@@ -27,7 +27,7 @@ class MsgListener implements MessageListener {
 	// 消息处理
 	public void processMessage(Chat chat, Message message) {
 		// 收到消息之后将消息内容放入bundle,发送消息去更新UI
-		if (null != XmppActivity.xmppactivity) {
+		if (null != XmppActivity.MsgHandler) {
 			android.os.Message msg = new android.os.Message();
 			msg.what = XmppActivity.RECEIVE_MESSAGE;
 			Bundle bundle = new Bundle();

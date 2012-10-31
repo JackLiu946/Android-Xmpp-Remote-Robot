@@ -25,7 +25,6 @@ public class XmppActivity extends Activity {
 	private AutoCompleteTextView autoCompleteTextViewSendMessage;
 	public static Handler MsgHandler = null;
 	public static TextView TVmessage;
-	public static XmppActivity xmppactivity;
 	public static SurfaceView surfaceview;
 
 	public static final int LOGIN_SUCCESSFUL = 0;
@@ -51,7 +50,6 @@ public class XmppActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		xmppactivity = XmppActivity.this;
 		final Button buttonServiceStart = (Button) findViewById(R.id.servicestart);
 		final Button buttonServiceStop = (Button) findViewById(R.id.servicestop);
 		final ScrollView scrollViewMessage = (ScrollView) findViewById(R.id.scrollviewmessage);

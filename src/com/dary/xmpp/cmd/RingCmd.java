@@ -5,11 +5,13 @@ import java.io.IOException;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.packet.Message;
 
+import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 
 import com.dary.xmpp.MainService;
+import com.dary.xmpp.MyApp;
 import com.dary.xmpp.ServiceManager;
 
 public class RingCmd extends CmdBase {
@@ -19,7 +21,7 @@ public class RingCmd extends CmdBase {
 
 	public static void Ring(Chat chat, Message message) {
 		try {
-			mediaPlayer.setDataSource(MainService.mainservice, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
+			mediaPlayer.setDataSource(MyApp.getContext(), RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
 		} catch (IllegalArgumentException e) {
 
 			e.printStackTrace();

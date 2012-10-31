@@ -7,12 +7,13 @@ import android.net.Uri;
 import android.telephony.SmsManager;
 
 import com.dary.xmpp.MainService;
+import com.dary.xmpp.MyApp;
 
 public class SmsCmdBase extends CmdBase {
 	// 发送短信,并插入短信库中
 	static void sendSMSAndInsertToLibrary(String addressNumber, String body) {
 		SmsManager smsManager = SmsManager.getDefault();
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(MainService.mainservice, 0, new Intent(), 0);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(MyApp.getContext(), 0, new Intent(), 0);
 		smsManager.sendTextMessage(addressNumber, null, body, pendingIntent, null);
 		insertSMSToLibrary(addressNumber, body);
 	}
@@ -23,6 +24,6 @@ public class SmsCmdBase extends CmdBase {
 		values.put("address", addressNumber);
 		values.put("date", System.currentTimeMillis());
 		values.put("body", body);
-		MainService.mainservice.getContentResolver().insert(Uri.parse("content://sms/sent"), values);
+		MyApp.getContext().getContentResolver().insert(Uri.parse("content://sms/sent"), values);
 	}
 }

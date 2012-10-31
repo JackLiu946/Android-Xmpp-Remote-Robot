@@ -31,7 +31,7 @@ public class Contact {
 	public static String getContactNameByNumber(String mNumber) {
 		mNumber = mNumber.replace("+86", "");
 		String[] projection = { ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.NUMBER };
-		Cursor cursor = MainService.mainservice.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, ContactsContract.CommonDataKinds.Phone.NUMBER + " = '" + mNumber + "'", null, null);
+		Cursor cursor = MyApp.getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, ContactsContract.CommonDataKinds.Phone.NUMBER + " = '" + mNumber + "'", null, null);
 
 		if (null == cursor) {
 			System.out.println("cursor null");
@@ -51,7 +51,7 @@ public class Contact {
 		ArrayList<String> listPhoneNumber = new ArrayList<String>();
 		String[] projection = { ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.NUMBER };
 
-		Cursor cursor = MainService.mainservice.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " = '" + mName + "'", null, null);
+		Cursor cursor = MyApp.getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " = '" + mName + "'", null, null);
 
 		if (null == cursor) {
 			System.out.println("cursor null");
@@ -77,7 +77,7 @@ public class Contact {
 		ArrayList<String> listContactNames = new ArrayList<String>();
 		String[] projection = { ContactsContract.PhoneLookup.DISPLAY_NAME };
 
-		Cursor cursor = MainService.mainservice.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, projection, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " LIKE ?", new String[] { "" + "%" + mName + "%" + "" }, null);
+		Cursor cursor = MyApp.getContext().getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, projection, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " LIKE ?", new String[] { "" + "%" + mName + "%" + "" }, null);
 
 		// 找不到指定联系人
 		if (null == cursor) {
@@ -103,7 +103,7 @@ public class Contact {
 	// 通过查询名字取得联系人邮箱
 	public static ArrayList<String> getContactEmailByName(String mName) {
 		ArrayList<String> listEmail = new ArrayList<String>();
-		Cursor cursor = MainService.mainservice.getContentResolver().query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " = '" + mName + "'", null, null);
+		Cursor cursor = MyApp.getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " = '" + mName + "'", null, null);
 
 		if (null == cursor) {
 			System.out.println("cursor null");

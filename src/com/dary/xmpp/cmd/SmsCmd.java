@@ -12,6 +12,7 @@ import android.net.Uri;
 
 import com.dary.xmpp.Contact;
 import com.dary.xmpp.MainService;
+import com.dary.xmpp.MyApp;
 
 public class SmsCmd extends SmsCmdBase {
 
@@ -24,7 +25,7 @@ public class SmsCmd extends SmsCmdBase {
 		if (!hasArgs(message)) {
 			uri = Uri.parse("content://sms/");
 			String[] projection = new String[] { "_id", "address", "body", "date", "type" };
-			cur = MainService.mainservice.getContentResolver().query(uri, projection, null, null, null);
+			cur = MyApp.getContext().getContentResolver().query(uri, projection, null, null, null);
 			StringBuilder smsBuilder = new StringBuilder();
 			int smsNumber = 0;
 			if (cur.moveToFirst()) {
@@ -77,7 +78,7 @@ public class SmsCmd extends SmsCmdBase {
 			// MainService.uri =
 			// Uri.parse("content://sms");
 			String[] projection = new String[] { "_id", "address", "person", "body", "date", "type" };
-			cur = MainService.mainservice.getContentResolver().query(uri, projection, null, null, null);
+			cur = MyApp.getContext().getContentResolver().query(uri, projection, null, null, null);
 			cur.moveToFirst();
 			int index_Address = cur.getColumnIndex("address");
 			String lastAddress = cur.getString(index_Address);
@@ -86,7 +87,7 @@ public class SmsCmd extends SmsCmdBase {
 			// 标记最后收到的短信为已读状态
 			ContentValues cvalues = new ContentValues();
 			cvalues.put("read", "1");
-			MainService.mainservice.getContentResolver().update(uri, cvalues, " address='" + lastAddress + "'", null);
+			MyApp.getContext().getContentResolver().update(uri, cvalues, " address='" + lastAddress + "'", null);
 
 			// MainService.cur.close();
 			// MainService.cur = null;

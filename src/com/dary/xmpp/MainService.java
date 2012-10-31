@@ -49,11 +49,9 @@ public class MainService extends Service {
 	private Context mContext = this;
 
 	public static Chat chat;
-	public static MainService mainservice;
 
 	@Override
 	public void onCreate() {
-		mainservice = MainService.this;
 		// Æô¶¯InCallService
 		Intent incallserviceIntent = new Intent();
 		incallserviceIntent.setClass(MainService.this, IncallService.class);
