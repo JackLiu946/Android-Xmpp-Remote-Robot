@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Android XMPP Remote Robot</string>
+    <string name="google_code">https://code.google.com/p/android-xmpp-remote-robot</string>
+    <string name="servicestart">Service Start</string>
+    <string name="servicestop">Service Stop</string>
+    <string name="settings">Settings</string>
+    <string name="exit">Exit</string>
+    <string name="about">About</string>
+    <string name="log">Show Log</string>
+    <string name="clear_log">Clear Log</string>
+    <string name="loginstatus">Status: </string>
+    <string name="loginstatus_not_logged_in">Not logged in</string>
+    <string name="loginstatus_successful">Successful</string>
+    <string name="loginstatus_set_incomplete">Set incomplete</string>
+    <string name="loginstatus_login_failure">Login Failure</string>
+    <string name="loginstatus_connection_failure">Connection Failure</string>
+    <string name="loginstatus_logging">Logging...</string>
+    <string name="preference_notified_address">Address to notify</string>
+    <string name="preference_notified_address_help">Enter your notify address</string>
+    <string name="preference_login_address">Address to login</string>
+    <string name="preference_login_address_help">Enter your login address</string>
+    <string name="preference_password">Login password</string>
+    <string name="preference_password_help">Enter your login password</string>
+    <string name="preference_resource">Jabber Resource</string>
+    <string name="preference_resource_help">Enter Jabber Resource</string>
+    <string name="preference_is_custom_server">Custom Server</string>
+    <string name="preference_is_custom_server_help">Check if you want custom server</string>
+    <string name="preference_server_settings">Server Settings</string>
+    <string name="preference_server_host_help">Enter Server Host</string>
+    <string name="preference_server_host">Server Host</string>
+    <string name="preference_server_port_help">Enter Server Port</string>
+    <string name="preference_server_port">Server Port</string>
+    <string name="preference_is_start_at_boot">Start at Boot</string>
+    <string name="preference_is_start_at_boot_help">Check if you want App to start at boot</string>
+    <string name="preference_is_auto_reconnect">Auto Reconnect</string>
+    <string name="preference_is_auto_reconnect_help">Check if you want App reconnect when connection status change</string>
+    <string name="buttonsendmessage">Send</string>
+    <string name="autocompletetextviewsendmessage_hint">Send Message</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_log">Log</string>
+
+</resources>
