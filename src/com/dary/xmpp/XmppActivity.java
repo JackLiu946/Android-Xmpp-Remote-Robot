@@ -2,9 +2,6 @@ package com.dary.xmpp;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -21,7 +18,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class XmppActivity extends Activity {
 
@@ -88,23 +84,10 @@ public class XmppActivity extends Activity {
 		// 更新显示收到的消息
 		MsgHandler = new Handler() {
 			public void handleMessage(Message msg) {
-				// 登录成功
-				// 如果在开机时候自动登录,那么log文件中只会记录登录的消息,不会记录登录成功的消息,并且不会弹出Notification,Toast没有注意
-				// 然而,这个消息本身应该还是发送并且接收到了的,因为按钮和标识登录状态的TextView都有改变.
+
 				if (msg.what == LOGIN_SUCCESSFUL) {
 					// 登录成功后禁用启动服务的按钮
-					Tools.doLog("Login Successful");
 					buttonServiceStart.setEnabled(false);
-
-					NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-					Notification notification = new Notification(R.drawable.ic_launcher, "Login Successful", System.currentTimeMillis());
-					notification.flags = Notification.FLAG_AUTO_CANCEL;
-					PendingIntent contentIntent = PendingIntent.getActivity(XmppActivity.this, 0, getIntent(), 0);
-					notification.setLatestEventInfo(XmppActivity.this, "Login Successful", "Login Successful", contentIntent);
-					notificationManager.notify(R.drawable.ic_launcher, notification);
-
-					// 显示Toast
-					Toast.makeText(MainService.mainservice, "Login Success", Toast.LENGTH_LONG).show();
 					// 修改TextView的信息去提示用户.
 					loginStatus.setText(R.string.loginstatus_successful);
 					loginStatus.setTextColor(Color.GREEN);
@@ -115,35 +98,16 @@ public class XmppActivity extends Activity {
 
 				// 登录失败
 				if (msg.what == LOGIN_FAILED) {
-					Tools.doLog("Login Failed");
 					buttonServiceStart.setEnabled(true);
 					// Tools.Vibrator(XmppActivity.this, 1000);
-
-					NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-					Notification notification = new Notification(R.drawable.ic_launcher, "Login Failed", System.currentTimeMillis());
-					notification.flags = Notification.FLAG_AUTO_CANCEL;
-					PendingIntent contentIntent = PendingIntent.getActivity(XmppActivity.this, 0, getIntent(), 0);
-					notification.setLatestEventInfo(XmppActivity.this, "Login Failed", "Login Failed", contentIntent);
-					notificationManager.notify(R.drawable.ic_launcher, notification);
-					Toast.makeText(MainService.mainservice, "Login Failure", Toast.LENGTH_LONG).show();
 					loginStatus.setText(R.string.loginstatus_login_failure);
 					loginStatus.setTextColor(Color.RED);
 				}
 
 				// 连接失败
 				if (msg.what == CONNECTION_FAILED) {
-					Tools.doLog("Connection Failed");
 					buttonServiceStart.setEnabled(true);
 					// Tools.Vibrator(XmppActivity.this, 1000);
-
-					NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-					Notification notification = new Notification(R.drawable.ic_launcher, "Connection Failed", System.currentTimeMillis());
-					notification.flags = Notification.FLAG_AUTO_CANCEL;
-					PendingIntent contentIntent = PendingIntent.getActivity(XmppActivity.this, 0, getIntent(), 0);
-					notification.setLatestEventInfo(XmppActivity.this, "Connection Failed", "Connection Failed", contentIntent);
-					notificationManager.notify(R.drawable.ic_launcher, notification);
-
-					Toast.makeText(MainService.mainservice, "Connection Failure", Toast.LENGTH_LONG).show();
 					loginStatus.setText(R.string.loginstatus_connection_failure);
 					loginStatus.setTextColor(Color.RED);
 				}
@@ -178,7 +142,6 @@ public class XmppActivity extends Activity {
 				// 配置不全
 				if (msg.what == SET_INCOMPLETE) {
 					buttonServiceStart.setEnabled(true);
-					Toast.makeText(MainService.mainservice, "Set incomplete", Toast.LENGTH_LONG).show();
 					loginStatus.setText(R.string.loginstatus_set_incomplete);
 					loginStatus.setTextColor(Color.RED);
 				}

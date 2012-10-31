@@ -9,7 +9,11 @@ import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Presence;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
@@ -42,6 +46,7 @@ public class MainService extends Service {
 	private BatteryReceiver batteryReceiver = new BatteryReceiver();
 	private ConnectionChangeReceiver connectionChangeReceiver;
 	private boolean iscustomServer;
+	private Context mContext = this;
 
 	public static Chat chat;
 	public static MainService mainservice;
@@ -76,6 +81,8 @@ public class MainService extends Service {
 			thread.start();
 			System.out.println("登录线程开始运行");
 
+			// 尝试将登录的记录存储下来,先暂时只存储到普通的文本文件中
+			Tools.doLog("Login");
 			// 登录中,发送消息,更新UI.
 			sendMsg(XmppActivity.LOGGING);
 		}
@@ -92,9 +99,6 @@ public class MainService extends Service {
 				config = new ConnectionConfiguration(serverHost);
 			}
 
-			// 尝试将登录的记录存储下来,先暂时只存储到普通的文本文件中
-			Tools.doLog("Login");
-
 			// config.setTruststorePath("/system/etc/security/cacerts.bks");
 			// config.setTruststorePassword("changeit");
 			// config.setTruststoreType("bks");
@@ -102,7 +106,7 @@ public class MainService extends Service {
 			// config.setReconnectionAllowed(false);
 			// config.setSendPresence(false);
 			// config.setCompressionEnabled(false);
-			// config.setSASLAuthenticationEnabled(true);
+			config.setSASLAuthenticationEnabled(true);
 
 			connection = new XMPPConnection(config);
 			try {
@@ -112,7 +116,7 @@ public class MainService extends Service {
 				try {
 					// 防止重新连接时多次登录.
 					if (!connection.isAuthenticated() && connection.isConnected()) {
-
+						
 						System.out.println("登录,验证口令");
 
 						// connection.login(loginAddress,password,resource);
@@ -123,7 +127,8 @@ public class MainService extends Service {
 						// Tools.Vibrator(MainService.this, 500);
 
 						System.out.println("登录成功");
-
+						Tools.doLog("Login Successful");
+						makeNotification("Login Successful");
 						// 登录成功后发送消息通知Activity改变按钮状态
 						sendMsg(XmppActivity.LOGIN_SUCCESSFUL);
 
@@ -151,12 +156,15 @@ public class MainService extends Service {
 
 				} catch (XMPPException e) {
 					System.out.println("登录失败");
+					Tools.doLog("Login Failed");
+					makeNotification("Login Failed");
 					sendMsg(XmppActivity.LOGIN_FAILED);
-
 					e.printStackTrace();
 				}
 			} catch (XMPPException e) {
 				System.out.println("连接服务器失败");
+				Tools.doLog("Connection Failed");
+				makeNotification("Connection Failed");
 				sendMsg(XmppActivity.CONNECTION_FAILED);
 				e.printStackTrace();
 			}
@@ -213,6 +221,16 @@ public class MainService extends Service {
 			msg.what = tag;
 			XmppActivity.MsgHandler.sendMessage(msg);
 		}
+	}
+
+	private void makeNotification(String str) {
+		NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		Notification notification = new Notification(R.drawable.ic_launcher, str, System.currentTimeMillis());
+		notification.flags = Notification.FLAG_AUTO_CANCEL;
+		Intent intent = new Intent(mContext, XmppActivity.class);
+		PendingIntent contentIntent = PendingIntent.getActivity(mContext, 0, intent, 0);
+		notification.setLatestEventInfo(mContext, str, str, contentIntent);
+		notificationManager.notify(R.drawable.ic_launcher, notification);
 	}
 
 }
