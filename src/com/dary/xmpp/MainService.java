@@ -27,7 +27,6 @@ import com.dary.xmpp.receivers.SMSReceiver;
 
 public class MainService extends Service {
 
-	public static boolean isloginin = false;
 	public static Connection connection;
 	private ConnectionConfiguration config;
 	public static int intLevel;
@@ -82,6 +81,7 @@ public class MainService extends Service {
 			// 尝试将登录的记录存储下来,先暂时只存储到普通的文本文件中
 			Tools.doLog("Login");
 			// 登录中,发送消息,更新UI.
+
 			sendMsg(XmppActivity.LOGGING);
 		}
 		return super.onStartCommand(intent, flags, startId);
@@ -104,7 +104,7 @@ public class MainService extends Service {
 			// config.setReconnectionAllowed(false);
 			// config.setSendPresence(false);
 			// config.setCompressionEnabled(false);
-			config.setSASLAuthenticationEnabled(true);
+			// config.setSASLAuthenticationEnabled(true);
 
 			connection = new XMPPConnection(config);
 			try {
@@ -114,19 +114,18 @@ public class MainService extends Service {
 				try {
 					// 防止重新连接时多次登录.
 					if (!connection.isAuthenticated() && connection.isConnected()) {
-						
+
 						System.out.println("登录,验证口令");
 
 						// connection.login(loginAddress,password,resource);
 						connection.login(loginAddress, password, Tools.getTimeStr());
-
-						isloginin = true;
 
 						// Tools.Vibrator(MainService.this, 500);
 
 						System.out.println("登录成功");
 						Tools.doLog("Login Successful");
 						makeNotification("Login Successful");
+
 						// 登录成功后发送消息通知Activity改变按钮状态
 						sendMsg(XmppActivity.LOGIN_SUCCESSFUL);
 
@@ -182,7 +181,6 @@ public class MainService extends Service {
 		if (isautoReconnect) {
 			unregisterReceiver(connectionChangeReceiver);
 		}
-		isloginin = false;
 		super.onDestroy();
 	}
 
@@ -213,8 +211,11 @@ public class MainService extends Service {
 	}
 
 	private void sendMsg(int tag) {
+		MyApp myApp = (MyApp) getApplication();
+		myApp.setStatus(tag);
 		// 登录中,发送消息,更新UI.
 		if (null != XmppActivity.MsgHandler) {
+			// 考虑修改为,当Activity启动的时候去读取状态
 			Message msg = new Message();
 			msg.what = tag;
 			XmppActivity.MsgHandler.sendMessage(msg);

@@ -23,17 +23,22 @@ public class XmppActivity extends Activity {
 
 	public TextView loginStatus;
 	private AutoCompleteTextView autoCompleteTextViewSendMessage;
+	private Button buttonServiceStart;
+	private Button buttonServiceStop;
+	private Button buttonSendMessage;
 	public static Handler MsgHandler = null;
 	public static TextView TVmessage;
 	public static SurfaceView surfaceview;
 
-	public static final int LOGIN_SUCCESSFUL = 0;
-	public static final int LOGIN_FAILED = 1;
-	public static final int CONNECTION_FAILED = 6;
-	public static final int LOGGING = 2;
-	public static final int RECEIVE_MESSAGE = 3;
-	public static final int SEND_MESSAGE = 4;
-	public static final int SET_INCOMPLETE = 5;
+	public static final int NOT_LOGGED_IN = 0;
+	public static final int LOGGING = 1;
+	public static final int LOGIN_SUCCESSFUL = 2;
+	public static final int SET_INCOMPLETE = 3;
+	public static final int CONNECTION_FAILED = 4;
+	public static final int LOGIN_FAILED = 5;
+
+	public static final int RECEIVE_MESSAGE = 6;
+	public static final int SEND_MESSAGE = 7;
 
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -50,70 +55,39 @@ public class XmppActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		final Button buttonServiceStart = (Button) findViewById(R.id.servicestart);
-		final Button buttonServiceStop = (Button) findViewById(R.id.servicestop);
-		final ScrollView scrollViewMessage = (ScrollView) findViewById(R.id.scrollviewmessage);
+		buttonServiceStart = (Button) findViewById(R.id.servicestart);
+		buttonServiceStop = (Button) findViewById(R.id.servicestop);
 		loginStatus = (TextView) findViewById(R.id.loginstatus);
+		final ScrollView scrollViewMessage = (ScrollView) findViewById(R.id.scrollviewmessage);
 		final LinearLayout linearLayoutMessage = (LinearLayout) findViewById(R.id.linearlayoutmessage);
-		final Button buttonSendMessage = (Button) findViewById(R.id.buttonsendmessage);
+		buttonSendMessage = (Button) findViewById(R.id.buttonsendmessage);
 		autoCompleteTextViewSendMessage = (AutoCompleteTextView) findViewById(R.id.autocompletetextviewsendmessage);
 		// 拍照相关
 		surfaceview = (SurfaceView) findViewById(R.id.sv);
-
 		// 设置AutoCompleteTextView的Adapter
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.auto_cmd_string_item, getResources().getStringArray(R.array.autoCmdString));
 		autoCompleteTextViewSendMessage.setAdapter(adapter);
 
-		// 一开始要关掉 关闭服务和发送消息 的按钮
-		buttonServiceStop.setEnabled(false);
-		buttonSendMessage.setEnabled(false);
-		// 判断Activity未创建之前服务是否已启动.用于判断自动启动.
-		if (MainService.isloginin == true) {
-			// 登录成功后禁用启动服务的按钮
-			buttonServiceStart.setEnabled(false);
-			// 修改TextView的信息去提示用户.
-			loginStatus.setText(R.string.loginstatus_successful);
-			loginStatus.setTextColor(Color.GREEN);
-			// 启动关闭服务的按钮
-			buttonServiceStop.setEnabled(true);
-			buttonSendMessage.setEnabled(true);
-		}
+		setViewByStatus(NOT_LOGGED_IN);
 
 		// 更新显示收到的消息
 		MsgHandler = new Handler() {
 			public void handleMessage(Message msg) {
 
 				if (msg.what == LOGIN_SUCCESSFUL) {
-					// 登录成功后禁用启动服务的按钮
-					buttonServiceStart.setEnabled(false);
-					// 修改TextView的信息去提示用户.
-					loginStatus.setText(R.string.loginstatus_successful);
-					loginStatus.setTextColor(Color.GREEN);
-					// 启动关闭服务的按钮
-					buttonServiceStop.setEnabled(true);
-					buttonSendMessage.setEnabled(true);
+					setViewByStatus(LOGIN_SUCCESSFUL);
 				}
-
-				// 登录失败
+				if (msg.what == SET_INCOMPLETE) {
+					setViewByStatus(SET_INCOMPLETE);
+				}
 				if (msg.what == LOGIN_FAILED) {
-					buttonServiceStart.setEnabled(true);
-					// Tools.Vibrator(XmppActivity.this, 1000);
-					loginStatus.setText(R.string.loginstatus_login_failure);
-					loginStatus.setTextColor(Color.RED);
+					setViewByStatus(LOGIN_FAILED);
 				}
-
-				// 连接失败
 				if (msg.what == CONNECTION_FAILED) {
-					buttonServiceStart.setEnabled(true);
-					// Tools.Vibrator(XmppActivity.this, 1000);
-					loginStatus.setText(R.string.loginstatus_connection_failure);
-					loginStatus.setTextColor(Color.RED);
+					setViewByStatus(CONNECTION_FAILED);
 				}
-
-				// 登录中
 				if (msg.what == LOGGING) {
-					loginStatus.setTextColor(Color.YELLOW);
-					loginStatus.setText(R.string.loginstatus_logging);
+					setViewByStatus(LOGGING);
 				}
 
 				// 接受的消息
@@ -135,13 +109,6 @@ public class XmppActivity extends Activity {
 					linearLayoutMessage.addView(sendMessage);
 					// 将ScrollView滚动到底部
 					scrollToBottom(scrollViewMessage, linearLayoutMessage);
-				}
-
-				// 配置不全
-				if (msg.what == SET_INCOMPLETE) {
-					buttonServiceStart.setEnabled(true);
-					loginStatus.setText(R.string.loginstatus_set_incomplete);
-					loginStatus.setTextColor(Color.RED);
 				}
 			}
 
@@ -205,7 +172,7 @@ public class XmppActivity extends Activity {
 
 		// 如果是测试模式,则自动登录
 		boolean isDebugMode = getApplicationContext().getSharedPreferences("com.dary.xmpp_preferences", 1).getBoolean("isDebugMode", false);
-		if (isDebugMode && MainService.isloginin != true) {
+		if (isDebugMode) {
 			Intent mainserviceIntent = new Intent();
 			mainserviceIntent.setClass(XmppActivity.this, MainService.class);
 			startService(mainserviceIntent);
@@ -272,10 +239,13 @@ public class XmppActivity extends Activity {
 		});
 	}
 
-	// 获取shareText
 	@Override
 	protected void onResume() {
 		autoCompleteTextViewSendMessage.clearFocus();
+		MyApp myApp  =  (MyApp)getApplication();
+		setViewByStatus(myApp.getStatus());
+
+		// 获取shareText
 		Intent intent = getIntent();
 		String shareText = intent.getStringExtra(Intent.EXTRA_TEXT);
 		if (shareText != "") {
@@ -284,4 +254,52 @@ public class XmppActivity extends Activity {
 		super.onResume();
 	}
 
+	private void setViewByStatus(int s) {
+		switch (s) {
+		case NOT_LOGGED_IN:
+			buttonServiceStart.setEnabled(true);
+			buttonServiceStop.setEnabled(false);
+			buttonSendMessage.setEnabled(false);
+			loginStatus.setTextColor(Color.GRAY);
+			loginStatus.setText(R.string.loginstatus_not_logged_in);
+			break;
+		case LOGGING:
+			buttonServiceStart.setEnabled(false);
+			buttonServiceStop.setEnabled(false);
+			buttonSendMessage.setEnabled(false);
+			loginStatus.setTextColor(Color.YELLOW);
+			loginStatus.setText(R.string.loginstatus_logging);
+			break;
+		case LOGIN_SUCCESSFUL:
+			buttonServiceStart.setEnabled(false);
+			buttonServiceStop.setEnabled(true);
+			buttonSendMessage.setEnabled(true);
+			loginStatus.setText(R.string.loginstatus_successful);
+			loginStatus.setTextColor(Color.GREEN);
+			break;
+		case SET_INCOMPLETE:
+			buttonServiceStart.setEnabled(true);
+			buttonServiceStop.setEnabled(false);
+			buttonSendMessage.setEnabled(false);
+			loginStatus.setText(R.string.loginstatus_set_incomplete);
+			loginStatus.setTextColor(Color.RED);
+			break;
+		case CONNECTION_FAILED:
+			buttonServiceStart.setEnabled(true);
+			buttonServiceStop.setEnabled(false);
+			buttonSendMessage.setEnabled(false);
+			// Tools.Vibrator(XmppActivity.this, 1000);
+			loginStatus.setText(R.string.loginstatus_connection_failure);
+			loginStatus.setTextColor(Color.RED);
+			break;
+		case LOGIN_FAILED:
+			buttonServiceStart.setEnabled(true);
+			buttonSendMessage.setEnabled(false);
+			buttonServiceStop.setEnabled(false);
+			// Tools.Vibrator(XmppActivity.this, 1000);
+			loginStatus.setText(R.string.loginstatus_login_failure);
+			loginStatus.setTextColor(Color.RED);
+			break;
+		}
+	}
 }

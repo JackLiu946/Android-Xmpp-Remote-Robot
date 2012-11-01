@@ -16,6 +16,7 @@ public class StartUpReceiver extends BroadcastReceiver {
 		SharedPreferences prefs = context.getSharedPreferences("com.dary.xmpp_preferences", 0);
 		boolean isStartAtBoot = prefs.getBoolean("isStartAtBoot", false);
 		if (isStartAtBoot) {
+			System.out.println("开机启动服务");
 			Intent startserviceintent = new Intent(context, MainService.class);
 			context.startService(startserviceintent);
 		}

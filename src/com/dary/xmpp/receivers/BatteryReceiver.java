@@ -23,7 +23,7 @@ public class BatteryReceiver extends BroadcastReceiver {
 				MainService.strPlugged = "USB";
 			}
 			// 这里需要判断是否登录.
-			if (MainService.isloginin && MainService.connection.isConnected()) {
+			if (MainService.connection.isConnected()) {
 				Presence presence = new Presence(Presence.Type.available);
 				presence.setStatus(MainService.strPlugged + " Power: " + String.valueOf(MainService.intLevel * 100 / MainService.intScale) + "%");
 				MainService.connection.sendPacket(presence);
