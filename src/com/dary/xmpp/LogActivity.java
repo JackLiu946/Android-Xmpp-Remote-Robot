@@ -26,7 +26,6 @@ public class LogActivity extends Activity {
 
 	@Override
 	protected void onStart() {
-		// TODO Auto-generated method stub
 
 		StringBuilder sb = new StringBuilder();
 		File file = new File("/data/data/com.dary.xmpp/files/LoginLog");
