@@ -55,16 +55,13 @@ public class InfoCmd extends CmdBase {
 			ApplicationInfo aInfo = info.applicationInfo;
 			appInfo.append("Application Name:" + aInfo.loadLabel(ServiceManager.pacManager) + "\n");
 			appInfo.append("Package Name : " + info.packageName + "\n");
-			// appInfo.append("" + "\n");
-			// if (info.permissions != null)
-			// {
-			// ;
-			// for (PermissionInfo p : info.permissions)
-			// {
-			// appInfo.append("permission:" + p.name +
-			// "\n");
-			// }
-			// }
+//			appInfo.append("" + "\n");
+//			if (info.permissions != null) {
+//				;
+//				for (PermissionInfo p : info.permissions) {
+//					appInfo.append("permission:" + p.name + "\n");
+//				}
+//			}
 			appInfo.append("\n");
 		}
 		return appInfo.toString();
