@@ -8,8 +8,8 @@ import android.os.Bundle;
 
 import com.dary.xmpp.XmppActivity;
 
-class CmdBase {
-	static void sendMessageAndUpdateView(Chat chat, String message) {
+public class CmdBase {
+	public static void sendMessageAndUpdateView(Chat chat, String message) {
 		try {
 			chat.sendMessage(message);
 		} catch (XMPPException e) {
@@ -18,7 +18,7 @@ class CmdBase {
 
 		if (null != XmppActivity.MsgHandler) {
 			android.os.Message msg = new android.os.Message();
-			msg.what = 0x0004;
+			msg.what = XmppActivity.SEND_MESSAGE;
 			Bundle bundle = new Bundle();
 			bundle.putString("msg", message);
 			msg.setData(bundle);

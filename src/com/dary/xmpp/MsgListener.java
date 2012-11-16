@@ -8,6 +8,7 @@ import org.jivesoftware.smack.packet.Message;
 import android.os.Bundle;
 
 import com.dary.xmpp.cmd.CallLogCmd;
+import com.dary.xmpp.cmd.CmdBase;
 import com.dary.xmpp.cmd.CmdCmd;
 import com.dary.xmpp.cmd.CopyCmd;
 import com.dary.xmpp.cmd.GpsCmd;
@@ -110,7 +111,7 @@ class MsgListener implements MessageListener {
 
 		// 所有命令都不匹配时
 		else {
-			SendMessageAndUpdateView.sendMessageAndUpdateView(chat, "Unknown Command");
+			CmdBase.sendMessageAndUpdateView(chat, "Unknown Command");
 		}
 	}
 

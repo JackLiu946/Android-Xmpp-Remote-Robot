@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceView;
@@ -18,6 +19,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import com.dary.xmpp.cmd.CmdBase;
 
 public class XmppActivity extends Activity {
 
@@ -50,11 +53,11 @@ public class XmppActivity extends Activity {
 		super.onSaveInstanceState(outState);
 	}
 
-	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		System.out.println("test!!!!!----->Create");
 		buttonServiceStart = (Button) findViewById(R.id.servicestart);
 		buttonServiceStop = (Button) findViewById(R.id.servicestop);
 		loginStatus = (TextView) findViewById(R.id.loginstatus);
@@ -76,22 +79,20 @@ public class XmppActivity extends Activity {
 
 				if (msg.what == LOGIN_SUCCESSFUL) {
 					setViewByStatus(LOGIN_SUCCESSFUL);
-				}
-				if (msg.what == SET_INCOMPLETE) {
+				} else if (msg.what == SET_INCOMPLETE) {
 					setViewByStatus(SET_INCOMPLETE);
-				}
-				if (msg.what == LOGIN_FAILED) {
+				} else if (msg.what == LOGIN_FAILED) {
 					setViewByStatus(LOGIN_FAILED);
-				}
-				if (msg.what == CONNECTION_FAILED) {
+				} else if (msg.what == CONNECTION_FAILED) {
 					setViewByStatus(CONNECTION_FAILED);
-				}
-				if (msg.what == LOGGING) {
+				} else if (msg.what == LOGGING) {
 					setViewByStatus(LOGGING);
+				} else if (msg.what == NOT_LOGGED_IN) {
+					setViewByStatus(NOT_LOGGED_IN);
 				}
 
 				// 接受的消息
-				if (msg.what == RECEIVE_MESSAGE) {
+				else if (msg.what == RECEIVE_MESSAGE) {
 					TextView receiveMessage = new TextView(XmppActivity.this);
 					receiveMessage.setText(Tools.getTimeStr() + "\n" + msg.getData().getString("msg") + "\n");
 					receiveMessage.setTextColor(Color.YELLOW);
@@ -101,7 +102,7 @@ public class XmppActivity extends Activity {
 				}
 
 				// 程序自己发送出去的消息
-				if (msg.what == SEND_MESSAGE) {
+				else if (msg.what == SEND_MESSAGE) {
 					TextView sendMessage = new TextView(XmppActivity.this);
 					// 这里由于发送回去的消息有可能是多行,使用换行
 					sendMessage.setText(Tools.getTimeStr() + "\n" + msg.getData().getString("msg") + "\n");
@@ -154,7 +155,7 @@ public class XmppActivity extends Activity {
 		buttonSendMessage.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				if (autoCompleteTextViewSendMessage.getText().toString() != "") {
-					SendMessageAndUpdateView.sendMessageAndUpdateView(MainService.chat, autoCompleteTextViewSendMessage.getText().toString());
+					CmdBase.sendMessageAndUpdateView(MainService.chat, autoCompleteTextViewSendMessage.getText().toString());
 					autoCompleteTextViewSendMessage.setText("");
 				}
 			}
@@ -165,7 +166,6 @@ public class XmppActivity extends Activity {
 		// OnClickListener() {
 		//
 		// public void onClick(View v) {
-		// // TODO Auto-generated method stub
 		// autoCompleteTextViewSendMessage.showDropDown();
 		// }
 		// });
@@ -211,14 +211,14 @@ public class XmppActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	// @Override
-	// public boolean onKeyDown(int keyCode, KeyEvent event) {
-	// if (keyCode == KeyEvent.KEYCODE_BACK) {
-	// XmppActivity.this.finish();
-	// return true;
-	// }
-	// return super.onKeyDown(keyCode, event);
-	// }
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			moveTaskToBack(true);
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 
 	// 滚动到底部
 	private static void scrollToBottom(final View scroll, final View inner) {
@@ -241,8 +241,9 @@ public class XmppActivity extends Activity {
 
 	@Override
 	protected void onResume() {
+		System.out.println("test!!!!!----->Resume");
 		autoCompleteTextViewSendMessage.clearFocus();
-		MyApp myApp  =  (MyApp)getApplication();
+		MyApp myApp = (MyApp) getApplication();
 		setViewByStatus(myApp.getStatus());
 
 		// 获取shareText

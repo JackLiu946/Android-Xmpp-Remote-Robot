@@ -7,6 +7,6 @@
 
 在PC上我也有用Python去实现一个简单的XMPP客户端,这样就可以做到,诸如在来电时让PC静音,挂断时恢复音量,以及完全的双向控制功能.
 
-做的还很粗糙.只是觉得这东西很有意思,当作练手的项目.
+做的还很粗糙.只是觉得这东西很有意思,当作练手的项目.如果您真的打算使用这样的软件,我更推荐使用目前更为稳定和完善的[GtalkSMS](https://github.com/vovs/gtalksms)
 
 <img src="http://ww1.sinaimg.cn/large/a74ecc4cjw1dxy20dzj7aj.jpg">

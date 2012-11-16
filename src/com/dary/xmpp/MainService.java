@@ -8,7 +8,6 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Presence;
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -16,11 +15,14 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.preference.PreferenceManager;
 
+import com.dary.xmpp.cmd.CmdBase;
 import com.dary.xmpp.receivers.BatteryReceiver;
 import com.dary.xmpp.receivers.ConnectionChangeReceiver;
 import com.dary.xmpp.receivers.SMSReceiver;
@@ -45,6 +47,7 @@ public class MainService extends Service {
 	private BatteryReceiver batteryReceiver = new BatteryReceiver();
 	private ConnectionChangeReceiver connectionChangeReceiver;
 	private boolean iscustomServer;
+	private static boolean isAlreadyRegisterConnectionChangeReceiver;
 	private Context mContext = this;
 
 	public static Chat chat;
@@ -52,6 +55,7 @@ public class MainService extends Service {
 	@Override
 	public void onCreate() {
 		// 启动InCallService
+		isAlreadyRegisterConnectionChangeReceiver = false;
 		Intent incallserviceIntent = new Intent();
 		incallserviceIntent.setClass(MainService.this, IncallService.class);
 		startService(incallserviceIntent);
@@ -138,16 +142,17 @@ public class MainService extends Service {
 						registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
 						// 这里必须判断监听网络连接的广播接收器是否已经注册了,否则会反复注册.导致收到广播的时候多次登录
-						if (isautoReconnect && connectionChangeReceiver == null) {
+						if (isautoReconnect && !isAlreadyRegisterConnectionChangeReceiver) {
 							connectionChangeReceiver = new ConnectionChangeReceiver();
 							registerReceiver(connectionChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+							isAlreadyRegisterConnectionChangeReceiver = true;
 						}
 
 						registerReceiver(smsReceiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
 
 						// 登录成功后发送消息,用于测试
 						if (isDebugMode) {
-							SendMessageAndUpdateView.sendMessageAndUpdateView(chat, "Login is successful");
+							CmdBase.sendMessageAndUpdateView(chat, "Login is successful");
 						}
 					}
 
@@ -170,6 +175,7 @@ public class MainService extends Service {
 
 	@Override
 	public void onDestroy() {
+		sendMsg(XmppActivity.NOT_LOGGED_IN);
 		if (connection.isConnected()) {
 			Presence presence = new Presence(Presence.Type.unavailable);
 			connection.sendPacket(presence);
@@ -180,6 +186,7 @@ public class MainService extends Service {
 		unregisterReceiver(smsReceiver);
 		if (isautoReconnect) {
 			unregisterReceiver(connectionChangeReceiver);
+			isAlreadyRegisterConnectionChangeReceiver = false;
 		}
 		super.onDestroy();
 	}
@@ -190,23 +197,24 @@ public class MainService extends Service {
 	}
 
 	private void getSetting() {
-		iscustomServer = getApplicationContext().getSharedPreferences("com.dary.xmpp_preferences", Activity.MODE_PRIVATE).getBoolean("isCustomServer", false);
+		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+		iscustomServer = mPrefs.getBoolean("isCustomServer", false);
 		System.out.println("自定义服务器设置 " + iscustomServer);
-		serverHost = getApplicationContext().getSharedPreferences("com.dary.xmpp_preferences", Activity.MODE_PRIVATE).getString("serverHost", "");
+		serverHost = mPrefs.getString("serverHost", "");
 		System.out.println("服务器主机 " + serverHost);
-		serverPort = getApplicationContext().getSharedPreferences("com.dary.xmpp_preferences", Activity.MODE_PRIVATE).getString("serverPort", "5222");
+		serverPort = mPrefs.getString("serverPort", "5222");
 		System.out.println("服务器端口 " + serverPort);
-		loginAddress = getApplicationContext().getSharedPreferences("com.dary.xmpp_preferences", Activity.MODE_PRIVATE).getString("loginAddress", "");
+		loginAddress = mPrefs.getString("loginAddress", "");
 		System.out.println("登录地址 " + loginAddress);
-		password = getApplicationContext().getSharedPreferences("com.dary.xmpp_preferences", Activity.MODE_PRIVATE).getString("password", "");
+		password = mPrefs.getString("password", "");
 		System.out.println("密码 " + password);
-		notifiedAddress = getApplicationContext().getSharedPreferences("com.dary.xmpp_preferences", Activity.MODE_PRIVATE).getString("notifiedAddress", "");
+		notifiedAddress = mPrefs.getString("notifiedAddress", "");
 		System.out.println("提醒地址 " + notifiedAddress);
-		resource = getApplicationContext().getSharedPreferences("com.dary.xmpp_preferences", Activity.MODE_PRIVATE).getString("resource", "");
+		resource = mPrefs.getString("resource", "");
 		System.out.println("资源名 " + resource);
-		isautoReconnect = getApplicationContext().getSharedPreferences("com.dary.xmpp_preferences", Activity.MODE_PRIVATE).getBoolean("isAutoReconnect", true);
+		isautoReconnect = mPrefs.getBoolean("isAutoReconnect", true);
 		System.out.println("是否重新连接 " + isautoReconnect);
-		isDebugMode = getApplicationContext().getSharedPreferences("com.dary.xmpp_preferences", Activity.MODE_PRIVATE).getBoolean("isDebugMode", false);
+		isDebugMode = mPrefs.getBoolean("isDebugMode", false);
 		System.out.println("调试模式 " + isDebugMode);
 	}
 

@@ -43,9 +43,9 @@ public class Tools {
 	public static void doLog(String str) {
 		try {
 			// 注意如果文件不存在的时候(确切的说应该是文件的内容为空时),添加新内容之前要先添加换行符.
+			// FileOutputStream outStream=MyApp.getContext().openFileOutput("LoginLog",Context.MODE_APPEND);
 			File fileDirectory = new File("/data/data/com.dary.xmpp/files/");
-			if (!fileDirectory.exists())
-			{
+			if (!fileDirectory.exists()) {
 				fileDirectory.mkdir();
 			}
 			File file = new File("/data/data/com.dary.xmpp/files/LoginLog");
@@ -56,7 +56,7 @@ public class Tools {
 				file.createNewFile();
 			}
 			sb.append(str);
-			//占满整个一行,对齐
+			// 占满整个一行,对齐
 			int length = 29;
 			for (int i = 0; i < length - str.length(); i++) {
 				sb.append(" ");

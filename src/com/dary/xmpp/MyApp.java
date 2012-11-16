@@ -1,9 +1,7 @@
 package com.dary.xmpp;
 
-import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -35,7 +33,7 @@ public class MyApp extends Application implements Thread.UncaughtExceptionHandle
 	public void uncaughtException(Thread thread, Throwable ex) {
 		// TODO Auto-generated method stub
 		final String crashReport = getCrashReport(mContext, ex);
-		// ÏÔÊ¾Òì³£ĞÅÏ¢&·¢ËÍ±¨¸æ
+		// é”Ÿæ–¤æ‹·ç¤ºé”Ÿå±Šå¸¸é”Ÿæ–¤æ‹·æ¯&é”Ÿæ–¤æ‹·é”Ÿé…µæ†‹æ‹·é”Ÿæ–¤æ‹·
 		new Thread() {
 			public void run() {
 				Looper.prepare();
@@ -60,13 +58,13 @@ public class MyApp extends Application implements Thread.UncaughtExceptionHandle
 
 	public static void sendAppCrashReport(final Context cont, final String crashReport) {
 		Intent i = new Intent(Intent.ACTION_SEND);
-		// i.setType("text/plain"); //Ä£ÄâÆ÷
-		i.setType("message/rfc822"); // Õæ»ú
+		// i.setType("text/plain"); //æ¨¡æ‹Ÿå™¨
+		i.setType("message/rfc822"); // çœŸæœº
 		i.putExtra(Intent.EXTRA_EMAIL, new String[] { "anyofyou@gmail.com" });
 		i.putExtra(Intent.EXTRA_SUBJECT, "Android XMPP Remote Robot Error Report");
 		i.putExtra(Intent.EXTRA_TEXT, crashReport);
 		cont.startActivity(Intent.createChooser(i, "Send Error Report"));
-		// ÍË³ö
+		// é€€å‡º
 		android.os.Process.killProcess(android.os.Process.myPid());
 		System.exit(1);
 	}

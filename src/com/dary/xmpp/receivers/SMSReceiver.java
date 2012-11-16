@@ -8,8 +8,8 @@ import android.telephony.SmsMessage;
 
 import com.dary.xmpp.Contact;
 import com.dary.xmpp.MainService;
-import com.dary.xmpp.SendMessageAndUpdateView;
 import com.dary.xmpp.XmppActivity;
+import com.dary.xmpp.cmd.CmdBase;
 
 public class SMSReceiver extends BroadcastReceiver {
 	private static final String mACTION = "android.provider.Telephony.SMS_RECEIVED";
@@ -38,7 +38,7 @@ public class SMSReceiver extends BroadcastReceiver {
 						sb.append("\n");
 					}
 				}
-				SendMessageAndUpdateView.sendMessageAndUpdateView(MainService.chat, sb.toString());
+				CmdBase.sendMessageAndUpdateView(MainService.chat, sb.toString());
 			}
 		}
 	}

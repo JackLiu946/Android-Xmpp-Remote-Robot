@@ -1,5 +1,7 @@
 package com.dary.xmpp;
 
+import com.dary.xmpp.cmd.CmdBase;
+
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -17,16 +19,16 @@ public class IncallService extends Service {
 			if (!isFirstStart) {
 				switch (state) {
 				case TelephonyManager.CALL_STATE_IDLE:
-					SendMessageAndUpdateView.sendMessageAndUpdateView(MainService.chat, "IDLE");
+					CmdBase.sendMessageAndUpdateView(MainService.chat, "IDLE");
 					System.out.println("IDLE");
 					break;
 				case TelephonyManager.CALL_STATE_OFFHOOK:
-					SendMessageAndUpdateView.sendMessageAndUpdateView(MainService.chat, "OFFHOOK");
+					CmdBase.sendMessageAndUpdateView(MainService.chat, "OFFHOOK");
 					System.out.println("OFFHOOK");
 					break;
 				case TelephonyManager.CALL_STATE_RINGING:
-					SendMessageAndUpdateView.sendMessageAndUpdateView(MainService.chat, "RINGING");
-					SendMessageAndUpdateView.sendMessageAndUpdateView(MainService.chat, "From : " + Contact.getContactNameByNumber(incomingNumber));
+					CmdBase.sendMessageAndUpdateView(MainService.chat, "RINGING");
+					CmdBase.sendMessageAndUpdateView(MainService.chat, "From : " + Contact.getContactNameByNumber(incomingNumber));
 					System.out.println("RINGING: Number " + incomingNumber);
 					break;
 				default:
