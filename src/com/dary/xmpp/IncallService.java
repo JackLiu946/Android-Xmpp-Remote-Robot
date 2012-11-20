@@ -17,22 +17,16 @@ public class IncallService extends Service {
 	private class mPhoneCallListener extends PhoneStateListener {
 		public void onCallStateChanged(int state, String incomingNumber) {
 			if (!isFirstStart) {
-				switch (state) {
-				case TelephonyManager.CALL_STATE_IDLE:
-					CmdBase.sendMessageAndUpdateView(MainService.chat, "IDLE");
-					System.out.println("IDLE");
-					break;
-				case TelephonyManager.CALL_STATE_OFFHOOK:
-					CmdBase.sendMessageAndUpdateView(MainService.chat, "OFFHOOK");
-					System.out.println("OFFHOOK");
-					break;
-				case TelephonyManager.CALL_STATE_RINGING:
+				if (state == TelephonyManager.CALL_STATE_RINGING) {
 					CmdBase.sendMessageAndUpdateView(MainService.chat, "RINGING");
 					CmdBase.sendMessageAndUpdateView(MainService.chat, "From : " + Contact.getContactNameByNumber(incomingNumber));
 					System.out.println("RINGING: Number " + incomingNumber);
-					break;
-				default:
-					break;
+				} else if (state == TelephonyManager.CALL_STATE_IDLE) {
+					CmdBase.sendMessageAndUpdateView(MainService.chat, "IDLE");
+					System.out.println("IDLE");
+				} else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
+					CmdBase.sendMessageAndUpdateView(MainService.chat, "OFFHOOK");
+					System.out.println("OFFHOOK");
 				}
 			}
 			isFirstStart = false;

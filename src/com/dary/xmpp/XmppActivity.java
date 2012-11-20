@@ -57,7 +57,6 @@ public class XmppActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		System.out.println("test!!!!!----->Create");
 		buttonServiceStart = (Button) findViewById(R.id.servicestart);
 		buttonServiceStop = (Button) findViewById(R.id.servicestop);
 		loginStatus = (TextView) findViewById(R.id.loginstatus);
@@ -241,7 +240,6 @@ public class XmppActivity extends Activity {
 
 	@Override
 	protected void onResume() {
-		System.out.println("test!!!!!----->Resume");
 		autoCompleteTextViewSendMessage.clearFocus();
 		MyApp myApp = (MyApp) getApplication();
 		setViewByStatus(myApp.getStatus());
