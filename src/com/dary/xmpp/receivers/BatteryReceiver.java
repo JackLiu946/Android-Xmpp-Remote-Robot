@@ -17,12 +17,9 @@ public class BatteryReceiver extends BroadcastReceiver {
 			MainService.intScale = intent.getIntExtra("scale", 100);
 			if (intPlugged == 0) {
 				MainService.strPlugged = "Battery";
-			}
-			// USB状态貌似应该是2的.
-			else {
+			} else {
 				MainService.strPlugged = "USB";
 			}
-			// 这里需要判断是否登录.
 			if (MainService.connection.isConnected()) {
 				Presence presence = new Presence(Presence.Type.available);
 				presence.setStatus(MainService.strPlugged + " Power: " + String.valueOf(MainService.intLevel * 100 / MainService.intScale) + "%");

@@ -8,17 +8,17 @@ import android.provider.ContactsContract;
 import com.dary.xmpp.cmd.SelCmd;
 
 public class Contact {
-	// ³¢ÊÔÈ¥ÕÒµ¥Ò»µÄÁªÏµÈËÃû×Ö.Èç¹û¶àÎª¸öÔò´´½¨Ñ¡Ôñ,·µ»Ø´´½¨Ñ¡ÔñºóµÄ×Ö·û´®.
+	// å°è¯•å»æ‰¾å•ä¸€çš„è”ç³»äººåå­—.å¦‚æœå¤šä¸ºä¸ªåˆ™åˆ›å»ºé€‰æ‹©,è¿”å›åˆ›å»ºé€‰æ‹©åçš„å­—ç¬¦ä¸².
 	public static String getSingleContactName(String findStr, String from) {
-		// ·µ»ØµÄÁªÏµÈËµÄÊıÁ¿
+		// è¿”å›çš„è”ç³»äººçš„æ•°é‡
 		int numberOfContactNames = getContactNamesByName(findStr).size();
-		// Èç¹ûÕÒµ½
+		// å¦‚æœæ‰¾åˆ°
 		if (numberOfContactNames != 0) {
-			// ÕÒµ½,²¢ÇÒÁªÏµÈËÊıÁ¿Îª1ÇÒºÍÃû×ÖºÍÓÃ»§ËùÊäÈëµÄÒ»ÖÂ.
+			// æ‰¾åˆ°,å¹¶ä¸”è”ç³»äººæ•°é‡ä¸º1ä¸”å’Œåå­—å’Œç”¨æˆ·æ‰€è¾“å…¥çš„ä¸€è‡´.
 			if (numberOfContactNames == 1 && findStr.equals(getContactNamesByName(findStr).get(0))) {
 				return findStr;
 			}
-			// ÕÒµ½,(²¢ÇÒÁªÏµÈËÊıÁ¿´óÓÚ1)
+			// æ‰¾åˆ°,(å¹¶ä¸”è”ç³»äººæ•°é‡å¤§äº1)
 			else {
 				return SelCmd.createChoices(getContactNamesByName(findStr), from + " Select Contacts");
 			}
@@ -27,7 +27,7 @@ public class Contact {
 
 	}
 
-	// Í¨¹ı²éÑ¯ºÅÂë»ñÈ¡ÁªÏµÈËĞÕÃû.Èç¹ûÕÒ²»µ½·µ»ØÔ­ºÅÂë
+	// é€šè¿‡æŸ¥è¯¢å·ç è·å–è”ç³»äººå§“å.å¦‚æœæ‰¾ä¸åˆ°è¿”å›åŸå·ç 
 	public static String getContactNameByNumber(String mNumber) {
 		mNumber = mNumber.replace("+86", "");
 		String[] projection = { ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.NUMBER };
@@ -37,7 +37,7 @@ public class Contact {
 			System.out.println("cursor null");
 			return mNumber;
 		}
-		// ÕâÀïÓÉÓÚÊ¹ÓÃÍ¬Ò»¸öºÅÂë,¶øÁªÏµÈËĞÕÃû²»Í¬µÄ¿ÉÄÜĞÔºÜĞ¡..ËùÒÔÕÒµ½µÚÒ»¸ö¾Í·µ»ØÁË.
+		// è¿™é‡Œç”±äºä½¿ç”¨åŒä¸€ä¸ªå·ç ,è€Œè”ç³»äººå§“åä¸åŒçš„å¯èƒ½æ€§å¾ˆå°..æ‰€ä»¥æ‰¾åˆ°ç¬¬ä¸€ä¸ªå°±è¿”å›äº†.
 		else {
 			cursor.moveToFirst();
 			int nameFieldColumnIndex = cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME);
@@ -46,7 +46,7 @@ public class Contact {
 		}
 	}
 
-	// Í¨¹ı²éÑ¯Ãû×ÖÈ¡µÃÁªÏµÈËºÅÂë
+	// é€šè¿‡æŸ¥è¯¢åå­—å–å¾—è”ç³»äººå·ç 
 	public static ArrayList<String> getContactNumberByName(String mName) {
 		ArrayList<String> listPhoneNumber = new ArrayList<String>();
 		String[] projection = { ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.NUMBER };
@@ -60,7 +60,7 @@ public class Contact {
 		if (cursor.moveToFirst()) {
 			do {
 				String phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-				// È¥³ı"-"·ûºÅ
+				// å»é™¤"-"ç¬¦å·
 				phoneNumber = phoneNumber.replace("-", "");
 				listPhoneNumber.add(phoneNumber);
 			} while (cursor.moveToNext());
@@ -69,9 +69,9 @@ public class Contact {
 		return listPhoneNumber;
 	}
 
-	// Í¨¹ı²éÑ¯Ãû×Ö·µ»Ø¶à¸ö°üº¬´«Èë×Ö¶ÎµÄÁªÏµÈËÃû×Ö
-	// ÒÔºó»á¿¼ÂÇĞŞ¸ÄÊµÏÖ²éÑ¯ºÅÂëÓÊÏäÀ´È¡µÃÁªÏµÈËÃû×Ö
-	// Ö»·µ»ØÁËº¬ÓĞµç»°ºÅÂëµÄÁªÏµÈËµÄÎÊÌâÒÑ½â¾ö,ÊÇ²éÑ¯Ê±ÊäÈëµÄµÚÒ»¸ö²ÎÊı,¼´´«ÈëµÄURIµ¼ÖÂµÄ
+	// é€šè¿‡æŸ¥è¯¢åå­—è¿”å›å¤šä¸ªåŒ…å«ä¼ å…¥å­—æ®µçš„è”ç³»äººåå­—
+	// ä»¥åä¼šè€ƒè™‘ä¿®æ”¹å®ç°æŸ¥è¯¢å·ç é‚®ç®±æ¥å–å¾—è”ç³»äººåå­—
+	// åªè¿”å›äº†å«æœ‰ç”µè¯å·ç çš„è”ç³»äººçš„é—®é¢˜å·²è§£å†³,æ˜¯æŸ¥è¯¢æ—¶è¾“å…¥çš„ç¬¬ä¸€ä¸ªå‚æ•°,å³ä¼ å…¥çš„URIå¯¼è‡´çš„
 
 	public static ArrayList<String> getContactNamesByName(String mName) {
 		ArrayList<String> listContactNames = new ArrayList<String>();
@@ -79,9 +79,9 @@ public class Contact {
 
 		Cursor cursor = MyApp.getContext().getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, projection, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " LIKE ?", new String[] { "" + "%" + mName + "%" + "" }, null);
 
-		// ÕÒ²»µ½Ö¸¶¨ÁªÏµÈË
+		// æ‰¾ä¸åˆ°æŒ‡å®šè”ç³»äºº
 		if (null == cursor) {
-			System.out.println("cursor null,ÕÒ²»µ½ÖÆ¶¨ÁªÏµÈË");
+			System.out.println("cursor null,æ‰¾ä¸åˆ°åˆ¶å®šè”ç³»äºº");
 			return listContactNames;
 		}
 
@@ -89,7 +89,7 @@ public class Contact {
 			String lastContactName = "";
 			do {
 				String ContactName = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
-				// ÕâÀïĞèÒªÅĞ¶ÏÇ°Ò»¸öÈ¡µÃµÄÁªÏµÈËÃû×ÖºÍĞÂÒ»¸öÊÇ·ñÒ»ÖÂ,Ö»ÓĞ²»Ò»ÖÂµÄÊ±ºò²ÅÌí¼Óµ½ArrayListÖĞ
+				// è¿™é‡Œéœ€è¦åˆ¤æ–­å‰ä¸€ä¸ªå–å¾—çš„è”ç³»äººåå­—å’Œæ–°ä¸€ä¸ªæ˜¯å¦ä¸€è‡´,åªæœ‰ä¸ä¸€è‡´çš„æ—¶å€™æ‰æ·»åŠ åˆ°ArrayListä¸­
 				if (!ContactName.equals(lastContactName)) {
 					listContactNames.add(ContactName);
 				}
@@ -100,7 +100,7 @@ public class Contact {
 		return listContactNames;
 	}
 
-	// Í¨¹ı²éÑ¯Ãû×ÖÈ¡µÃÁªÏµÈËÓÊÏä
+	// é€šè¿‡æŸ¥è¯¢åå­—å–å¾—è”ç³»äººé‚®ç®±
 	public static ArrayList<String> getContactEmailByName(String mName) {
 		ArrayList<String> listEmail = new ArrayList<String>();
 		Cursor cursor = MyApp.getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " = '" + mName + "'", null, null);

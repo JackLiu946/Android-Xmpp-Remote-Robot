@@ -4,19 +4,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.dary.xmpp.MainService;
 
-//开机启动服务
 public class StartUpReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		// 判断配置选项
-		SharedPreferences prefs = context.getSharedPreferences("com.dary.xmpp_preferences", 0);
-		boolean isStartAtBoot = prefs.getBoolean("isStartAtBoot", false);
+		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+		boolean isStartAtBoot = mPrefs.getBoolean("isStartAtBoot", false);
 		if (isStartAtBoot) {
-			System.out.println("开机启动服务");
+			System.out.println("StartUp Service");
 			Intent startserviceintent = new Intent(context, MainService.class);
 			context.startService(startserviceintent);
 		}

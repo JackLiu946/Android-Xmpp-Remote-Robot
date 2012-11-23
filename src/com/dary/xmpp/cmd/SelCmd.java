@@ -11,31 +11,31 @@ public class SelCmd extends CmdBase {
 	private static String from = null;
 
 	public static void Sel(Message message) {
-		// ½«SelÃüÁîµÄString²ÎÊı×¨ÎªintÀàĞÍ
+		// å°†Selå‘½ä»¤çš„Stringå‚æ•°ä¸“ä¸ºintç±»å‹
 		int sel = Integer.parseInt(getArgs(message));
 		// return choicesALL.get(sel-1).toString();
 		selDone(choices.get(sel - 1).toString());
 	}
 
-	// ´´½¨Ñ¡Ôñ
+	// åˆ›å»ºé€‰æ‹©
 	public static String createChoices(ArrayList<String> choices, String from) {
-		// ÎªstaticµÄ±äÁ¿¸³Öµ.
+		// ä¸ºstaticçš„å˜é‡èµ‹å€¼.
 		SelCmd.choices = choices;
 		SelCmd.from = from;
 
-		// ½«Ñ¡Ïî½âÎö³öÀ´.
+		// å°†é€‰é¡¹è§£æå‡ºæ¥.
 		int numberOfChoices = choices.size();
 		StringBuilder choicesSB = new StringBuilder();
-		// ÕâÀï¸ù¾İFromµÄ²»Í¬,¿ÉÒÔÊ¹ÓÃ²»Í¬µÄÌáÊ¾Óï¾ä.
+		// è¿™é‡Œæ ¹æ®Fromçš„ä¸åŒ,å¯ä»¥ä½¿ç”¨ä¸åŒçš„æç¤ºè¯­å¥.
 		choicesSB.append("From : " + from + "\n" + "Just Make A Choices :" + "\n");
 		for (int i = 0; i < numberOfChoices; i++) {
 			choicesSB.append(i + 1 + " " + choices.get(i).toString() + "\n");
 		}
-		// È¥³ı×îºóÒ»¸ö»»ĞĞ·û
+		// å»é™¤æœ€åä¸€ä¸ªæ¢è¡Œç¬¦
 		return Tools.delLastLine(choicesSB);
 	}
 
-	// µ±Ñ¡ÔñÍê³ÉÊ±ºò,¸ù¾İFrom(Ñ¡Ôñ´´½¨µÄÀ´Ô´)µÄ²»Í¬,È¥Ö´ĞĞ²»Í¬µÄ·½·¨.
+	// å½“é€‰æ‹©å®Œæˆæ—¶å€™,æ ¹æ®From(é€‰æ‹©åˆ›å»ºçš„æ¥æº)çš„ä¸åŒ,å»æ‰§è¡Œä¸åŒçš„æ–¹æ³•.
 	static void selDone(String selection) {
 		if (from.equals("Select PhoneNumbers")) {
 			SmsToCmd.SelPhoneNumberDone(selection);

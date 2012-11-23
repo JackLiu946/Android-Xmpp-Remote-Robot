@@ -9,7 +9,7 @@ import com.dary.xmpp.ServiceManager;
 
 public class RingerModeCmd extends CmdBase {
 	public static void RingerMode(Chat chat, Message message) {
-		// 不带参数,返回当前的RingerMode
+		// 涓嶅甫鍙傛暟,杩斿洖褰撳墠鐨凴ingerMode
 		if (!hasArgs(message)) {
 			int RingerMode = ServiceManager.audManager.getRingerMode();
 			String strRingerMode = "";
@@ -26,7 +26,7 @@ public class RingerModeCmd extends CmdBase {
 			}
 			sendMessageAndUpdateView(chat, "Phone 's RingerMode : " + strRingerMode);
 		}
-		// 带参数则根据参数来设置RingerMode
+		// 甯﹀弬鏁板垯鏍规嵁鍙傛暟鏉ヨ缃甊ingerMode
 		else if (getArgs(message).equals("normal")) {
 			ServiceManager.audManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
 			sendMessageAndUpdateView(chat, "Set RingerMode : Normal Done");

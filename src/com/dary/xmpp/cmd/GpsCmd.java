@@ -16,7 +16,7 @@ public class GpsCmd extends CmdBase {
 		// {
 		// System.out.println("gps3");
 		// Toast.makeText(XmppActivity.xmppactivity,
-		// "GPSÄ£¿éÕı³£", Toast.LENGTH_SHORT)
+		// "GPSæ¨¡å—æ­£å¸¸", Toast.LENGTH_SHORT)
 		// .show();
 		// //return;
 		// }
@@ -27,13 +27,13 @@ public class GpsCmd extends CmdBase {
 		// MainService.mainservice.startActivity(intent);
 
 		Criteria criteria = new Criteria();
-		criteria.setAccuracy(Criteria.ACCURACY_COARSE); // µÍ¾«¶È
-		// criteria.setAltitudeRequired(false); //¸ß¶È
-		// criteria.setBearingRequired(false); //·½Ïò
-		criteria.setCostAllowed(false); // Ãâ·Ñ
-		// criteria.setPowerRequirement(Criteria.POWER_LOW); µçÁ¿
-		String provider = ServiceManager.locManager.getBestProvider(criteria, true); // »ñÈ¡GPSĞÅÏ¢
-		Location location = ServiceManager.locManager.getLastKnownLocation(provider); // Í¨¹ıGPS»ñÈ¡Î»ÖÃ
+		criteria.setAccuracy(Criteria.ACCURACY_COARSE); // ä½ç²¾åº¦
+		// criteria.setAltitudeRequired(false); //é«˜åº¦
+		// criteria.setBearingRequired(false); //æ–¹å‘
+		criteria.setCostAllowed(false); // å…è´¹
+		// criteria.setPowerRequirement(Criteria.POWER_LOW); ç”µé‡
+		String provider = ServiceManager.locManager.getBestProvider(criteria, true); // è·å–GPSä¿¡æ¯
+		Location location = ServiceManager.locManager.getLastKnownLocation(provider); // é€šè¿‡GPSè·å–ä½ç½®
 		if (location != null) {
 			System.out.println(location.getLatitude());
 			System.out.println(location.getLongitude());
@@ -41,7 +41,7 @@ public class GpsCmd extends CmdBase {
 			sendMessageAndUpdateView(chat, "http://maps.google.com/maps?q=" + location.getLatitude() + ",+" + location.getLongitude());
 
 		}
-		// ÉèÖÃ¼àÌıÆ÷£¬×Ô¶¯¸üĞÂµÄ×îĞ¡Ê±¼äÎª¼ä¸ôNÃë(1ÃëÎª1*1000£¬ÕâÑùĞ´Ö÷ÒªÎªÁË·½±ã)»ò×îĞ¡Î»ÒÆ±ä»¯³¬¹ıNÃ×
+		// è®¾ç½®ç›‘å¬å™¨ï¼Œè‡ªåŠ¨æ›´æ–°çš„æœ€å°æ—¶é—´ä¸ºé—´éš”Nç§’(1ç§’ä¸º1*1000ï¼Œè¿™æ ·å†™ä¸»è¦ä¸ºäº†æ–¹ä¾¿)æˆ–æœ€å°ä½ç§»å˜åŒ–è¶…è¿‡Nç±³
 		ServiceManager.locManager.requestLocationUpdates(provider, 10 * 1000, 100, new LocationListener() {
 
 			public void onLocationChanged(Location location) {

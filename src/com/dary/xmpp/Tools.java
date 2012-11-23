@@ -42,7 +42,7 @@ public class Tools {
 
 	public static void doLog(String str) {
 		try {
-			// ×¢ÒâÈç¹ûÎÄ¼ş²»´æÔÚµÄÊ±ºò(È·ÇĞµÄËµÓ¦¸ÃÊÇÎÄ¼şµÄÄÚÈİÎª¿ÕÊ±),Ìí¼ÓĞÂÄÚÈİÖ®Ç°ÒªÏÈÌí¼Ó»»ĞĞ·û.
+			// æ³¨æ„å¦‚æœæ–‡ä»¶ä¸å­˜åœ¨çš„æ—¶å€™(ç¡®åˆ‡çš„è¯´åº”è¯¥æ˜¯æ–‡ä»¶çš„å†…å®¹ä¸ºç©ºæ—¶),æ·»åŠ æ–°å†…å®¹ä¹‹å‰è¦å…ˆæ·»åŠ æ¢è¡Œç¬¦.
 			// FileOutputStream outStream=MyApp.getContext().openFileOutput("LoginLog",Context.MODE_APPEND);
 			File fileDirectory = new File("/data/data/com.dary.xmpp/files/");
 			if (!fileDirectory.exists()) {
@@ -56,7 +56,7 @@ public class Tools {
 				file.createNewFile();
 			}
 			sb.append(str);
-			// Õ¼ÂúÕû¸öÒ»ĞĞ,¶ÔÆë
+			// å æ»¡æ•´ä¸ªä¸€è¡Œ,å¯¹é½
 			int length = 29;
 			for (int i = 0; i < length - str.length(); i++) {
 				sb.append(" ");

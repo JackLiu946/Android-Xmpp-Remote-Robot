@@ -11,7 +11,6 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import com.dary.xmpp.Contact;
-import com.dary.xmpp.MainService;
 import com.dary.xmpp.MyApp;
 
 public class SmsCmd extends SmsCmdBase {
@@ -21,7 +20,7 @@ public class SmsCmd extends SmsCmdBase {
 		Cursor cur;
 		Uri uri;
 
-		// ²»´ø²ÎÊı,Ôò·µ»Ø¶ÌĞÅ¼ÇÂ¼.
+		// ä¸å¸¦å‚æ•°,åˆ™è¿”å›çŸ­ä¿¡è®°å½•.
 		if (!hasArgs(message)) {
 			uri = Uri.parse("content://sms/");
 			String[] projection = new String[] { "_id", "address", "body", "date", "type" };
@@ -72,8 +71,8 @@ public class SmsCmd extends SmsCmdBase {
 
 			System.out.println(smsBuilder.toString());
 		} else {
-			// ´ø²ÎÊı¾Í»Ø¸´×îºóÊÕµ½µÄ¶ÌĞÅ
-			// »ñÈ¡×îºó(ÊÕµ½µÄ)¶ÌĞÅµÄºÅÂë
+			// å¸¦å‚æ•°å°±å›å¤æœ€åæ”¶åˆ°çš„çŸ­ä¿¡
+			// è·å–æœ€å(æ”¶åˆ°çš„)çŸ­ä¿¡çš„å·ç 
 			uri = Uri.parse("content://sms/inbox");
 			// MainService.uri =
 			// Uri.parse("content://sms");
@@ -84,7 +83,7 @@ public class SmsCmd extends SmsCmdBase {
 			String lastAddress = cur.getString(index_Address);
 			System.out.println("LastAddress" + lastAddress);
 
-			// ±ê¼Ç×îºóÊÕµ½µÄ¶ÌĞÅÎªÒÑ¶Á×´Ì¬
+			// æ ‡è®°æœ€åæ”¶åˆ°çš„çŸ­ä¿¡ä¸ºå·²è¯»çŠ¶æ€
 			ContentValues cvalues = new ContentValues();
 			cvalues.put("read", "1");
 			MyApp.getContext().getContentResolver().update(uri, cvalues, " address='" + lastAddress + "'", null);
@@ -92,7 +91,7 @@ public class SmsCmd extends SmsCmdBase {
 			// MainService.cur.close();
 			// MainService.cur = null;
 
-			// ·¢ËÍ¶ÌĞÅ²¢²åÈëµ½¶ÌĞÅ¿âÖĞ
+			// å‘é€çŸ­ä¿¡å¹¶æ’å…¥åˆ°çŸ­ä¿¡åº“ä¸­
 			sendSMSAndInsertToLibrary(lastAddress, getArgsCaseSensitive(message));
 
 			sendMessageAndUpdateView(chat, "Send SMS " + "( Number : " + Contact.getContactNameByNumber(lastAddress) + " Body : " + getArgsCaseSensitive(message) + " )" + "Done");

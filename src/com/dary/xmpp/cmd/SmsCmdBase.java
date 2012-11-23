@@ -6,11 +6,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.telephony.SmsManager;
 
-import com.dary.xmpp.MainService;
 import com.dary.xmpp.MyApp;
 
 public class SmsCmdBase extends CmdBase {
-	// ·¢ËÍ¶ÌĞÅ,²¢²åÈë¶ÌĞÅ¿âÖĞ
+	// å‘é€çŸ­ä¿¡,å¹¶æ’å…¥çŸ­ä¿¡åº“ä¸­
 	static void sendSMSAndInsertToLibrary(String addressNumber, String body) {
 		SmsManager smsManager = SmsManager.getDefault();
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(MyApp.getContext(), 0, new Intent(), 0);
@@ -18,7 +17,7 @@ public class SmsCmdBase extends CmdBase {
 		insertSMSToLibrary(addressNumber, body);
 	}
 
-	// ½«¶ÌĞÅ²åÈë¶ÌĞÅ¿âÖĞ.
+	// å°†çŸ­ä¿¡æ’å…¥çŸ­ä¿¡åº“ä¸­.
 	static void insertSMSToLibrary(String addressNumber, String body) {
 		ContentValues values = new ContentValues();
 		values.put("address", addressNumber);

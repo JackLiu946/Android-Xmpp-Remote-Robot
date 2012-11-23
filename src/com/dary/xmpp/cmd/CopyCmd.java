@@ -8,18 +8,18 @@ import com.dary.xmpp.ServiceManager;
 public class CopyCmd extends CmdBase {
 	public static void Copy(Chat chat, Message message) {
 
-		// ²»´ø²ÎÊı,½«ÊÖ»úÉÏ¼ôÌù°åÄÚÈİ·µ»ØÈ¥
+		// ä¸å¸¦å‚æ•°,å°†æ‰‹æœºä¸Šå‰ªè´´æ¿å†…å®¹è¿”å›å»
 		if (!hasArgs(message)) {
 			if (ServiceManager.cliManager.getText().length() > 0) {
 				sendMessageAndUpdateView(chat, "Phone's Clipboard : " + ServiceManager.cliManager.getText());
 			}
-			// Èç¹û¼ôÌù°å·µ»ØNull,ËµÃ÷ÄÚÈİÎª¿Õ,»òÕß²»ÊÇÎÄ±¾
+			// å¦‚æœå‰ªè´´æ¿è¿”å›Null,è¯´æ˜å†…å®¹ä¸ºç©º,æˆ–è€…ä¸æ˜¯æ–‡æœ¬
 			else {
 				sendMessageAndUpdateView(chat, "Phone's Clipboard is empty or not text");
 			}
 
 		}
-		// Èç¹û´ø²ÎÊı,½«²ÎÊıÄÚÈİ¸´ÖÆµ½¼ôÌù°å
+		// å¦‚æœå¸¦å‚æ•°,å°†å‚æ•°å†…å®¹å¤åˆ¶åˆ°å‰ªè´´æ¿
 		else {
 			ServiceManager.cliManager.setText(getArgsCaseSensitive(message));
 			sendMessageAndUpdateView(chat, "Copy \"" + getArgsCaseSensitive(message) + "\" Done");

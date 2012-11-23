@@ -25,9 +25,9 @@ import com.dary.xmpp.cmd.SmsToCmd;
 
 class MsgListener implements MessageListener {
 
-	// ÏûÏ¢´¦Àí
+	// æ¶ˆæ¯å¤„ç†
 	public void processMessage(Chat chat, Message message) {
-		// ÊÕµ½ÏûÏ¢Ö®ºó½«ÏûÏ¢ÄÚÈİ·ÅÈëbundle,·¢ËÍÏûÏ¢È¥¸üĞÂUI
+		// æ”¶åˆ°æ¶ˆæ¯ä¹‹åå°†æ¶ˆæ¯å†…å®¹æ”¾å…¥bundle,å‘é€æ¶ˆæ¯å»æ›´æ–°UI
 		if (null != XmppActivity.MsgHandler) {
 			android.os.Message msg = new android.os.Message();
 			msg.what = XmppActivity.RECEIVE_MESSAGE;
@@ -37,87 +37,87 @@ class MsgListener implements MessageListener {
 			XmppActivity.MsgHandler.sendMessage(msg);
 		}
 		Roster roster = MainService.connection.getRoster();
-		// ´òÓ¡ÊÕµ½µÄÏûÏ¢
-		System.out.println("½ÓÊÜµ½µÄÏûÏ¢: " + message.getBody());
+		// æ‰“å°æ”¶åˆ°çš„æ¶ˆæ¯
+		System.out.println("æ¥å—åˆ°çš„æ¶ˆæ¯: " + message.getBody());
 
 		String cmd = getCmd(message);
 
-		// LightÃüÁî
+		// Lightå‘½ä»¤
 		if (cmd.equals("light")) {
 			LightCmd.Light(chat, message);
 		}
 
-		// RingÃüÁî
+		// Ringå‘½ä»¤
 		else if (cmd.equals("ring")) {
 			RingCmd.Ring(chat, message);
 		}
-		// CallLogÃüÁî.²»ĞèÒªMessage²ÎÊı
+		// CallLogå‘½ä»¤.ä¸éœ€è¦Messageå‚æ•°
 		else if (cmd.equals("calllog")) {
 			CallLogCmd.Calllog(chat);
 		}
 
-		// CopyÃüÁî
+		// Copyå‘½ä»¤
 		else if (cmd.equals("copy")) {
 			CopyCmd.Copy(chat, message);
 		}
 
-		// RejectÃüÁî
+		// Rejectå‘½ä»¤
 		else if (cmd.equals("reject")) {
 			RejectCmd.Reject(chat);
 		}
-		// InfoÃüÁî
+		// Infoå‘½ä»¤
 		else if (cmd.equals("info")) {
 			InfoCmd.Info(chat, message);
 		}
 
-		// CmdÃüÁî
+		// Cmdå‘½ä»¤
 		else if (cmd.equals("cmd")) {
 			CmdCmd.Cmd(chat, message);
 		}
 
-		// SmsÃüÁî
+		// Smså‘½ä»¤
 		else if (cmd.equals("sms")) {
 			SmsCmd.Sms(chat, message);
 		}
 
-		// GpsÃüÁî,GpsÃüÁî²»ĞèÒªmessage²ÎÊı
+		// Gpså‘½ä»¤,Gpså‘½ä»¤ä¸éœ€è¦messageå‚æ•°
 		else if (cmd.equals("gps")) {
 			GpsCmd.Gps(chat);
 		}
 
-		// RingerModeÃüÁî
+		// RingerModeå‘½ä»¤
 		else if (cmd.equals("ringermode")) {
 			RingerModeCmd.RingerMode(chat, message);
 		}
 
-		// SmsToÃüÁî
+		// SmsToå‘½ä»¤
 		else if (cmd.equals("smsto")) {
 			SmsToCmd.Smsto(chat, message);
 		}
 
-		// SelÃüÁî
+		// Selå‘½ä»¤
 		else if (cmd.equals("sel")) {
 			SelCmd.Sel(message);
 		}
 
-		// PhotoÃüÁî
+		// Photoå‘½ä»¤
 		else if (cmd.equals("photo")) {
 			PhotoCmd.Photo(chat, roster.getPresence("anyofyou@gmail.com").getFrom());
 		}
-		// HelpÃüÁî
+		// Helpå‘½ä»¤
 		else if (cmd.equals("help")) {
 			HelpCmd.Help(chat, message);
 		}
 
-		// ËùÓĞÃüÁî¶¼²»Æ¥ÅäÊ±
+		// æ‰€æœ‰å‘½ä»¤éƒ½ä¸åŒ¹é…æ—¶
 		else {
 			CmdBase.sendMessageAndUpdateView(chat, "Unknown Command");
 		}
 	}
 
-	// ½âÎöÏûÏ¢µÄÃüÁî²¿·Ö(µÚÒ»¸ö:Ö®Ç°µÄ²¿·Ö)
+	// è§£ææ¶ˆæ¯çš„å‘½ä»¤éƒ¨åˆ†(ç¬¬ä¸€ä¸ª:ä¹‹å‰çš„éƒ¨åˆ†)
 	private static String getCmd(Message message) {
-		// ÕâÀïÒª×¢Òâ×ª»»ÎªĞ¡Ğ´
+		// è¿™é‡Œè¦æ³¨æ„è½¬æ¢ä¸ºå°å†™
 		return message.getBody().toLowerCase().split(":")[0];
 	}
 }

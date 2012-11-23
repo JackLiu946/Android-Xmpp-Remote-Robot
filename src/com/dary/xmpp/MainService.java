@@ -54,7 +54,7 @@ public class MainService extends Service {
 
 	@Override
 	public void onCreate() {
-		// Æô¶¯InCallService
+		// å¯åŠ¨InCallService
 		isAlreadyRegisterConnectionChangeReceiver = false;
 		Intent incallserviceIntent = new Intent();
 		incallserviceIntent.setClass(MainService.this, IncallService.class);
@@ -66,32 +66,32 @@ public class MainService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		IncallService.isFirstStart = true;
 
-		// ÅĞ¶ÏÅäÖÃÊÇ·ñ¶¼ÒÑÌîÈë
+		// åˆ¤æ–­é…ç½®æ˜¯å¦éƒ½å·²å¡«å…¥
 		getSetting();
 
-		// Èç¹ûÅäÖÃ²»È«,ÏÔÊ¾Toast
+		// å¦‚æœé…ç½®ä¸å…¨,æ˜¾ç¤ºToast
 		if (loginAddress.equals("") || password.equals("") || notifiedAddress.equals("")) {
 			sendMsg(XmppActivity.SET_INCOMPLETE);
 		}
-		// ·ñÔò²ÅµÇÂ¼
+		// å¦åˆ™æ‰ç™»å½•
 		else {
-			// Æô¶¯µÇÂ¼Ïß³Ì
+			// å¯åŠ¨ç™»å½•çº¿ç¨‹
 			LoginInThread logininthread = new LoginInThread();
 			Thread thread = new Thread(logininthread);
 			thread.setName("LoginThread");
 			thread.start();
-			System.out.println("µÇÂ¼Ïß³Ì¿ªÊ¼ÔËĞĞ");
+			System.out.println("ç™»å½•çº¿ç¨‹å¼€å§‹è¿è¡Œ");
 
-			// ³¢ÊÔ½«µÇÂ¼µÄ¼ÇÂ¼´æ´¢ÏÂÀ´,ÏÈÔİÊ±Ö»´æ´¢µ½ÆÕÍ¨µÄÎÄ±¾ÎÄ¼şÖĞ
+			// å°è¯•å°†ç™»å½•çš„è®°å½•å­˜å‚¨ä¸‹æ¥,å…ˆæš‚æ—¶åªå­˜å‚¨åˆ°æ™®é€šçš„æ–‡æœ¬æ–‡ä»¶ä¸­
 			Tools.doLog("Login");
-			// µÇÂ¼ÖĞ,·¢ËÍÏûÏ¢,¸üĞÂUI.
+			// ç™»å½•ä¸­,å‘é€æ¶ˆæ¯,æ›´æ–°UI.
 
 			sendMsg(XmppActivity.LOGGING);
 		}
 		return super.onStartCommand(intent, flags, startId);
 	}
 
-	// µÇÂ¼Ïß³Ì
+	// ç™»å½•çº¿ç¨‹
 	class LoginInThread implements Runnable {
 
 		public void run() {
@@ -112,36 +112,36 @@ public class MainService extends Service {
 
 			connection = new XMPPConnection(config);
 			try {
-				System.out.println("Óë·şÎñÆ÷½¨Á¢Á¬½Ó");
+				System.out.println("ä¸æœåŠ¡å™¨å»ºç«‹è¿æ¥");
 				connection.connect();
 
 				try {
-					// ·ÀÖ¹ÖØĞÂÁ¬½ÓÊ±¶à´ÎµÇÂ¼.
+					// é˜²æ­¢é‡æ–°è¿æ¥æ—¶å¤šæ¬¡ç™»å½•.
 					if (!connection.isAuthenticated() && connection.isConnected()) {
 
-						System.out.println("µÇÂ¼,ÑéÖ¤¿ÚÁî");
+						System.out.println("ç™»å½•,éªŒè¯å£ä»¤");
 
 						// connection.login(loginAddress,password,resource);
 						connection.login(loginAddress, password, Tools.getTimeStr());
 
 						// Tools.Vibrator(MainService.this, 500);
 
-						System.out.println("µÇÂ¼³É¹¦");
+						System.out.println("ç™»å½•æˆåŠŸ");
 						Tools.doLog("Login Successful");
 						makeNotification("Login Successful");
 
-						// µÇÂ¼³É¹¦ºó·¢ËÍÏûÏ¢Í¨ÖªActivity¸Ä±ä°´Å¥×´Ì¬
+						// ç™»å½•æˆåŠŸåå‘é€æ¶ˆæ¯é€šçŸ¥Activityæ”¹å˜æŒ‰é’®çŠ¶æ€
 						sendMsg(XmppActivity.LOGIN_SUCCESSFUL);
 
 						ChatManager chatmanager = connection.getChatManager();
 
-						// ×¢²áÏûÏ¢¼àÌıÆ÷
+						// æ³¨å†Œæ¶ˆæ¯ç›‘å¬å™¨
 						chat = chatmanager.createChat(notifiedAddress.toLowerCase(), new MsgListener());
 
-						// µÇÂ¼³É¹¦Ö®ºóÔÙÔÚ³ÌĞò¶¯Ì¬µÄ×¢²áµçÁ¿¸Ä±ä,¶ÌĞÅºÍÁ¬½Ó¸Ä±äµÄ¹ã²¥½ÓÊÕÆ÷,×¢²áµçÁ¿¸Ä±äµÄ½ÓÊÕÆ÷Ê±»áÉèÖÃPresence
+						// ç™»å½•æˆåŠŸä¹‹åå†åœ¨ç¨‹åºåŠ¨æ€çš„æ³¨å†Œç”µé‡æ”¹å˜,çŸ­ä¿¡å’Œè¿æ¥æ”¹å˜çš„å¹¿æ’­æ¥æ”¶å™¨,æ³¨å†Œç”µé‡æ”¹å˜çš„æ¥æ”¶å™¨æ—¶ä¼šè®¾ç½®Presence
 						registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
-						// ÕâÀï±ØĞëÅĞ¶Ï¼àÌıÍøÂçÁ¬½ÓµÄ¹ã²¥½ÓÊÕÆ÷ÊÇ·ñÒÑ¾­×¢²áÁË,·ñÔò»á·´¸´×¢²á.µ¼ÖÂÊÕµ½¹ã²¥µÄÊ±ºò¶à´ÎµÇÂ¼
+						// è¿™é‡Œå¿…é¡»åˆ¤æ–­ç›‘å¬ç½‘ç»œè¿æ¥çš„å¹¿æ’­æ¥æ”¶å™¨æ˜¯å¦å·²ç»æ³¨å†Œäº†,å¦åˆ™ä¼šåå¤æ³¨å†Œ.å¯¼è‡´æ”¶åˆ°å¹¿æ’­çš„æ—¶å€™å¤šæ¬¡ç™»å½•
 						if (isautoReconnect && !isAlreadyRegisterConnectionChangeReceiver) {
 							connectionChangeReceiver = new ConnectionChangeReceiver();
 							registerReceiver(connectionChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
@@ -150,21 +150,21 @@ public class MainService extends Service {
 
 						registerReceiver(smsReceiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
 
-						// µÇÂ¼³É¹¦ºó·¢ËÍÏûÏ¢,ÓÃÓÚ²âÊÔ
+						// ç™»å½•æˆåŠŸåå‘é€æ¶ˆæ¯,ç”¨äºæµ‹è¯•
 						if (isDebugMode) {
 							CmdBase.sendMessageAndUpdateView(chat, "Login is successful");
 						}
 					}
 
 				} catch (XMPPException e) {
-					System.out.println("µÇÂ¼Ê§°Ü");
+					System.out.println("ç™»å½•å¤±è´¥");
 					Tools.doLog("Login Failed");
 					makeNotification("Login Failed");
 					sendMsg(XmppActivity.LOGIN_FAILED);
 					e.printStackTrace();
 				}
 			} catch (XMPPException e) {
-				System.out.println("Á¬½Ó·şÎñÆ÷Ê§°Ü");
+				System.out.println("è¿æ¥æœåŠ¡å™¨å¤±è´¥");
 				Tools.doLog("Connection Failed");
 				makeNotification("Connection Failed");
 				sendMsg(XmppActivity.CONNECTION_FAILED);
@@ -181,7 +181,7 @@ public class MainService extends Service {
 			connection.sendPacket(presence);
 			connection.disconnect();
 		}
-		// ·´×¢²á¹ã²¥½ÓÊÕÆ÷
+		// åæ³¨å†Œå¹¿æ’­æ¥æ”¶å™¨
 		unregisterReceiver(batteryReceiver);
 		unregisterReceiver(smsReceiver);
 		if (isautoReconnect) {
@@ -199,31 +199,31 @@ public class MainService extends Service {
 	private void getSetting() {
 		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		iscustomServer = mPrefs.getBoolean("isCustomServer", false);
-		System.out.println("×Ô¶¨Òå·şÎñÆ÷ÉèÖÃ " + iscustomServer);
+		System.out.println("è‡ªå®šä¹‰æœåŠ¡å™¨è®¾ç½® " + iscustomServer);
 		serverHost = mPrefs.getString("serverHost", "");
-		System.out.println("·şÎñÆ÷Ö÷»ú " + serverHost);
+		System.out.println("æœåŠ¡å™¨ä¸»æœº " + serverHost);
 		serverPort = mPrefs.getString("serverPort", "5222");
-		System.out.println("·şÎñÆ÷¶Ë¿Ú " + serverPort);
+		System.out.println("æœåŠ¡å™¨ç«¯å£ " + serverPort);
 		loginAddress = mPrefs.getString("loginAddress", "");
-		System.out.println("µÇÂ¼µØÖ· " + loginAddress);
+		System.out.println("ç™»å½•åœ°å€ " + loginAddress);
 		password = mPrefs.getString("password", "");
-		System.out.println("ÃÜÂë " + password);
+		System.out.println("å¯†ç  " + password);
 		notifiedAddress = mPrefs.getString("notifiedAddress", "");
-		System.out.println("ÌáĞÑµØÖ· " + notifiedAddress);
+		System.out.println("æé†’åœ°å€ " + notifiedAddress);
 		resource = mPrefs.getString("resource", "");
-		System.out.println("×ÊÔ´Ãû " + resource);
+		System.out.println("èµ„æºå " + resource);
 		isautoReconnect = mPrefs.getBoolean("isAutoReconnect", true);
-		System.out.println("ÊÇ·ñÖØĞÂÁ¬½Ó " + isautoReconnect);
+		System.out.println("æ˜¯å¦é‡æ–°è¿æ¥ " + isautoReconnect);
 		isDebugMode = mPrefs.getBoolean("isDebugMode", false);
-		System.out.println("µ÷ÊÔÄ£Ê½ " + isDebugMode);
+		System.out.println("è°ƒè¯•æ¨¡å¼ " + isDebugMode);
 	}
 
 	private void sendMsg(int tag) {
 		MyApp myApp = (MyApp) getApplication();
 		myApp.setStatus(tag);
-		// µÇÂ¼ÖĞ,·¢ËÍÏûÏ¢,¸üĞÂUI.
+		// ç™»å½•ä¸­,å‘é€æ¶ˆæ¯,æ›´æ–°UI.
 		if (null != XmppActivity.MsgHandler) {
-			// ¿¼ÂÇĞŞ¸ÄÎª,µ±ActivityÆô¶¯µÄÊ±ºòÈ¥¶ÁÈ¡×´Ì¬
+			// è€ƒè™‘ä¿®æ”¹ä¸º,å½“Activityå¯åŠ¨çš„æ—¶å€™å»è¯»å–çŠ¶æ€
 			Message msg = new Message();
 			msg.what = tag;
 			XmppActivity.MsgHandler.sendMessage(msg);

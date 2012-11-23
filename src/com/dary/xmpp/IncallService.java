@@ -35,7 +35,7 @@ public class IncallService extends Service {
 
 	@Override
 	public void onCreate() {
-		// ÓĞÎÊÌâ,¸ÄÎª²»µ÷ÓÃServiceManagerÖĞµÄtelManager
+		// æœ‰é—®é¢˜,æ”¹ä¸ºä¸è°ƒç”¨ServiceManagerä¸­çš„telManager
 		TelephonyManager telManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		telManager.listen(phoneListener, mPhoneCallListener.LISTEN_CALL_STATE);
 		super.onCreate();

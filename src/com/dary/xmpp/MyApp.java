@@ -31,9 +31,7 @@ public class MyApp extends Application implements Thread.UncaughtExceptionHandle
 	}
 
 	public void uncaughtException(Thread thread, Throwable ex) {
-		// TODO Auto-generated method stub
 		final String crashReport = getCrashReport(mContext, ex);
-		// 锟斤拷示锟届常锟斤拷息&锟斤拷锟酵憋拷锟斤拷
 		new Thread() {
 			public void run() {
 				Looper.prepare();

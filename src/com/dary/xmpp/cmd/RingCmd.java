@@ -5,18 +5,14 @@ import java.io.IOException;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.packet.Message;
 
-import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 
-import com.dary.xmpp.MainService;
 import com.dary.xmpp.MyApp;
-import com.dary.xmpp.ServiceManager;
 
 public class RingCmd extends CmdBase {
 
-	private static int OldVolume;
 	private static MediaPlayer mediaPlayer = new MediaPlayer();
 
 	public static void Ring(Chat chat, Message message) {
@@ -36,14 +32,9 @@ public class RingCmd extends CmdBase {
 			e.printStackTrace();
 		}
 
-		// ²»´ø²ÎÊı
+		// ä¸å¸¦å‚æ•°
 		if (message.getBody().indexOf(":") == -1) {
-			OldVolume = ServiceManager.audManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-			System.out.println(ServiceManager.audManager.getStreamVolume(AudioManager.STREAM_MUSIC));
-			// ÒôÁ¿Èç¹ûĞ¡ÓÚ12¾Íµ÷ÕûÎª12,×î´óÎª15.
-			if (OldVolume < 12) {
-				ServiceManager.audManager.setStreamVolume(AudioManager.STREAM_MUSIC, 12, 0);
-			}
+			mediaPlayer.setAudioStreamType(AudioManager.STREAM_RING);
 			mediaPlayer.setLooping(true);
 			try {
 				mediaPlayer.prepare();
@@ -58,15 +49,16 @@ public class RingCmd extends CmdBase {
 			sendMessageAndUpdateView(chat, "Ring Start");
 
 		} else if (getArgs(message).equals("stop")) {
-			// ÕâÀïĞèÒªÏÈÅĞ¶ÏÒ»ÏÂÊÇ·ñÔÙ²¥·ÅÖĞ
+			// è¿™é‡Œéœ€è¦å…ˆåˆ¤æ–­ä¸€ä¸‹æ˜¯å¦å†æ’­æ”¾ä¸­
 			if (mediaPlayer.isPlaying()) {
-				// µ÷Õû»ØÔ­ÏÈÓÃ»§ÉèÖÃµÄÒôÁ¿
-				ServiceManager.audManager.setStreamVolume(AudioManager.STREAM_MUSIC, OldVolume, 0);
 				mediaPlayer.stop();
+//				 mediaPlayer.release();
 				sendMessageAndUpdateView(chat, "Ring Stop");
-
 			}
-			// mediaPlayer.release();
+			else
+			{
+				sendMessageAndUpdateView(chat,"No Ringing!");
+			}
 		}
 	}
 }

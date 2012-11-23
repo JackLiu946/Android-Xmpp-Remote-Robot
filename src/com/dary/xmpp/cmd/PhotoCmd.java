@@ -24,7 +24,7 @@ public class PhotoCmd extends CmdBase {
 	static File file = null;
 
 	public static void Photo(Chat chat, final String From) {
-		// ÕÕÆ¬µÄÃû×ÖºÍ´æ´¢µÄµØÖ·.
+		// ç…§ç‰‡çš„åå­—å’Œå­˜å‚¨çš„åœ°å€.
 		fileName = Tools.getTimeStrHyphen() + ".jpg";
 		filePath = "/sdcard";
 
@@ -72,13 +72,13 @@ public class PhotoCmd extends CmdBase {
 						sCamera = null;
 					}
 
-					// ÕâÀïÊ¼ÖÕÓĞÎÊÌâ,Î´½â¾ö.
+					// è¿™é‡Œå§‹ç»ˆæœ‰é—®é¢˜,æœªè§£å†³.
 					// ConfigureProviderManager.configure(ProviderManager.getInstance());
 					// new ServiceDiscoveryManager(MainService.connection);
 					// FileTransferManager FTmanager = new
 					// FileTransferManager(MainService.connection);
 					//
-					// // ÕâÀïÊÇÍêÕûµÄÓÃ»§ID,°üÀ¨×ÊÔ´Ãû
+					// // è¿™é‡Œæ˜¯å®Œæ•´çš„ç”¨æˆ·ID,åŒ…æ‹¬èµ„æºå
 					// OutgoingFileTransfer transfer =
 					// FTmanager.createOutgoingFileTransfer(From);
 					// try

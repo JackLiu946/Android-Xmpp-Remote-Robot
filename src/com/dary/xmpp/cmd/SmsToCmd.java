@@ -10,18 +10,18 @@ public class SmsToCmd extends SmsCmdBase {
 	static String contactName = null;
 	static Chat chat = null;
 
-	// Ä¿Ç°µÄSmstoÃüÁîÖ»ÄÜ½ÓÊÕÃ÷È·µÄÁªÏµÈËĞÕÃû.ÒÔºóÒª¿¼ÂÇĞŞ¸ÄÎªÄÜ½ÓÊÜÄ£ºıµÄÁªÏµÈËĞÅÏ¢,ºÍÖ±½ÓÎªºÅÂëµÄ·½Ê½.
+	// ç›®å‰çš„Smstoå‘½ä»¤åªèƒ½æ¥æ”¶æ˜ç¡®çš„è”ç³»äººå§“å.ä»¥åè¦è€ƒè™‘ä¿®æ”¹ä¸ºèƒ½æ¥å—æ¨¡ç³Šçš„è”ç³»äººä¿¡æ¯,å’Œç›´æ¥ä¸ºå·ç çš„æ–¹å¼.
 	public static void Smsto(Chat chat, Message message) {
-		// ²»º¬ÓĞÁ½¸ö²ÎÊıÔò·µ»ØÏûÏ¢
+		// ä¸å«æœ‰ä¸¤ä¸ªå‚æ•°åˆ™è¿”å›æ¶ˆæ¯
 		if (hasSecArgs(message)) {
 			SmsToCmd.chat = chat;
 			String findStr = getFirArgsCaseSensitive(message);
 			body = getSecArgsCaseSensitive(message);
-			// ÕÒµ½Î¨Ò»µÄÁªÏµÈË,´ËÊ±findStr,¼´ÓÃ»§ÊäÈëµÄ²ÎÊı,¼´ÎªÁªÏµÈËÃû×Ö.
+			// æ‰¾åˆ°å”¯ä¸€çš„è”ç³»äºº,æ­¤æ—¶findStr,å³ç”¨æˆ·è¾“å…¥çš„å‚æ•°,å³ä¸ºè”ç³»äººåå­—.
 			if (Contact.getSingleContactName(findStr, "SmsTo").equals(findStr)) {
 				sendSMS(findStr);
 			}
-			// ÕÒµ½µÄÁªÏµÈËÎª¶à¸ö,»òÕßÎª¿Õ,ÔòÖ±½Ó·¢ËÍ³öÏûÏ¢.
+			// æ‰¾åˆ°çš„è”ç³»äººä¸ºå¤šä¸ª,æˆ–è€…ä¸ºç©º,åˆ™ç›´æ¥å‘é€å‡ºæ¶ˆæ¯.
 			else {
 				sendMessageAndUpdateView(chat, Contact.getSingleContactName(findStr, "SmsTo"));
 			}
@@ -30,41 +30,41 @@ public class SmsToCmd extends SmsCmdBase {
 		}
 	}
 
-	// Ñ¡ÔñÁªÏµÈËÍê³É.ÒÑ»ñµÃµ¥Ò»µÄÁªÏµÈË,È¥·¢ËÍSMS.
+	// é€‰æ‹©è”ç³»äººå®Œæˆ.å·²è·å¾—å•ä¸€çš„è”ç³»äºº,å»å‘é€SMS.
 	public static void SelContactDone(String Contact) {
 		sendSMS(Contact);
 	}
 
-	// Ñ¡ÔñºÅÂëÍê³É,ÒÑ»ñµÃµ¥Ò»µÄºÅÂë,È¥ÕæÕıµÄ·¢ËÍSMS.
+	// é€‰æ‹©å·ç å®Œæˆ,å·²è·å¾—å•ä¸€çš„å·ç ,å»çœŸæ­£çš„å‘é€SMS.
 	public static void SelPhoneNumberDone(String addressNumber) {
 		sendSMSAndInsertToLibrary(addressNumber, body);
 
-		// ¿¼ÂÇÈ¥¶¯Ì¬×¢²á¹ã²¥½ÓÊÕÆ÷À´ÅĞ¶Ï¶ÌĞÅ·¢ËÍµÄ×´Ì¬
+		// è€ƒè™‘å»åŠ¨æ€æ³¨å†Œå¹¿æ’­æ¥æ”¶å™¨æ¥åˆ¤æ–­çŸ­ä¿¡å‘é€çš„çŠ¶æ€
 		sendMessageAndUpdateView(chat, "Send SMS To : " + contactName + " ( Number : " + addressNumber + " Body : " + body + " )" + " Done");
 	}
 
 	static void sendSMS(String findStr) {
 		int NumberOfPhoneNumber = Contact.getContactNumberByName(findStr).size();
-		// Èç¹ûÄÜÕÒµ½ÁªÏµÈËµÄºÅÂë.
+		// å¦‚æœèƒ½æ‰¾åˆ°è”ç³»äººçš„å·ç .
 		if (NumberOfPhoneNumber != 0) {
 			contactName = findStr;
-			// Èç¹ûºÅÂë²»Î¨Ò»,È¥´´½¨Ñ¡Ôñ.
+			// å¦‚æœå·ç ä¸å”¯ä¸€,å»åˆ›å»ºé€‰æ‹©.
 			if (NumberOfPhoneNumber != 1) {
 				sendMessageAndUpdateView(chat, SelCmd.createChoices(Contact.getContactNumberByName(contactName), "Select PhoneNumbers"));
 			}
-			// ºÅÂëÎ¨Ò»ÔòÖ±½Ó·¢ËÍ
+			// å·ç å”¯ä¸€åˆ™ç›´æ¥å‘é€
 			else {
 
 				String addressNumber = Contact.getContactNumberByName(contactName).get(0).toString();
-				// ÕâÀïÓ¦¸ÃÔÙÈ¥ÅĞ¶ÏÊÇ·ñº¬ÓĞµÚ2¸ö²ÎÊı(¼´¶ÌĞÅµÄÄÚÈİ²¿·Ö).
+				// è¿™é‡Œåº”è¯¥å†å»åˆ¤æ–­æ˜¯å¦å«æœ‰ç¬¬2ä¸ªå‚æ•°(å³çŸ­ä¿¡çš„å†…å®¹éƒ¨åˆ†).
 
 				sendSMSAndInsertToLibrary(addressNumber, body);
 
-				// ¿¼ÂÇÈ¥¶¯Ì¬×¢²á¹ã²¥½ÓÊÕÆ÷À´ÅĞ¶Ï¶ÌĞÅ·¢ËÍµÄ×´Ì¬
+				// è€ƒè™‘å»åŠ¨æ€æ³¨å†Œå¹¿æ’­æ¥æ”¶å™¨æ¥åˆ¤æ–­çŸ­ä¿¡å‘é€çš„çŠ¶æ€
 				sendMessageAndUpdateView(chat, "Send SMS To : " + contactName + " ( Number : " + addressNumber + " Body : " + body + " )" + " Done");
 			}
 		}
-		// Èç¹ûÕÒ²»µ½Ôò·µ»ØÏûÏ¢.
+		// å¦‚æœæ‰¾ä¸åˆ°åˆ™è¿”å›æ¶ˆæ¯.
 		else {
 			sendMessageAndUpdateView(chat, "Contact Has No Number");
 		}

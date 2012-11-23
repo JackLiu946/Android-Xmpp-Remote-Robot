@@ -9,7 +9,6 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.provider.CallLog;
 
-import com.dary.xmpp.MainService;
 import com.dary.xmpp.MyApp;
 
 public class CallLogCmd extends CmdBase {
@@ -22,17 +21,15 @@ public class CallLogCmd extends CmdBase {
 		StringBuilder sb = new StringBuilder();
 		ContentResolver cr = MyApp.getContext().getContentResolver();
 		final Cursor cursor = cr.query(CallLog.Calls.CONTENT_URI, new String[] { CallLog.Calls.NUMBER, CallLog.Calls.CACHED_NAME, CallLog.Calls.TYPE, CallLog.Calls.DATE }, null, null, CallLog.Calls.DEFAULT_SORT_ORDER);
-		// ÅĞ¶ÏÍ¨»°¼ÇÂ¼ÊÇ·ñÎª¿Õ
+		// åˆ¤æ–­æ˜¯å¦æœ‰è®°å½•
 		if (cursor.moveToFirst()) {
 			for (int i = 0; i < defaultShowNumber; i++)
 			// for (int i = 0; i < cursor.getCount(); i++)
 			{
-				// ÅĞ¶ÏÊÇ·ñĞ¡ÓÚÄ¬ÈÏÖ¸¶¨µÄ´ÎÊı
-				boolean isHaveEntry = cursor.moveToPosition(i);
-				if (isHaveEntry) {
+				// åˆ¤æ–­æ˜¯å¦æœ‰æŒ‡å®šçš„è®°å½•æ•°é‡
+				if (cursor.moveToPosition(i)) {
 					String strNumber = cursor.getString(0);
 					String strName = cursor.getString(1);
-					// ²¦³öÈ¥Îª2,²¦½øÀ´Î´½ÓÎª3.²¦½øÀ´½ÓÌıÎª1.
 					intType = cursor.getInt(2);
 
 					if (intType == 1) {
@@ -49,7 +46,7 @@ public class CallLogCmd extends CmdBase {
 					sb.append("[ " + time + " , " + strType + " , " + strName + " , " + strNumber + " ]" + "\n\n");
 				}
 			}
-			// È¥³ı×îºóÒ»¸ö»»ĞĞ·û
+			// å»é™¤æœ€åä¸€ä¸ªæ¢è¡Œç¬¦
 			sb.delete(sb.toString().length() - 1, sb.toString().length());
 		} else {
 			sb.append("CallLog is Empty");

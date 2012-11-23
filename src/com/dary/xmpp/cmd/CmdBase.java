@@ -23,25 +23,25 @@ public class CmdBase {
 			bundle.putString("msg", message);
 			msg.setData(bundle);
 			XmppActivity.MsgHandler.sendMessage(msg);
-			System.out.println("·¢³öÈ¥µÄÏûÏ¢: " + message);
+			System.out.println("Send Message: " + message);
 		}
 	}
 
-	// ½âÎöÏûÏ¢µÄÈ«²¿²ÎÊı²¿·Ö,Çø·Ö´óĞ¡Ğ´.
+	// è§£ææ¶ˆæ¯çš„å…¨éƒ¨å‚æ•°éƒ¨åˆ†,åŒºåˆ†å¤§å°å†™.
 	static String getArgsCaseSensitive(Message message) {
 		// return message.getBody().substring(message.getBody().indexOf(":") +
 		// 1);
 		return message.getBody().split(":", 2)[1];
 	}
 
-	// ½âÎöÏûÏ¢µÄÈ«²¿²ÎÊı²¿·Ö,²»Çø·Ö´óĞ¡Ğ´.
+	// è§£ææ¶ˆæ¯çš„å…¨éƒ¨å‚æ•°éƒ¨åˆ†,ä¸åŒºåˆ†å¤§å°å†™.
 	static String getArgs(Message message) {
 		// return message.getBody().substring(message.getBody().indexOf(":") +
 		// 1).toLowerCase();
 		return message.getBody().split(":", 2)[1].toLowerCase();
 	}
 
-	// ½âÎöÏûÏ¢µÄµÚÒ»¸ö²ÎÊı²¿·Ö,²»Çø·Ö´óĞ¡Ğ´.
+	// è§£ææ¶ˆæ¯çš„ç¬¬ä¸€ä¸ªå‚æ•°éƒ¨åˆ†,ä¸åŒºåˆ†å¤§å°å†™.
 	static String getFirArgs(Message message) {
 		// return message.getBody().substring(message.getBody().indexOf(":") +
 		// 1, message.getBody().indexOf(":", message.getBody().indexOf(":") +
@@ -50,7 +50,7 @@ public class CmdBase {
 		return message.getBody().split(":", -1)[1].toLowerCase();
 	}
 
-	// ½âÎöÏûÏ¢µÄµÚÒ»¸ö²ÎÊı²¿·Ö,Çø·Ö´óĞ¡Ğ´.
+	// è§£ææ¶ˆæ¯çš„ç¬¬ä¸€ä¸ªå‚æ•°éƒ¨åˆ†,åŒºåˆ†å¤§å°å†™.
 	static String getFirArgsCaseSensitive(Message message) {
 		// return message.getBody().substring(message.getBody().indexOf(":") +
 		// 1, message.getBody().indexOf(":", message.getBody().indexOf(":") +
@@ -58,27 +58,27 @@ public class CmdBase {
 		return message.getBody().split(":", -1)[1];
 	}
 
-	// ½âÎöÏûÏ¢µÄµÚ¶ş¸ö²ÎÊı²¿·Ö,²»Çø·Ö´óĞ¡Ğ´.
+	// è§£ææ¶ˆæ¯çš„ç¬¬äºŒä¸ªå‚æ•°éƒ¨åˆ†,ä¸åŒºåˆ†å¤§å°å†™.
 	static String getSecArgs(Message message) {
 		// return message.getBody().substring(message.getBody().indexOf(":",
 		// message.getBody().indexOf(":") + 1) + 1).toLowerCase();
 		return message.getBody().split(":", -1)[2].toLowerCase();
 	}
 
-	// ½âÎöÏûÏ¢µÄµÚ¶ş¸ö²ÎÊı²¿·Ö,Çø·Ö´óĞ¡Ğ´.
+	// è§£ææ¶ˆæ¯çš„ç¬¬äºŒä¸ªå‚æ•°éƒ¨åˆ†,åŒºåˆ†å¤§å°å†™.
 	static String getSecArgsCaseSensitive(Message message) {
 		// return message.getBody().substring(message.getBody().indexOf(":",
 		// message.getBody().indexOf(":") + 1) + 1);
 		return message.getBody().split(":", -1)[2];
 	}
 
-	// ÅĞ¶ÏÊÇ·ñº¬ÓĞ²ÎÊı.(²»È¥ÅĞ¶ÏÊÇ·ñÎª¿Õ),Ò²¿ÉÈ¥·Ö¸îÏûÏ¢,ÅĞ¶ÏËùµÃÊı×éµÄ³¤¶È.
+	// åˆ¤æ–­æ˜¯å¦å«æœ‰å‚æ•°.(ä¸å»åˆ¤æ–­æ˜¯å¦ä¸ºç©º),ä¹Ÿå¯å»åˆ†å‰²æ¶ˆæ¯,åˆ¤æ–­æ‰€å¾—æ•°ç»„çš„é•¿åº¦.
 	static boolean hasArgs(Message message) {
 		// return message.getBody().indexOf(":") != -1;
 		return message.getBody().matches(".*:.*");
 	}
 
-	// ÅĞ¶ÏÊÇ·ñº¬ÓĞµÚ2¸ö²ÎÊı.(²»ÅĞ¶ÏÊÇ·ñÎª¿Õ),Ò²¿ÉÈ¥·Ö¸îÏûÏ¢,ÅĞ¶ÏËùµÃÊı×éµÄ³¤¶È.
+	// åˆ¤æ–­æ˜¯å¦å«æœ‰ç¬¬2ä¸ªå‚æ•°.(ä¸åˆ¤æ–­æ˜¯å¦ä¸ºç©º),ä¹Ÿå¯å»åˆ†å‰²æ¶ˆæ¯,åˆ¤æ–­æ‰€å¾—æ•°ç»„çš„é•¿åº¦.
 	static boolean hasSecArgs(Message message) {
 		// return
 		// message.getBody().indexOf(":",message.getBody().indexOf(":")+1) !=

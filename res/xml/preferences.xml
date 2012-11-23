@@ -29,16 +29,17 @@
             android:key="isCustomServer"
             android:summary="@string/preference_is_custom_server_help"
             android:title="@string/preference_is_custom_server" />
-        <EditTextPreference
-            android:dependency="isCustomServer"
+
+        <EditTextPreference
             android:defaultValue="jabber.org"
+            android:dependency="isCustomServer"
             android:inputType="textUri"
             android:key="serverHost"
             android:summary="@string/preference_server_host_help"
             android:title="@string/preference_server_host" />
         <EditTextPreference
-            android:dependency="isCustomServer"
             android:defaultValue="5222"
+            android:dependency="isCustomServer"
             android:inputType="number"
             android:key="serverPort"
             android:numeric="integer"

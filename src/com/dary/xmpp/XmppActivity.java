@@ -64,15 +64,15 @@ public class XmppActivity extends Activity {
 		final LinearLayout linearLayoutMessage = (LinearLayout) findViewById(R.id.linearlayoutmessage);
 		buttonSendMessage = (Button) findViewById(R.id.buttonsendmessage);
 		autoCompleteTextViewSendMessage = (AutoCompleteTextView) findViewById(R.id.autocompletetextviewsendmessage);
-		// ÅÄÕÕÏà¹Ø
+		// æ‹ç…§ç›¸å…³
 		surfaceview = (SurfaceView) findViewById(R.id.sv);
-		// ÉèÖÃAutoCompleteTextViewµÄAdapter
+		// è®¾ç½®AutoCompleteTextViewçš„Adapter
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.auto_cmd_string_item, getResources().getStringArray(R.array.autoCmdString));
 		autoCompleteTextViewSendMessage.setAdapter(adapter);
 
 		setViewByStatus(NOT_LOGGED_IN);
 
-		// ¸üĞÂÏÔÊ¾ÊÕµ½µÄÏûÏ¢
+		// æ›´æ–°æ˜¾ç¤ºæ”¶åˆ°çš„æ¶ˆæ¯
 		MsgHandler = new Handler() {
 			public void handleMessage(Message msg) {
 
@@ -90,31 +90,31 @@ public class XmppActivity extends Activity {
 					setViewByStatus(NOT_LOGGED_IN);
 				}
 
-				// ½ÓÊÜµÄÏûÏ¢
+				// æ¥å—çš„æ¶ˆæ¯
 				else if (msg.what == RECEIVE_MESSAGE) {
 					TextView receiveMessage = new TextView(XmppActivity.this);
 					receiveMessage.setText(Tools.getTimeStr() + "\n" + msg.getData().getString("msg") + "\n");
 					receiveMessage.setTextColor(Color.YELLOW);
 					linearLayoutMessage.addView(receiveMessage);
-					// ½«ScrollView¹ö¶¯µ½µ×²¿
+					// å°†ScrollViewæ»šåŠ¨åˆ°åº•éƒ¨
 					scrollToBottom(scrollViewMessage, linearLayoutMessage);
 				}
 
-				// ³ÌĞò×Ô¼º·¢ËÍ³öÈ¥µÄÏûÏ¢
+				// ç¨‹åºè‡ªå·±å‘é€å‡ºå»çš„æ¶ˆæ¯
 				else if (msg.what == SEND_MESSAGE) {
 					TextView sendMessage = new TextView(XmppActivity.this);
-					// ÕâÀïÓÉÓÚ·¢ËÍ»ØÈ¥µÄÏûÏ¢ÓĞ¿ÉÄÜÊÇ¶àĞĞ,Ê¹ÓÃ»»ĞĞ
+					// è¿™é‡Œç”±äºå‘é€å›å»çš„æ¶ˆæ¯æœ‰å¯èƒ½æ˜¯å¤šè¡Œ,ä½¿ç”¨æ¢è¡Œ
 					sendMessage.setText(Tools.getTimeStr() + "\n" + msg.getData().getString("msg") + "\n");
 					sendMessage.setTextColor(Color.GREEN);
 					linearLayoutMessage.addView(sendMessage);
-					// ½«ScrollView¹ö¶¯µ½µ×²¿
+					// å°†ScrollViewæ»šåŠ¨åˆ°åº•éƒ¨
 					scrollToBottom(scrollViewMessage, linearLayoutMessage);
 				}
 			}
 
 		};
 
-		// ·şÎñÆô¶¯°´Å¥
+		// æœåŠ¡å¯åŠ¨æŒ‰é’®
 		buttonServiceStart.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
@@ -125,7 +125,7 @@ public class XmppActivity extends Activity {
 				startService(mainserviceIntent);
 			}
 		});
-		// ·şÎñÍ£Ö¹µÄ°´Å¥
+		// æœåŠ¡åœæ­¢çš„æŒ‰é’®
 		buttonServiceStop.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
@@ -136,7 +136,7 @@ public class XmppActivity extends Activity {
 				loginStatus.setTextColor(Color.GRAY);
 
 				buttonSendMessage.setEnabled(false);
-				// Æô¶¯Á½¸ö·şÎñ
+				// å¯åŠ¨ä¸¤ä¸ªæœåŠ¡
 				Intent mainserviceIntent = new Intent();
 				mainserviceIntent.setClass(XmppActivity.this, MainService.class);
 				stopService(mainserviceIntent);
@@ -145,12 +145,12 @@ public class XmppActivity extends Activity {
 				stopService(incallserviceIntent);
 				buttonServiceStart.setEnabled(true);
 				buttonServiceStop.setEnabled(false);
-				// ÒÆ³ıLinearLayoutÉÏµÄËùÓĞTextView
+				// ç§»é™¤LinearLayoutä¸Šçš„æ‰€æœ‰TextView
 				linearLayoutMessage.removeAllViewsInLayout();
 			}
 		});
 
-		// ·¢ËÍ°´Å¥
+		// å‘é€æŒ‰é’®
 		buttonSendMessage.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				if (autoCompleteTextViewSendMessage.getText().toString() != "") {
@@ -160,7 +160,7 @@ public class XmppActivity extends Activity {
 			}
 		});
 
-		// ÉèÖÃµã»÷¼´ÏÔÊ¾ÏÂÀ­ÁĞ±í
+		// è®¾ç½®ç‚¹å‡»å³æ˜¾ç¤ºä¸‹æ‹‰åˆ—è¡¨
 		// autoCompleteTextViewSendMessage.setOnClickListener(new
 		// OnClickListener() {
 		//
@@ -169,7 +169,7 @@ public class XmppActivity extends Activity {
 		// }
 		// });
 
-		// Èç¹ûÊÇ²âÊÔÄ£Ê½,Ôò×Ô¶¯µÇÂ¼
+		// å¦‚æœæ˜¯æµ‹è¯•æ¨¡å¼,åˆ™è‡ªåŠ¨ç™»å½•
 		boolean isDebugMode = getApplicationContext().getSharedPreferences("com.dary.xmpp_preferences", 1).getBoolean("isDebugMode", false);
 		if (isDebugMode) {
 			Intent mainserviceIntent = new Intent();
@@ -196,7 +196,7 @@ public class XmppActivity extends Activity {
 			startActivity(intent);
 			break;
 		case 1:
-			// intÀàĞÍµÄÒıÓÃ,²»ÄÜÖ±½ÓÏà¼Ó
+			// intç±»å‹çš„å¼•ç”¨,ä¸èƒ½ç›´æ¥ç›¸åŠ 
 			new AlertDialog.Builder(XmppActivity.this).setTitle(R.string.about).setMessage(getResources().getString(R.string.app_name) + "\n\n" + getResources().getString(R.string.google_code)).setPositiveButton("OK", null).show();
 			break;
 		case 2:
@@ -219,7 +219,7 @@ public class XmppActivity extends Activity {
 		return super.onKeyDown(keyCode, event);
 	}
 
-	// ¹ö¶¯µ½µ×²¿
+	// æ»šåŠ¨åˆ°åº•éƒ¨
 	private static void scrollToBottom(final View scroll, final View inner) {
 
 		Handler mHandler = new Handler();
@@ -244,7 +244,7 @@ public class XmppActivity extends Activity {
 		MyApp myApp = (MyApp) getApplication();
 		setViewByStatus(myApp.getStatus());
 
-		// »ñÈ¡shareText
+		// è·å–shareText
 		Intent intent = getIntent();
 		String shareText = intent.getStringExtra(Intent.EXTRA_TEXT);
 		if (shareText != "") {

@@ -18,7 +18,7 @@ public class InfoCmd extends CmdBase {
 
 	public static void Info(Chat chat, Message message) {
 		InfoCmd.chat = chat;
-		// ²»´ø²ÎÊıÔò·µ»ØÈ«²¿ĞÅÏ¢(²»°üº¬ÁªÏµÈË).
+		// ä¸å¸¦å‚æ•°åˆ™è¿”å›å…¨éƒ¨ä¿¡æ¯(ä¸åŒ…å«è”ç³»äºº).
 		if (!hasArgs(message)) {
 			// infoSB.append("Active Network Type" +
 			// ServiceManager.conManager.getActiveNetworkInfo().getTypeName()
@@ -33,11 +33,11 @@ public class InfoCmd extends CmdBase {
 		} else if (getArgs(message).equals("wifi")) {
 			sendMessageAndUpdateView(chat, getWiFiInfo());
 		}
-		// Èç¹û²»º¬µÚ2¸ö²ÎÊıÒ²Òª°üÀ¨½øÈ¥.×¢ÒâË³Ğò
+		// å¦‚æœä¸å«ç¬¬2ä¸ªå‚æ•°ä¹Ÿè¦åŒ…æ‹¬è¿›å».æ³¨æ„é¡ºåº
 		else if (getArgs(message).equals("contact") || getFirArgs(message).equals("contact")) {
-			// È¡µÃÓÃ»§ÊäÈëµÄ×Ö´®
+			// å–å¾—ç”¨æˆ·è¾“å…¥çš„å­—ä¸²
 			String findStr;
-			// ²»º¬ÓĞµÚ2¸ö²ÎÊı,¼´"info:contact"
+			// ä¸å«æœ‰ç¬¬2ä¸ªå‚æ•°,å³"info:contact"
 			if (!hasSecArgs(message)) {
 				findStr = "";
 			} else {
@@ -91,14 +91,14 @@ public class InfoCmd extends CmdBase {
 		wifiInfo.append("WiFi Mac Address : " + ServiceManager.wifManager.getConnectionInfo().getMacAddress() + "\n");
 		wifiInfo.append("WiFi Link Speed : " + ServiceManager.wifManager.getConnectionInfo().getLinkSpeed() + "\n");
 		wifiInfo.append("WiFi SSID : " + ServiceManager.wifManager.getConnectionInfo().getSSID() + "\n");
-		// ×ª»»IPµØÖ·¸ñÊ½
+		// è½¬æ¢IPåœ°å€æ ¼å¼
 		int ip = ServiceManager.wifManager.getConnectionInfo().getIpAddress();
 		String ipaddress = String.format("%d.%d.%d.%d", (ip & 0xff), (ip >> 8 & 0xff), (ip >> 16 & 0xff), (ip >> 24 & 0xff));
 		wifiInfo.append("WiFi IP Address : " + ipaddress + "\n");
 		return wifiInfo.toString();
 	}
 
-	// Í¨¹ıÁªÏµÈËĞÕÃûĞÅÏ¢È¥²éÕÒÁªÏµÈË,·µ»Øµç»°.³¢ÊÔÔÙÈ¥»ñÈ¡ÈçÓÊ¼ş,µØÖ·,¹«Ë¾µÈµÈµÄÆäËûĞÅÏ¢.
+	// é€šè¿‡è”ç³»äººå§“åä¿¡æ¯å»æŸ¥æ‰¾è”ç³»äºº,è¿”å›ç”µè¯.å°è¯•å†å»è·å–å¦‚é‚®ä»¶,åœ°å€,å…¬å¸ç­‰ç­‰çš„å…¶ä»–ä¿¡æ¯.
 	static String getContactInfo(String findStr) {
 
 		if (Contact.getSingleContactName(findStr, "Contact Info").equals(findStr)) {
@@ -109,26 +109,26 @@ public class InfoCmd extends CmdBase {
 	}
 
 	static String getContactPhoneInfo(String ContactName) {
-		// È¡µÃÁªÏµÈËµÄµç»°ºÅÂëµÄÊıÁ¿
+		// å–å¾—è”ç³»äººçš„ç”µè¯å·ç çš„æ•°é‡
 		int numberOfPhoneNumber = Contact.getContactNumberByName(ContactName).size();
-		// Èç¹ûÁªÏµÈË´æÔÚµç»°ºÅÂë
+		// å¦‚æœè”ç³»äººå­˜åœ¨ç”µè¯å·ç 
 		if (numberOfPhoneNumber != 0) {
 			StringBuilder contactInfo = new StringBuilder();
-			// µÚÒ»ĞĞÎªÁªÏµÈËĞÕÃû
+			// ç¬¬ä¸€è¡Œä¸ºè”ç³»äººå§“å
 			contactInfo.append(ContactName + "\n");
-			// ÒÀ´ÎÈ¡µÃÁªÏµÈËµÄºÅÂë
+			// ä¾æ¬¡å–å¾—è”ç³»äººçš„å·ç 
 			for (int i = 0; i < numberOfPhoneNumber; i++) {
 				contactInfo.append(Contact.getContactNumberByName(ContactName).get(i).toString());
 				contactInfo.append("\n");
 			}
-			// È¥³ı×îºóÒ»¸ö»»ĞĞ·û
+			// å»é™¤æœ€åä¸€ä¸ªæ¢è¡Œç¬¦
 			return Tools.delLastLine(contactInfo);
 		}
 		return ContactName + "\nContact Has No Number";
 	}
 
-	// ÁªÏµÈËÖĞÍ¬Ê±´æÔÚ"X"ºÍ"X?"Ãû×ÖµÄÊ±ºò»áÏİÈëÑ­»·.ÒÑ½â¾ö.
-	// ÔÚÑ¡ÔñÍê³ÉÒÔºó,²»ÄÜÔÙÈ¥Ä£ºı²éÑ¯ÁË.
+	// è”ç³»äººä¸­åŒæ—¶å­˜åœ¨"X"å’Œ"X?"åå­—çš„æ—¶å€™ä¼šé™·å…¥å¾ªç¯.å·²è§£å†³.
+	// åœ¨é€‰æ‹©å®Œæˆä»¥å,ä¸èƒ½å†å»æ¨¡ç³ŠæŸ¥è¯¢äº†.
 	public static void SelDone(String ContactName) {
 		sendMessageAndUpdateView(chat, getContactPhoneInfo(ContactName));
 	}
