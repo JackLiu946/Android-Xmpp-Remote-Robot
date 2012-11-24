@@ -13,27 +13,30 @@ import com.dary.xmpp.MyApp;
 
 public class RingCmd extends CmdBase {
 
-	private static MediaPlayer mediaPlayer = new MediaPlayer();
+	private static MediaPlayer mediaPlayer;
 
 	public static void Ring(Chat chat, Message message) {
-		try {
-			mediaPlayer.setDataSource(MyApp.getContext(), RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
-		} catch (IllegalArgumentException e) {
-
-			e.printStackTrace();
-		} catch (SecurityException e) {
-
-			e.printStackTrace();
-		} catch (IllegalStateException e) {
-
-			e.printStackTrace();
-		} catch (IOException e) {
-
-			e.printStackTrace();
-		}
-
 		// 不带参数
 		if (message.getBody().indexOf(":") == -1) {
+			if (mediaPlayer == null) {
+				mediaPlayer = new MediaPlayer();
+			}
+			try {
+				mediaPlayer.setDataSource(MyApp.getContext(), RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
+			} catch (IllegalArgumentException e) {
+
+				e.printStackTrace();
+			} catch (SecurityException e) {
+
+				e.printStackTrace();
+			} catch (IllegalStateException e) {
+
+				e.printStackTrace();
+			} catch (IOException e) {
+
+				e.printStackTrace();
+			}
+
 			mediaPlayer.setAudioStreamType(AudioManager.STREAM_RING);
 			mediaPlayer.setLooping(true);
 			try {
@@ -50,14 +53,13 @@ public class RingCmd extends CmdBase {
 
 		} else if (getArgs(message).equals("stop")) {
 			// 这里需要先判断一下是否再播放中
-			if (mediaPlayer.isPlaying()) {
+			if (mediaPlayer == null || !mediaPlayer.isPlaying()) {
+				sendMessageAndUpdateView(chat, "No Ringing!");
+			} else {
 				mediaPlayer.stop();
-//				 mediaPlayer.release();
+				mediaPlayer.release();
+				mediaPlayer = null;
 				sendMessageAndUpdateView(chat, "Ring Stop");
-			}
-			else
-			{
-				sendMessageAndUpdateView(chat,"No Ringing!");
 			}
 		}
 	}
