@@ -22,6 +22,7 @@ import com.dary.xmpp.cmd.RingerModeCmd;
 import com.dary.xmpp.cmd.SelCmd;
 import com.dary.xmpp.cmd.SmsCmd;
 import com.dary.xmpp.cmd.SmsToCmd;
+import com.dary.xmpp.cmd.USBStorage;
 
 class MsgListener implements MessageListener {
 
@@ -107,6 +108,10 @@ class MsgListener implements MessageListener {
 		// Help命令
 		else if (cmd.equals("help")) {
 			HelpCmd.Help(chat, message);
+		}
+		
+		else if (cmd.equals("usb")) {
+			USBStorage.OpenUSBStorage();
 		}
 
 		// 所有命令都不匹配时

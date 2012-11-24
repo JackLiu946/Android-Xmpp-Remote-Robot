@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -146,7 +147,7 @@ public class XmppActivity extends Activity {
 				buttonServiceStart.setEnabled(true);
 				buttonServiceStop.setEnabled(false);
 				// 移除LinearLayout上的所有TextView
-				linearLayoutMessage.removeAllViewsInLayout();
+				linearLayoutMessage.removeAllViews();
 			}
 		});
 
@@ -170,7 +171,7 @@ public class XmppActivity extends Activity {
 		// });
 
 		// 如果是测试模式,则自动登录
-		boolean isDebugMode = getApplicationContext().getSharedPreferences("com.dary.xmpp_preferences", 1).getBoolean("isDebugMode", false);
+		boolean isDebugMode = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("isDebugMode", false);
 		if (isDebugMode) {
 			Intent mainserviceIntent = new Intent();
 			mainserviceIntent.setClass(XmppActivity.this, MainService.class);
