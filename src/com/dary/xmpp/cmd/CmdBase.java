@@ -1,35 +1,44 @@
 package com.dary.xmpp.cmd;
 
 import org.jivesoftware.smack.Chat;
-import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.dary.xmpp.IncallService;
+import com.dary.xmpp.MainService;
 import com.dary.xmpp.MyApp;
 import com.dary.xmpp.Tools;
 import com.dary.xmpp.XmppActivity;
 
 public class CmdBase {
 	public static void sendMessageAndUpdateView(Chat chat, String message) {
-		
-			try {
-				chat.sendMessage(message);
-				if (null != XmppActivity.MsgHandler) {
-					android.os.Message msg = new android.os.Message();
-					msg.what = XmppActivity.SEND_MESSAGE;
-					Bundle bundle = new Bundle();
-					bundle.putString("msg", message);
-					msg.setData(bundle);
-					XmppActivity.MsgHandler.sendMessage(msg);
-					System.out.println("Send Message: " + message);
-				}
-			} catch (XMPPException e) {
-				e.printStackTrace();
-				Tools.doLog("Send MessageFailed");
-				Toast.makeText(MyApp.getContext(),"Send Message Failed",Toast.LENGTH_SHORT).show();
+
+		try {
+			chat.sendMessage(message);
+			if (null != XmppActivity.MsgHandler) {
+				android.os.Message msg = new android.os.Message();
+				msg.what = XmppActivity.SEND_MESSAGE;
+				Bundle bundle = new Bundle();
+				bundle.putString("msg", message);
+				msg.setData(bundle);
+				XmppActivity.MsgHandler.sendMessage(msg);
+				System.out.println("Send Message: " + message);
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			Tools.doLog("Send Message Failed");
+			Toast.makeText(MyApp.getContext(), "Send Message Failed", Toast.LENGTH_SHORT).show();
+			Intent mainserviceIntent = new Intent();
+			mainserviceIntent.setClass(MyApp.getContext(), MainService.class);
+			MyApp.getContext().stopService(mainserviceIntent);
+			Intent incallserviceIntent = new Intent();
+			incallserviceIntent.setClass(MyApp.getContext(), IncallService.class);
+			MyApp.getContext().stopService(incallserviceIntent);
+			MainService.sendMsg(XmppActivity.NOT_LOGGED_IN);
+		}
 	}
 
 	// 解析消息的全部参数部分,区分大小写.

@@ -218,8 +218,8 @@ public class MainService extends Service {
 		System.out.println("调试模式 " + isDebugMode);
 	}
 
-	private void sendMsg(int tag) {
-		MyApp myApp = (MyApp) getApplication();
+	public static void sendMsg(int tag) {
+		MyApp myApp =new MyApp();
 		myApp.setStatus(tag);
 		// 登录中,发送消息,更新UI.
 		if (null != XmppActivity.MsgHandler) {
