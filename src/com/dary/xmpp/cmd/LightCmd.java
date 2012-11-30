@@ -22,23 +22,15 @@ public class LightCmd extends CmdBase {
 
 		} else if (getArgs(message).equals("off")) {
 			if (sCamera == null) {
-				sCamera = Camera.open();
-			}
-			Parameters params = sCamera.getParameters();
-			params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
-			sCamera.setParameters(params);
-
-
-
-			if (sCamera != null) {
-//				sCamera.stopPreview();
-//				sCamera.setPreviewCallback(null);
-//				sCamera.unlock();
+				sendMessageAndUpdateView(chat, "No Lighting!!!");
+			} else {
+				Parameters params = sCamera.getParameters();
+				params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+				sCamera.setParameters(params);
 				sCamera.release();
 				sCamera = null;
+				sendMessageAndUpdateView(chat, "Light Off");
 			}
-			sendMessageAndUpdateView(chat, "Light Off");
-
 		}
 	}
 
