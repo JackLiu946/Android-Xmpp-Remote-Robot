@@ -20,9 +20,6 @@ public class InfoCmd extends CmdBase {
 		InfoCmd.chat = chat;
 		// 不带参数则返回全部信息(不包含联系人).
 		if (!hasArgs(message)) {
-			// infoSB.append("Active Network Type" +
-			// ServiceManager.conManager.getActiveNetworkInfo().getTypeName()
-			// +"\n");
 			sendMessageAndUpdateView(chat, getTelInfo());
 			sendMessageAndUpdateView(chat, getWiFiInfo());
 			sendMessageAndUpdateView(chat, getAppInfo());
@@ -55,13 +52,13 @@ public class InfoCmd extends CmdBase {
 			ApplicationInfo aInfo = info.applicationInfo;
 			appInfo.append("Application Name:" + aInfo.loadLabel(ServiceManager.pacManager) + "\n");
 			appInfo.append("Package Name : " + info.packageName + "\n");
-//			appInfo.append("" + "\n");
-//			if (info.permissions != null) {
-//				;
-//				for (PermissionInfo p : info.permissions) {
-//					appInfo.append("permission:" + p.name + "\n");
-//				}
-//			}
+			// appInfo.append("" + "\n");
+			// if (info.permissions != null) {
+			// ;
+			// for (PermissionInfo p : info.permissions) {
+			// appInfo.append("permission:" + p.name + "\n");
+			// }
+			// }
 			appInfo.append("\n");
 		}
 		return appInfo.toString();

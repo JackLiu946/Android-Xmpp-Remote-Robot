@@ -1,8 +1,5 @@
 package com.dary.xmpp.cmd;
 
-import java.sql.Date;
-import java.text.SimpleDateFormat;
-
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.packet.Message;
 
@@ -12,6 +9,7 @@ import android.net.Uri;
 
 import com.dary.xmpp.Contact;
 import com.dary.xmpp.MyApp;
+import com.dary.xmpp.Tools;
 
 public class SmsCmd extends SmsCmdBase {
 
@@ -38,9 +36,7 @@ public class SmsCmd extends SmsCmdBase {
 					long longDate = cur.getLong(index_Date);
 					int intType = cur.getInt(index_Type);
 
-					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-					Date d = new Date(longDate);
-					String strDate = dateFormat.format(d);
+					String strDate = Tools.getTimeStr(longDate);
 
 					String strType = "";
 					if (intType == 1) {

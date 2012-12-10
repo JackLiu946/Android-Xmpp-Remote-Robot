@@ -3,12 +3,13 @@ package com.dary.xmpp;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceView;
@@ -30,6 +31,8 @@ public class XmppActivity extends Activity {
 	private Button buttonServiceStart;
 	private Button buttonServiceStop;
 	private Button buttonSendMessage;
+	private ScrollView scrollViewMessage;
+	private LinearLayout linearLayoutMessage;
 	public static Handler MsgHandler = null;
 	public static TextView TVmessage;
 	public static SurfaceView surfaceview;
@@ -40,29 +43,22 @@ public class XmppActivity extends Activity {
 	public static final int SET_INCOMPLETE = 3;
 	public static final int CONNECTION_FAILED = 4;
 	public static final int LOGIN_FAILED = 5;
-
 	public static final int RECEIVE_MESSAGE = 6;
 	public static final int SEND_MESSAGE = 7;
 
-	@Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		super.onRestoreInstanceState(savedInstanceState);
-	}
-
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-	}
+	public static final int RECEIVE_MESSAGE_DATABASE = 0;
+	public static final int SEND_MESSAGE_DATABASE = 1;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+
 		buttonServiceStart = (Button) findViewById(R.id.servicestart);
 		buttonServiceStop = (Button) findViewById(R.id.servicestop);
 		loginStatus = (TextView) findViewById(R.id.loginstatus);
-		final ScrollView scrollViewMessage = (ScrollView) findViewById(R.id.scrollviewmessage);
-		final LinearLayout linearLayoutMessage = (LinearLayout) findViewById(R.id.linearlayoutmessage);
+		scrollViewMessage = (ScrollView) findViewById(R.id.scrollviewmessage);
+		linearLayoutMessage = (LinearLayout) findViewById(R.id.linearlayoutmessage);
 		buttonSendMessage = (Button) findViewById(R.id.buttonsendmessage);
 		autoCompleteTextViewSendMessage = (AutoCompleteTextView) findViewById(R.id.autocompletetextviewsendmessage);
 		// 拍照相关
@@ -70,8 +66,6 @@ public class XmppActivity extends Activity {
 		// 设置AutoCompleteTextView的Adapter
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.auto_cmd_string_item, getResources().getStringArray(R.array.autoCmdString));
 		autoCompleteTextViewSendMessage.setAdapter(adapter);
-
-		setViewByStatus(NOT_LOGGED_IN);
 
 		// 更新显示收到的消息
 		MsgHandler = new Handler() {
@@ -94,7 +88,7 @@ public class XmppActivity extends Activity {
 				// 接受的消息
 				else if (msg.what == RECEIVE_MESSAGE) {
 					TextView receiveMessage = new TextView(XmppActivity.this);
-					receiveMessage.setText(Tools.getTimeStr() + "\n" + msg.getData().getString("msg") + "\n");
+					receiveMessage.setText(msg.getData().getString("time") + "\n" + msg.getData().getString("msg") + "\n");
 					receiveMessage.setTextColor(Color.YELLOW);
 					linearLayoutMessage.addView(receiveMessage);
 					// 将ScrollView滚动到底部
@@ -104,22 +98,22 @@ public class XmppActivity extends Activity {
 				// 程序自己发送出去的消息
 				else if (msg.what == SEND_MESSAGE) {
 					TextView sendMessage = new TextView(XmppActivity.this);
-					// 这里由于发送回去的消息有可能是多行,使用换行
-					sendMessage.setText(Tools.getTimeStr() + "\n" + msg.getData().getString("msg") + "\n");
+					sendMessage.setText(msg.getData().getString("time") + "\n" + msg.getData().getString("msg") + "\n");
 					sendMessage.setTextColor(Color.GREEN);
 					linearLayoutMessage.addView(sendMessage);
 					// 将ScrollView滚动到底部
 					scrollToBottom(scrollViewMessage, linearLayoutMessage);
 				}
 			}
-
 		};
+
+		// 读取数据库,创建MsgView
+		createMsgView();
 
 		// 服务启动按钮
 		buttonServiceStart.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				buttonServiceStart.setEnabled(false);
 				Tools.Vibrator(XmppActivity.this, 100);
 				Intent mainserviceIntent = new Intent();
 				mainserviceIntent.setClass(XmppActivity.this, MainService.class);
@@ -130,13 +124,8 @@ public class XmppActivity extends Activity {
 		buttonServiceStop.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-
 				Tools.Vibrator(XmppActivity.this, 100);
 
-				loginStatus.setText(R.string.loginstatus_not_logged_in);
-				loginStatus.setTextColor(Color.GRAY);
-
-				buttonSendMessage.setEnabled(false);
 				// 启动两个服务
 				Intent mainserviceIntent = new Intent();
 				mainserviceIntent.setClass(XmppActivity.this, MainService.class);
@@ -144,10 +133,6 @@ public class XmppActivity extends Activity {
 				Intent incallserviceIntent = new Intent();
 				incallserviceIntent.setClass(XmppActivity.this, IncallService.class);
 				stopService(incallserviceIntent);
-				buttonServiceStart.setEnabled(true);
-				buttonServiceStop.setEnabled(false);
-				// 移除LinearLayout上的所有TextView
-				linearLayoutMessage.removeAllViews();
 			}
 		});
 
@@ -177,12 +162,13 @@ public class XmppActivity extends Activity {
 			mainserviceIntent.setClass(XmppActivity.this, MainService.class);
 			startService(mainserviceIntent);
 		}
+
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, 0, 0, R.string.settings);
 		menu.add(0, 1, 1, R.string.about);
-		menu.add(0, 2, 2, R.string.exit);
+		menu.add(0, 2, 2, R.string.clear_msg);
 		menu.add(0, 3, 3, R.string.log);
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -192,39 +178,44 @@ public class XmppActivity extends Activity {
 		super.onOptionsItemSelected(item);
 		switch (item.getItemId()) {
 		case 0:
-			Intent intent = new Intent();
-			intent.setClass(XmppActivity.this, PreferenceActivity.class);
-			startActivity(intent);
+			Intent preferenceIntent = new Intent();
+			preferenceIntent.setClass(XmppActivity.this, PreferenceActivity.class);
+			startActivity(preferenceIntent);
 			break;
 		case 1:
-			// int类型的引用,不能直接相加
-			new AlertDialog.Builder(XmppActivity.this).setTitle(R.string.about).setMessage(getResources().getString(R.string.app_name) + "\n\n" + getResources().getString(R.string.google_code)).setPositiveButton("OK", null).show();
+			View view = View.inflate(XmppActivity.this, R.layout.about, null);
+			TextView tv = (TextView) view.findViewById(R.id.text_about);
+			tv.setText(getResources().getString(R.string.author) + getResources().getString(R.string.author_value) + "\n" + getResources().getString(R.string.email) + getResources().getString(R.string.email_value) + "\n" + getResources().getString(R.string.version) + Tools.getAppVersionName(XmppActivity.this) + "\n" + getResources().getString(R.string.find_more) + "\n" + getResources().getString(R.string.github));
+			new AlertDialog.Builder(XmppActivity.this).setTitle(R.string.app_name).setView(view).setPositiveButton(R.string.ok, null).setIcon(R.drawable.ic_launcher).show();
 			break;
 		case 2:
-			finish();
+			// 移除LinearLayout上的所有TextView
+			linearLayoutMessage.removeAllViews();
+			// 清空表
+			DatabaseHelper dbHelper = new DatabaseHelper(MyApp.getContext(), "database", null, 1);
+			SQLiteDatabase db = dbHelper.getReadableDatabase();
+			db.delete("messages", null, null);
 			break;
 		case 3:
-			Intent intent2 = new Intent();
-			intent2.setClass(XmppActivity.this, LogActivity.class);
-			startActivity(intent2);
+			Intent logIntent = new Intent();
+			logIntent.setClass(XmppActivity.this, LogActivity.class);
+			startActivity(logIntent);
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			moveTaskToBack(true);
-			return true;
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+	// @Override
+	// public boolean onKeyDown(int keyCode, KeyEvent event) {
+	// if (keyCode == KeyEvent.KEYCODE_BACK) {
+	// moveTaskToBack(true);
+	// return true;
+	// }
+	// return super.onKeyDown(keyCode, event);
+	// }
 
 	// 滚动到底部
 	private static void scrollToBottom(final View scroll, final View inner) {
-
 		Handler mHandler = new Handler();
-
 		mHandler.post(new Runnable() {
 			public void run() {
 				if (scroll == null || inner == null) {
@@ -241,6 +232,7 @@ public class XmppActivity extends Activity {
 
 	@Override
 	protected void onResume() {
+
 		autoCompleteTextViewSendMessage.clearFocus();
 		MyApp myApp = (MyApp) getApplication();
 		setViewByStatus(myApp.getStatus());
@@ -248,8 +240,13 @@ public class XmppActivity extends Activity {
 		// 获取shareText
 		Intent intent = getIntent();
 		String shareText = intent.getStringExtra(Intent.EXTRA_TEXT);
-		if (shareText != "") {
-			autoCompleteTextViewSendMessage.setText(shareText);
+		if (shareText != null) {
+			// 如果登录成功则直接发送消息
+			if (myApp.getStatus() == XmppActivity.LOGIN_SUCCESSFUL) {
+				CmdBase.sendMessageAndUpdateView(MainService.chat, shareText);
+			} else {
+				autoCompleteTextViewSendMessage.setText(shareText);
+			}
 		}
 		super.onResume();
 	}
@@ -301,5 +298,27 @@ public class XmppActivity extends Activity {
 			loginStatus.setTextColor(Color.RED);
 			break;
 		}
+	}
+
+	// 读取数据库,创建MsgView
+	private void createMsgView() {
+		DatabaseHelper dbHelper = new DatabaseHelper(MyApp.getContext(), "database", null, 1);
+		SQLiteDatabase db = dbHelper.getReadableDatabase();
+		Cursor cursor = db.query("messages", new String[] { "time", "type", "msg" }, null, null, null, null, null);
+		while (cursor.moveToNext()) {
+			long time = cursor.getLong(cursor.getColumnIndex("time"));
+			int type = cursor.getInt(cursor.getColumnIndex("type"));
+			String msg = cursor.getString(cursor.getColumnIndex("msg"));
+
+			android.os.Message handleMsg = new android.os.Message();
+			handleMsg.what = type == XmppActivity.RECEIVE_MESSAGE_DATABASE ? XmppActivity.RECEIVE_MESSAGE : XmppActivity.SEND_MESSAGE;
+			Bundle bundle = new Bundle();
+			bundle.putString("time", Tools.getTimeStr(time));
+			bundle.putString("msg", msg);
+			handleMsg.setData(bundle);
+			XmppActivity.MsgHandler.sendMessage(handleMsg);
+
+		}
+		db.close();
 	}
 }

@@ -6,7 +6,7 @@ import android.content.Context;
 public class MyApp extends Application{
 
 	private static Context mContext;
-	private int status;
+	private int status = XmppActivity.NOT_LOGGED_IN;
 
 	public void onCreate() {
 		super.onCreate();

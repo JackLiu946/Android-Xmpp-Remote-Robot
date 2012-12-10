@@ -1,8 +1,5 @@
 package com.dary.xmpp.cmd;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.jivesoftware.smack.Chat;
 
 import android.content.ContentResolver;
@@ -10,6 +7,7 @@ import android.database.Cursor;
 import android.provider.CallLog;
 
 import com.dary.xmpp.MyApp;
+import com.dary.xmpp.Tools;
 
 public class CallLogCmd extends CmdBase {
 	public static void Calllog(Chat chat) {
@@ -39,10 +37,7 @@ public class CallLogCmd extends CmdBase {
 					} else if (intType == 3) {
 						strType = "Missed call";
 					}
-
-					SimpleDateFormat sfd = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-					Date date = new Date(Long.parseLong(cursor.getString(3)));
-					time = sfd.format(date);
+					time = Tools.getTimeStr(Long.parseLong(cursor.getString(3)));
 					sb.append("[ " + time + " , " + strType + " , " + strName + " , " + strNumber + " ]" + "\n\n");
 				}
 			}

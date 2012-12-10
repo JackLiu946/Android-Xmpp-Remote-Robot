@@ -1,5 +1,7 @@
 package com.dary.xmpp;
 
+import java.util.Locale;
+
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManager;
 import org.jivesoftware.smack.Connection;
@@ -49,12 +51,14 @@ public class MainService extends Service {
 	private boolean iscustomServer;
 	private static boolean isAlreadyRegisterConnectionChangeReceiver;
 	private Context mContext = this;
+	private static MyApp myApp;
 
 	public static Chat chat;
 
 	@Override
 	public void onCreate() {
 		// 启动InCallService
+		myApp = (MyApp) getApplication();
 		isAlreadyRegisterConnectionChangeReceiver = false;
 		Intent incallserviceIntent = new Intent();
 		incallserviceIntent.setClass(MainService.this, IncallService.class);
@@ -136,7 +140,7 @@ public class MainService extends Service {
 						ChatManager chatmanager = connection.getChatManager();
 
 						// 注册消息监听器
-						chat = chatmanager.createChat(notifiedAddress.toLowerCase(), new MsgListener());
+						chat = chatmanager.createChat(notifiedAddress.toLowerCase(Locale.getDefault()), new MsgListener());
 
 						// 登录成功之后再在程序动态的注册电量改变,短信和连接改变的广播接收器,注册电量改变的接收器时会设置Presence
 						registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
@@ -219,7 +223,6 @@ public class MainService extends Service {
 	}
 
 	public static void sendMsg(int tag) {
-		MyApp myApp =new MyApp();
 		myApp.setStatus(tag);
 		// 登录中,发送消息,更新UI.
 		if (null != XmppActivity.MsgHandler) {

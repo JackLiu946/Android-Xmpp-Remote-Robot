@@ -48,7 +48,7 @@
     </PreferenceScreen>
 
     <CheckBoxPreference
-        android:defaultValue="false"
+        android:defaultValue="true"
         android:key="isStartAtBoot"
         android:summary="@string/preference_is_start_at_boot_help"
         android:title="@string/preference_is_start_at_boot" />
