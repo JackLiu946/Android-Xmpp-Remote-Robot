@@ -36,8 +36,8 @@ public class MainService extends Service {
 	public static int intLevel;
 	public static int intScale;
 	public static String strPlugged = "";
-	private String notifiedAddress;
-	private String loginAddress;
+	public static String notifiedAddress;
+	public static String loginAddress;
 	private String password;
 	public Handler myHandler;
 	private String serverHost;
@@ -70,9 +70,7 @@ public class MainService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		IncallService.isFirstStart = true;
 
-		// 判断配置是否都已填入
 		getSetting();
-
 		// 如果配置不全,显示Toast
 		if (loginAddress.equals("") || password.equals("") || notifiedAddress.equals("")) {
 			sendMsg(XmppActivity.SET_INCOMPLETE);
@@ -80,8 +78,8 @@ public class MainService extends Service {
 		// 否则才登录
 		else {
 			// 启动登录线程
-			LoginInThread logininthread = new LoginInThread();
-			Thread thread = new Thread(logininthread);
+			LoginInThread loginInThread = new LoginInThread();
+			Thread thread = new Thread(loginInThread);
 			thread.setName("LoginThread");
 			thread.start();
 			System.out.println("登录线程开始运行");
@@ -118,7 +116,6 @@ public class MainService extends Service {
 			try {
 				System.out.println("与服务器建立连接");
 				connection.connect();
-
 				try {
 					// 防止重新连接时多次登录.
 					if (!connection.isAuthenticated() && connection.isConnected()) {
@@ -129,7 +126,6 @@ public class MainService extends Service {
 						connection.login(loginAddress, password, Tools.getTimeStr());
 
 						// Tools.Vibrator(MainService.this, 500);
-
 						System.out.println("登录成功");
 						Tools.doLog("Login Successful");
 						makeNotification("Login Successful");

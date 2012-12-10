@@ -88,4 +88,9 @@ public class Tools {
 		}
 		return versionName;
 	}
+	
+	//移除Resource
+	public static String getAddress(String str) {
+		return str.split("/", -1)[0];
+	}
 }

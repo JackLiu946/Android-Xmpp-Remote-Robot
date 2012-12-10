@@ -87,20 +87,16 @@ public class XmppActivity extends Activity {
 
 				// 接受的消息
 				else if (msg.what == RECEIVE_MESSAGE) {
-					TextView receiveMessage = new TextView(XmppActivity.this);
-					receiveMessage.setText(msg.getData().getString("time") + "\n" + msg.getData().getString("msg") + "\n");
-					receiveMessage.setTextColor(Color.YELLOW);
-					linearLayoutMessage.addView(receiveMessage);
+					MsgView mv = new MsgView(XmppActivity.this, MsgView.RECEIVE, msg.getData().getString("fromaddress"), msg.getData().getString("time"), msg.getData().getString("msg"));
+					linearLayoutMessage.addView(mv);
 					// 将ScrollView滚动到底部
 					scrollToBottom(scrollViewMessage, linearLayoutMessage);
 				}
 
 				// 程序自己发送出去的消息
 				else if (msg.what == SEND_MESSAGE) {
-					TextView sendMessage = new TextView(XmppActivity.this);
-					sendMessage.setText(msg.getData().getString("time") + "\n" + msg.getData().getString("msg") + "\n");
-					sendMessage.setTextColor(Color.GREEN);
-					linearLayoutMessage.addView(sendMessage);
+					MsgView mv = new MsgView(XmppActivity.this, MsgView.SEND, msg.getData().getString("fromaddress"), msg.getData().getString("time"), msg.getData().getString("msg"));
+					linearLayoutMessage.addView(mv);
 					// 将ScrollView滚动到底部
 					scrollToBottom(scrollViewMessage, linearLayoutMessage);
 				}
@@ -303,21 +299,22 @@ public class XmppActivity extends Activity {
 	// 读取数据库,创建MsgView
 	private void createMsgView() {
 		DatabaseHelper dbHelper = new DatabaseHelper(MyApp.getContext(), "database", null, 1);
-		SQLiteDatabase db = dbHelper.getReadableDatabase();
-		Cursor cursor = db.query("messages", new String[] { "time", "type", "msg" }, null, null, null, null, null);
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
+		Cursor cursor = db.query("messages", new String[] { "time", "fromaddress", "type", "msg" }, null, null, null, null, null);
 		while (cursor.moveToNext()) {
-			long time = cursor.getLong(cursor.getColumnIndex("time"));
+			String time = cursor.getString(cursor.getColumnIndex("time"));
+			String fromaddress = cursor.getString(cursor.getColumnIndex("fromaddress"));
 			int type = cursor.getInt(cursor.getColumnIndex("type"));
 			String msg = cursor.getString(cursor.getColumnIndex("msg"));
 
 			android.os.Message handleMsg = new android.os.Message();
 			handleMsg.what = type == XmppActivity.RECEIVE_MESSAGE_DATABASE ? XmppActivity.RECEIVE_MESSAGE : XmppActivity.SEND_MESSAGE;
 			Bundle bundle = new Bundle();
-			bundle.putString("time", Tools.getTimeStr(time));
+			bundle.putString("time", time);
+			bundle.putString("fromaddress", fromaddress);
 			bundle.putString("msg", msg);
 			handleMsg.setData(bundle);
 			XmppActivity.MsgHandler.sendMessage(handleMsg);
-
 		}
 		db.close();
 	}

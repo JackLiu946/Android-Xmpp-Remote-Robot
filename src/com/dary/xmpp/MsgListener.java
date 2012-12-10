@@ -39,6 +39,7 @@ class MsgListener implements MessageListener {
 			msg.what = XmppActivity.RECEIVE_MESSAGE;
 			Bundle bundle = new Bundle();
 			bundle.putString("msg", message.getBody());
+			bundle.putString("fromaddress",Tools.getAddress(message.getFrom()));
 			bundle.putString("time",Tools.getTimeStr());
 			msg.setData(bundle);
 			XmppActivity.MsgHandler.sendMessage(msg);
@@ -47,7 +48,8 @@ class MsgListener implements MessageListener {
 		DatabaseHelper dbHelper = new DatabaseHelper(MyApp.getContext(), "database", null, 1);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		ContentValues values = new ContentValues();
-		values.put("time", System.currentTimeMillis());
+		values.put("time", Tools.getTimeStr());
+		values.put("fromaddress",Tools.getAddress(message.getFrom()));
 		values.put("type", XmppActivity.RECEIVE_MESSAGE_DATABASE);
 		values.put("msg", message.getBody());
 		db.insert("messages", null, values);

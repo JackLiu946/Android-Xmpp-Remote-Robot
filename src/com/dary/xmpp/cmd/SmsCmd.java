@@ -63,7 +63,7 @@ public class SmsCmd extends SmsCmdBase {
 			} else {
 				smsBuilder.append("No Result!");
 			}
-			sendMessageAndUpdateView(chat, smsBuilder.toString());
+			sendMessageAndUpdateView(chat, Tools.delLastLine(smsBuilder));
 
 			System.out.println(smsBuilder.toString());
 		} else {

@@ -23,27 +23,29 @@ public class CmdBase {
 
 		try {
 			chat.sendMessage(message);
-			//更新UI
+			// 更新UI
 			if (null != XmppActivity.MsgHandler) {
 				android.os.Message msg = new android.os.Message();
 				msg.what = XmppActivity.SEND_MESSAGE;
 				Bundle bundle = new Bundle();
 				bundle.putString("msg", message);
-				bundle.putString("time",Tools.getTimeStr());
+				bundle.putString("fromaddress",Tools.getAddress(MainService.connection.getUser()));
+				bundle.putString("time", Tools.getTimeStr());
 				msg.setData(bundle);
 				XmppActivity.MsgHandler.sendMessage(msg);
 				System.out.println("Send Message: " + message);
 			}
-			//插入数据库
+			// 插入数据库
 			DatabaseHelper dbHelper = new DatabaseHelper(MyApp.getContext(), "database", null, 1);
 			SQLiteDatabase db = dbHelper.getWritableDatabase();
 			ContentValues values = new ContentValues();
-			values.put("time", System.currentTimeMillis());
+			values.put("time", Tools.getTimeStr());
+			values.put("fromaddress", Tools.getAddress(MainService.connection.getUser()));
 			values.put("type", XmppActivity.SEND_MESSAGE_DATABASE);
 			values.put("msg", message);
 			db.insert("messages", null, values);
 			db.close();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			Tools.doLog("Send Message Failed");

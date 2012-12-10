@@ -16,7 +16,7 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(final Context context, Intent intent) {
 		if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-			System.out.println("Connectivty Change");
+			System.out.println("连接状态改变");
 			Tools.doLog("Connectivty Change");
 			// NetworkInfo activeNetInfo = ServiceManager.conManager.getActiveNetworkInfo();
 			NetworkInfo activeNetInfo = (NetworkInfo) intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
@@ -24,7 +24,7 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 			boolean isautoReconnect = mPrefs.getBoolean("isAutoReconnect", true);
 			if (isautoReconnect == true && activeNetInfo != null && activeNetInfo.isAvailable() && !activeNetInfo.isFailover() && activeNetInfo.isConnected() && activeNetInfo.getState().toString().equals("CONNECTED")) {
 				if (null == MainService.connection || MainService.connection.isAuthenticated() != true) {
-					System.out.println("Try Relogin");
+					System.out.println("尝试重新连接");
 					Tools.doLog("Try Relogin");
 					Intent mainserviceIntent = new Intent();
 					mainserviceIntent.setClass(context, MainService.class);
