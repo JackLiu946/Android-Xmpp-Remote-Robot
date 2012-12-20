@@ -29,19 +29,21 @@ public class Contact {
 
 	// 通过查询号码获取联系人姓名.如果找不到返回原号码
 	public static String getContactNameByNumber(String mNumber) {
+		System.out.println(mNumber);
 		mNumber = mNumber.replace("+86", "");
 		String[] projection = { ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.NUMBER };
-		Cursor cursor = MyApp.getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, ContactsContract.CommonDataKinds.Phone.NUMBER + " = '" + mNumber + "'", null, null);
-
-		if (null == cursor) {
-			System.out.println("cursor null");
+		Cursor c = MyApp.getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, ContactsContract.CommonDataKinds.Phone.NUMBER + " = '" + mNumber + "'", null, null);
+		// 不在联系人目录中
+		if (!c.moveToFirst()) {
+			c.close();
 			return mNumber;
 		}
 		// 这里由于使用同一个号码,而联系人姓名不同的可能性很小..所以找到第一个就返回了.
 		else {
-			cursor.moveToFirst();
-			int nameFieldColumnIndex = cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME);
-			String name = cursor.getString(nameFieldColumnIndex);
+			c.moveToFirst();
+			int nameFieldColumnIndex = c.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME);
+			String name = c.getString(nameFieldColumnIndex);
+			c.close();
 			return name;
 		}
 	}

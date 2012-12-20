@@ -191,6 +191,7 @@ public class XmppActivity extends Activity {
 			DatabaseHelper dbHelper = new DatabaseHelper(MyApp.getContext(), "database", null, 1);
 			SQLiteDatabase db = dbHelper.getReadableDatabase();
 			db.delete("messages", null, null);
+			db.close();
 			break;
 		case 3:
 			Intent logIntent = new Intent();

@@ -32,29 +32,29 @@ class MsgListener implements MessageListener {
 
 	// 消息处理
 	public void processMessage(Chat chat, Message message) {
-		System.out.println("接受到的消息: " + message.getBody());
+		System.out.println("Receive Message :" + "\n" + message.getBody());
 		// 收到消息之后将消息内容放入bundle,发送消息去更新UI
 		if (null != XmppActivity.MsgHandler) {
 			android.os.Message msg = new android.os.Message();
 			msg.what = XmppActivity.RECEIVE_MESSAGE;
 			Bundle bundle = new Bundle();
 			bundle.putString("msg", message.getBody());
-			bundle.putString("fromaddress",Tools.getAddress(message.getFrom()));
-			bundle.putString("time",Tools.getTimeStr());
+			bundle.putString("fromaddress", Tools.getAddress(message.getFrom()));
+			bundle.putString("time", Tools.getTimeStr());
 			msg.setData(bundle);
 			XmppActivity.MsgHandler.sendMessage(msg);
 		}
-		//插入数据库
+		// 插入数据库
 		DatabaseHelper dbHelper = new DatabaseHelper(MyApp.getContext(), "database", null, 1);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put("time", Tools.getTimeStr());
-		values.put("fromaddress",Tools.getAddress(message.getFrom()));
+		values.put("fromaddress", Tools.getAddress(message.getFrom()));
 		values.put("type", XmppActivity.RECEIVE_MESSAGE_DATABASE);
 		values.put("msg", message.getBody());
 		db.insert("messages", null, values);
 		db.close();
-		
+
 		Roster roster = MainService.connection.getRoster();
 
 		String cmd = getCmd(message);

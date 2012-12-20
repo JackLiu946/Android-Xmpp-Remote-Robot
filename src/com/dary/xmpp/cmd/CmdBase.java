@@ -29,11 +29,11 @@ public class CmdBase {
 				msg.what = XmppActivity.SEND_MESSAGE;
 				Bundle bundle = new Bundle();
 				bundle.putString("msg", message);
-				bundle.putString("fromaddress",Tools.getAddress(MainService.connection.getUser()));
+				bundle.putString("fromaddress", Tools.getAddress(MainService.connection.getUser()));
 				bundle.putString("time", Tools.getTimeStr());
 				msg.setData(bundle);
 				XmppActivity.MsgHandler.sendMessage(msg);
-				System.out.println("Send Message: " + message);
+				System.out.println("Send Message:" + "\n" + message);
 			}
 			// 插入数据库
 			DatabaseHelper dbHelper = new DatabaseHelper(MyApp.getContext(), "database", null, 1);

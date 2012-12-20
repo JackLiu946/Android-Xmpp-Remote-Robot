@@ -64,8 +64,6 @@ public class SmsCmd extends SmsCmdBase {
 				smsBuilder.append("No Result!");
 			}
 			sendMessageAndUpdateView(chat, Tools.delLastLine(smsBuilder));
-
-			System.out.println(smsBuilder.toString());
 		} else {
 			// 带参数就回复最后收到的短信
 			// 获取最后(收到的)短信的号码
