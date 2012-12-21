@@ -75,7 +75,6 @@ public class SmsCmd extends SmsCmdBase {
 			cur.moveToFirst();
 			int index_Address = cur.getColumnIndex("address");
 			String lastAddress = cur.getString(index_Address);
-			System.out.println("LastAddress" + lastAddress);
 
 			// 标记最后收到的短信为已读状态
 			ContentValues cvalues = new ContentValues();
@@ -86,10 +85,13 @@ public class SmsCmd extends SmsCmdBase {
 			// MainService.cur = null;
 
 			// 发送短信并插入到短信库中
-			sendSMSAndInsertToLibrary(lastAddress, getArgsCaseSensitive(message));
-
-			sendMessageAndUpdateView(chat, "Send SMS " + "( Number : " + Contact.getContactNameByNumber(lastAddress) + " Body : " + getArgsCaseSensitive(message) + " )" + "Done");
-
+			//如果有参数,但参数为空(即长度为0)
+			if (getArgsCaseSensitive(message).length() == 0) {
+				sendMessageAndUpdateView(chat, "Make Last Message As Read Done");
+			} else {
+				sendSMSAndInsertToLibrary(lastAddress, getArgsCaseSensitive(message));
+				sendMessageAndUpdateView(chat, "Send SMS " + "( Number : " + Contact.getContactNameByNumber(lastAddress) + " Body : " + getArgsCaseSensitive(message) + " )" + "Done");
+			}
 		}
 	}
 }
