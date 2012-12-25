@@ -3,10 +3,11 @@ package com.dary.xmpp;
 import android.app.Application;
 import android.content.Context;
 
-public class MyApp extends Application{
+public class MyApp extends Application {
 
 	private static Context mContext;
 	private int status = XmppActivity.NOT_LOGGED_IN;
+	public static boolean isShouldRunning = false;
 
 	public void onCreate() {
 		super.onCreate();

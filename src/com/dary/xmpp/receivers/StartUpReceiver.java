@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.dary.xmpp.MainService;
+import com.dary.xmpp.MyApp;
 
 public class StartUpReceiver extends BroadcastReceiver {
 
@@ -18,6 +19,8 @@ public class StartUpReceiver extends BroadcastReceiver {
 			System.out.println("StartUp Service");
 			Intent startserviceintent = new Intent(context, MainService.class);
 			context.startService(startserviceintent);
+
+			MyApp.isShouldRunning = true;
 		}
 	}
 }

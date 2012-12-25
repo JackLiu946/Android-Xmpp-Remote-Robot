@@ -18,7 +18,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -26,7 +25,6 @@ import android.preference.PreferenceManager;
 
 import com.dary.xmpp.cmd.CmdBase;
 import com.dary.xmpp.receivers.BatteryReceiver;
-import com.dary.xmpp.receivers.ConnectionChangeReceiver;
 import com.dary.xmpp.receivers.SMSReceiver;
 
 public class MainService extends Service {
@@ -47,9 +45,7 @@ public class MainService extends Service {
 	private boolean isDebugMode;
 	public SMSReceiver smsReceiver = new SMSReceiver();
 	private BatteryReceiver batteryReceiver = new BatteryReceiver();
-	private ConnectionChangeReceiver connectionChangeReceiver;
 	private boolean iscustomServer;
-	private static boolean isAlreadyRegisterConnectionChangeReceiver;
 	private Context mContext = this;
 	private static MyApp myApp;
 
@@ -59,7 +55,6 @@ public class MainService extends Service {
 	public void onCreate() {
 		// 启动InCallService
 		myApp = (MyApp) getApplication();
-		isAlreadyRegisterConnectionChangeReceiver = false;
 		Intent incallserviceIntent = new Intent();
 		incallserviceIntent.setClass(MainService.this, IncallService.class);
 		startService(incallserviceIntent);
@@ -138,16 +133,8 @@ public class MainService extends Service {
 						// 注册消息监听器
 						chat = chatmanager.createChat(notifiedAddress.toLowerCase(Locale.getDefault()), new MsgListener());
 
-						// 登录成功之后再在程序动态的注册电量改变,短信和连接改变的广播接收器,注册电量改变的接收器时会设置Presence
+						// 登录成功之后再在程序动态的注册电量改变,短信的广播接收器,注册电量改变的接收器时会设置Presence
 						registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-
-						// 这里必须判断监听网络连接的广播接收器是否已经注册了,否则会反复注册.导致收到广播的时候多次登录
-						if (isautoReconnect && !isAlreadyRegisterConnectionChangeReceiver) {
-							connectionChangeReceiver = new ConnectionChangeReceiver();
-							registerReceiver(connectionChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-							isAlreadyRegisterConnectionChangeReceiver = true;
-						}
-
 						registerReceiver(smsReceiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
 
 						// 登录成功后发送消息,用于测试
@@ -184,10 +171,6 @@ public class MainService extends Service {
 		// 反注册广播接收器
 		unregisterReceiver(batteryReceiver);
 		unregisterReceiver(smsReceiver);
-		if (isautoReconnect) {
-			unregisterReceiver(connectionChangeReceiver);
-			isAlreadyRegisterConnectionChangeReceiver = false;
-		}
 		super.onDestroy();
 	}
 

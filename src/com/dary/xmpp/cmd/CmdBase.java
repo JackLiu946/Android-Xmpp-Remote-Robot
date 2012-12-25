@@ -6,13 +6,11 @@ import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.packet.Message;
 
 import android.content.ContentValues;
-import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import com.dary.xmpp.DatabaseHelper;
-import com.dary.xmpp.IncallService;
 import com.dary.xmpp.MainService;
 import com.dary.xmpp.MyApp;
 import com.dary.xmpp.Tools;
@@ -50,12 +48,12 @@ public class CmdBase {
 			e.printStackTrace();
 			Tools.doLog("Send Message Failed");
 			Toast.makeText(MyApp.getContext(), "Send Message Failed", Toast.LENGTH_SHORT).show();
-			Intent mainserviceIntent = new Intent();
-			mainserviceIntent.setClass(MyApp.getContext(), MainService.class);
-			MyApp.getContext().stopService(mainserviceIntent);
-			Intent incallserviceIntent = new Intent();
-			incallserviceIntent.setClass(MyApp.getContext(), IncallService.class);
-			MyApp.getContext().stopService(incallserviceIntent);
+//			Intent mainserviceIntent = new Intent();
+//			mainserviceIntent.setClass(MyApp.getContext(), MainService.class);
+//			MyApp.getContext().stopService(mainserviceIntent);
+//			Intent incallserviceIntent = new Intent();
+//			incallserviceIntent.setClass(MyApp.getContext(), IncallService.class);
+//			MyApp.getContext().stopService(incallserviceIntent);
 			MainService.sendMsg(XmppActivity.NOT_LOGGED_IN);
 		}
 	}

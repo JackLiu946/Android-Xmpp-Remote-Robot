@@ -42,7 +42,6 @@ public class LogActivity extends Activity {
 
 		} catch (Exception e) {
 			textViewLog.setText("Log dose not exist");
-			e.printStackTrace();
 		}
 		super.onStart();
 	}
