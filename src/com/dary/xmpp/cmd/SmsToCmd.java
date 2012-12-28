@@ -4,6 +4,7 @@ import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.packet.Message;
 
 import com.dary.xmpp.Contact;
+import com.dary.xmpp.Tools;
 
 public class SmsToCmd extends SmsCmdBase {
 	static String body = null;
@@ -12,18 +13,28 @@ public class SmsToCmd extends SmsCmdBase {
 
 	// 目前的Smsto命令只能接收明确的联系人姓名.以后要考虑修改为能接受模糊的联系人信息,和直接为号码的方式.
 	public static void Smsto(Chat chat, Message message) {
-		// 不含有两个参数则返回消息
+		// 判断是否含有两个参数
 		if (hasSecArgs(message)) {
 			SmsToCmd.chat = chat;
 			String findStr = getFirArgsCaseSensitive(message);
 			body = getSecArgsCaseSensitive(message);
-			// 找到唯一的联系人,此时findStr,即用户输入的参数,即为联系人名字.
-			if (Contact.getSingleContactName(findStr, "SmsTo").equals(findStr)) {
-				sendSMS(findStr);
+			// 用户输入的完全为数字的情况
+			if (Tools.isNumeric(findStr))
+			{
+				sendSMSAndInsertToLibrary(findStr,body);
+				// 考虑去动态注册广播接收器来判断短信发送的状态
+				sendMessageAndUpdateView(chat, "Send SMS To : " + findStr + " ( Number : " + findStr + " Body : " + body + " )" + " Done");
 			}
-			// 找到的联系人为多个,或者为空,则直接发送出消息.
-			else {
-				sendMessageAndUpdateView(chat, Contact.getSingleContactName(findStr, "SmsTo"));
+			// 不全为数字则去查询号码是否为联系人号码
+			else{
+				// 找到唯一的联系人,此时findStr,即用户输入的参数,即为联系人名字.
+				if (Contact.getSingleContactName(findStr, "SmsTo").equals(findStr)) {
+					sendSMS(findStr);
+				}
+				// 找到的联系人为多个,或者为空,则直接发送出消息.
+				else {
+					sendMessageAndUpdateView(chat, Contact.getSingleContactName(findStr, "SmsTo"));
+				}
 			}
 		} else {
 			sendMessageAndUpdateView(chat, "Parameters incomplete");

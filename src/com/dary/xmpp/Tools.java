@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -92,5 +94,16 @@ public class Tools {
 	//移除Resource
 	public static String getAddress(String str) {
 		return str.split("/", -1)[0];
+	}
+	
+	public static boolean isNumeric(String str)
+	{
+	Pattern pattern = Pattern.compile("[0-9]*");
+	Matcher isNum = pattern.matcher(str);
+	if( !isNum.matches() )
+	{
+	return false;
+	}
+	return true;
 	}
 }

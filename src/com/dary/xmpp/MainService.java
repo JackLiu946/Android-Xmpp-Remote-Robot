@@ -55,6 +55,7 @@ public class MainService extends Service {
 	public void onCreate() {
 		// 启动InCallService
 		myApp = (MyApp) getApplication();
+		// 提高优先级
 		setForeground(true);
 		Intent incallserviceIntent = new Intent();
 		incallserviceIntent.setClass(MainService.this, IncallService.class);
