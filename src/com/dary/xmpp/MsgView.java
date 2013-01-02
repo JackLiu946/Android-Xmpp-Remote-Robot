@@ -15,7 +15,7 @@ public class MsgView extends LinearLayout {
 		super(context);
 	}
 
-	public MsgView(Context context, int intFrom,String strFrom,String strTime, String strMsg) {
+	public MsgView(Context context, int intFrom, String strFrom, String strTime, String strMsg) {
 		super(context);
 		TextView from = new TextView(context);
 		TextView time = new TextView(context);
@@ -31,10 +31,10 @@ public class MsgView extends LinearLayout {
 		LinearLayout fromAndTime = new LinearLayout(context);
 		fromAndTime.setOrientation(LinearLayout.HORIZONTAL);
 
-		from.setText(strFrom+" :");
+		from.setText(strFrom + " :");
 		time.setText(strTime);
 		time.setGravity(Gravity.RIGHT);
-		msg.setText(strMsg+"\n");
+		msg.setText(strMsg + "\n");
 		fromAndTime.addView(from, new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		fromAndTime.addView(time, new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 		addView(fromAndTime, new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));

@@ -19,25 +19,25 @@ public class Tools {
 		return sb.delete(sb.toString().length() - 1, sb.toString().length()).toString();
 	}
 
-	//Photo命令中,照片的命名
+	// Photo命令中,照片的命名
 	public static String getTimeStrHyphen() {
 		Date d = new Date();
-		SimpleDateFormat sdFormatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss",Locale.getDefault());
+		SimpleDateFormat sdFormatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.getDefault());
 		String timeStr = sdFormatter.format(d);
 		return timeStr;
 	}
 
-	//doLog中用到
+	// doLog中用到
 	public static String getTimeStr() {
 		Date d = new Date();
-		SimpleDateFormat sdFormatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss",Locale.getDefault());
+		SimpleDateFormat sdFormatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
 		String retStrFormatNowDate = sdFormatter.format(d);
 		return retStrFormatNowDate;
 	}
-	
+
 	public static String getTimeStr(long time) {
 		Date d = new Date(time);
-		SimpleDateFormat sdFormatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss",Locale.getDefault());
+		SimpleDateFormat sdFormatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
 		String retStrFormatNowDate = sdFormatter.format(d);
 		return retStrFormatNowDate;
 	}
@@ -75,7 +75,7 @@ public class Tools {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static String getAppVersionName(Context context) {
 		String versionName = "";
 		try {
@@ -90,20 +90,18 @@ public class Tools {
 		}
 		return versionName;
 	}
-	
-	//移除Resource
+
+	// 移除Resource
 	public static String getAddress(String str) {
 		return str.split("/", -1)[0];
 	}
-	
-	public static boolean isNumeric(String str)
-	{
-	Pattern pattern = Pattern.compile("[0-9]*");
-	Matcher isNum = pattern.matcher(str);
-	if( !isNum.matches() )
-	{
-	return false;
-	}
-	return true;
+
+	public static boolean isNumeric(String str) {
+		Pattern pattern = Pattern.compile("[0-9]*");
+		Matcher isNum = pattern.matcher(str);
+		if (!isNum.matches()) {
+			return false;
+		}
+		return true;
 	}
 }

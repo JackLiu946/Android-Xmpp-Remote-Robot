@@ -7,7 +7,7 @@ public class MyApp extends Application {
 
 	private static Context mContext;
 	private int status = XmppActivity.NOT_LOGGED_IN;
-	public static boolean isShouldRunning = false;
+	private boolean isShouldRunning = false;
 
 	public void onCreate() {
 		super.onCreate();
@@ -24,5 +24,13 @@ public class MyApp extends Application {
 
 	public void setStatus(int s) {
 		this.status = s;
+	}
+
+	public boolean getIsShouldRunning() {
+		return isShouldRunning;
+	}
+
+	public void setIsShouldRunning(boolean b) {
+		this.isShouldRunning = b;
 	}
 }

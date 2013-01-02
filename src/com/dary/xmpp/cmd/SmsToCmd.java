@@ -19,14 +19,13 @@ public class SmsToCmd extends SmsCmdBase {
 			String findStr = getFirArgsCaseSensitive(message);
 			body = getSecArgsCaseSensitive(message);
 			// 用户输入的完全为数字的情况
-			if (Tools.isNumeric(findStr))
-			{
-				sendSMSAndInsertToLibrary(findStr,body);
+			if (Tools.isNumeric(findStr)) {
+				sendSMSAndInsertToLibrary(findStr, body);
 				// 考虑去动态注册广播接收器来判断短信发送的状态
 				sendMessageAndUpdateView(chat, "Send SMS To : " + findStr + " ( Number : " + findStr + " Body : " + body + " )" + " Done");
 			}
 			// 不全为数字则去查询号码是否为联系人号码
-			else{
+			else {
 				// 找到唯一的联系人,此时findStr,即用户输入的参数,即为联系人名字.
 				if (Contact.getSingleContactName(findStr, "SmsTo").equals(findStr)) {
 					sendSMS(findStr);

@@ -47,7 +47,7 @@ public class MainService extends Service {
 	private BatteryReceiver batteryReceiver = new BatteryReceiver();
 	private boolean iscustomServer;
 	private Context mContext = this;
-	private static MyApp myApp;
+	public static MyApp myApp;
 
 	public static Chat chat;
 
@@ -113,6 +113,7 @@ public class MainService extends Service {
 			try {
 				System.out.println("与服务器建立连接");
 				connection.connect();
+
 				try {
 					// 防止重新连接时多次登录.
 					if (!connection.isAuthenticated() && connection.isConnected()) {

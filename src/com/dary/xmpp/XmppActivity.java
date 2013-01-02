@@ -114,7 +114,7 @@ public class XmppActivity extends Activity {
 				Intent mainserviceIntent = new Intent();
 				mainserviceIntent.setClass(XmppActivity.this, MainService.class);
 				startService(mainserviceIntent);
-				MyApp.isShouldRunning = true;
+				MainService.myApp.setIsShouldRunning(true);
 			}
 		});
 		// 服务停止的按钮
@@ -130,8 +130,7 @@ public class XmppActivity extends Activity {
 				Intent incallserviceIntent = new Intent();
 				incallserviceIntent.setClass(XmppActivity.this, IncallService.class);
 				stopService(incallserviceIntent);
-				
-				MyApp.isShouldRunning = false;
+				MainService.myApp.setIsShouldRunning(false);
 			}
 		});
 

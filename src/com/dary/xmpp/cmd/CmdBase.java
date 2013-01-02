@@ -48,12 +48,12 @@ public class CmdBase {
 			e.printStackTrace();
 			Tools.doLog("Send Message Failed");
 			Toast.makeText(MyApp.getContext(), "Send Message Failed", Toast.LENGTH_SHORT).show();
-//			Intent mainserviceIntent = new Intent();
-//			mainserviceIntent.setClass(MyApp.getContext(), MainService.class);
-//			MyApp.getContext().stopService(mainserviceIntent);
-//			Intent incallserviceIntent = new Intent();
-//			incallserviceIntent.setClass(MyApp.getContext(), IncallService.class);
-//			MyApp.getContext().stopService(incallserviceIntent);
+			// Intent mainserviceIntent = new Intent();
+			// mainserviceIntent.setClass(MyApp.getContext(), MainService.class);
+			// MyApp.getContext().stopService(mainserviceIntent);
+			// Intent incallserviceIntent = new Intent();
+			// incallserviceIntent.setClass(MyApp.getContext(), IncallService.class);
+			// MyApp.getContext().stopService(incallserviceIntent);
 			MainService.sendMsg(XmppActivity.NOT_LOGGED_IN);
 		}
 	}

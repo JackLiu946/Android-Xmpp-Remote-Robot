@@ -85,7 +85,7 @@ public class SmsCmd extends SmsCmdBase {
 			// MainService.cur = null;
 
 			// 发送短信并插入到短信库中
-			//如果有参数,但参数为空(即长度为0)
+			// 如果有参数,但参数为空(即长度为0)
 			if (getArgsCaseSensitive(message).length() == 0) {
 				sendMessageAndUpdateView(chat, "Make Last Message As Read Done");
 			} else {
