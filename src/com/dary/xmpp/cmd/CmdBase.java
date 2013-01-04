@@ -5,9 +5,6 @@ import java.util.Locale;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.packet.Message;
 
-import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
 import android.widget.Toast;
 
 import com.dary.xmpp.DatabaseHelper;
@@ -22,27 +19,9 @@ public class CmdBase {
 		try {
 			chat.sendMessage(message);
 			// 更新UI
-			if (null != XmppActivity.MsgHandler) {
-				android.os.Message msg = new android.os.Message();
-				msg.what = XmppActivity.SEND_MESSAGE;
-				Bundle bundle = new Bundle();
-				bundle.putString("msg", message);
-				bundle.putString("fromaddress", Tools.getAddress(MainService.connection.getUser()));
-				bundle.putString("time", Tools.getTimeStr());
-				msg.setData(bundle);
-				XmppActivity.MsgHandler.sendMessage(msg);
-				System.out.println("Send Message:" + "\n" + message);
-			}
+			XmppActivity.sendHandlerMessageToAddMsgView(DatabaseHelper.SEND_MESSAGE, Tools.getAddress(MainService.connection.getUser()), message, Tools.getTimeStr());
 			// 插入数据库
-			DatabaseHelper dbHelper = new DatabaseHelper(MyApp.getContext(), "database", null, 1);
-			SQLiteDatabase db = dbHelper.getWritableDatabase();
-			ContentValues values = new ContentValues();
-			values.put("time", Tools.getTimeStr());
-			values.put("fromaddress", Tools.getAddress(MainService.connection.getUser()));
-			values.put("type", XmppActivity.SEND_MESSAGE_DATABASE);
-			values.put("msg", message);
-			db.insert("messages", null, values);
-			db.close();
+			DatabaseHelper.insertMsgToDatabase(DatabaseHelper.SEND_MESSAGE, Tools.getAddress(MainService.connection.getUser()), message, Tools.getTimeStr());
 
 		} catch (Exception e) {
 			e.printStackTrace();

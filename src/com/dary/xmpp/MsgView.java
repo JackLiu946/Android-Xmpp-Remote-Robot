@@ -10,6 +10,7 @@ public class MsgView extends LinearLayout {
 
 	public static final int RECEIVE = 0;
 	public static final int SEND = 1;
+	public static final int LOG = 2;
 
 	public MsgView(Context context) {
 		super(context);
@@ -27,6 +28,8 @@ public class MsgView extends LinearLayout {
 			msg.setTextColor(Color.YELLOW);
 		} else if (intFrom == SEND) {
 			msg.setTextColor(Color.GREEN);
+		} else if (intFrom == LOG) {
+			msg.setTextColor(Color.RED);
 		}
 		LinearLayout fromAndTime = new LinearLayout(context);
 		fromAndTime.setOrientation(LinearLayout.HORIZONTAL);

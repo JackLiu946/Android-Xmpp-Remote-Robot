@@ -43,11 +43,7 @@ public class XmppActivity extends Activity {
 	public static final int SET_INCOMPLETE = 3;
 	public static final int CONNECTION_FAILED = 4;
 	public static final int LOGIN_FAILED = 5;
-	public static final int RECEIVE_MESSAGE = 6;
-	public static final int SEND_MESSAGE = 7;
-
-	public static final int RECEIVE_MESSAGE_DATABASE = 0;
-	public static final int SEND_MESSAGE_DATABASE = 1;
+	public static final int SHOW_MESSAGE = 6;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +66,6 @@ public class XmppActivity extends Activity {
 		// 更新显示收到的消息
 		MsgHandler = new Handler() {
 			public void handleMessage(Message msg) {
-
 				if (msg.what == LOGIN_SUCCESSFUL) {
 					setViewByStatus(LOGIN_SUCCESSFUL);
 				} else if (msg.what == SET_INCOMPLETE) {
@@ -85,17 +80,9 @@ public class XmppActivity extends Activity {
 					setViewByStatus(NOT_LOGGED_IN);
 				}
 
-				// 接受的消息
-				else if (msg.what == RECEIVE_MESSAGE) {
-					MsgView mv = new MsgView(XmppActivity.this, MsgView.RECEIVE, msg.getData().getString("fromaddress"), msg.getData().getString("time"), msg.getData().getString("msg"));
-					linearLayoutMessage.addView(mv);
-					// 将ScrollView滚动到底部
-					scrollToBottom(scrollViewMessage, linearLayoutMessage);
-				}
-
-				// 程序自己发送出去的消息
-				else if (msg.what == SEND_MESSAGE) {
-					MsgView mv = new MsgView(XmppActivity.this, MsgView.SEND, msg.getData().getString("fromaddress"), msg.getData().getString("time"), msg.getData().getString("msg"));
+				// 要展示的消息
+				else if (msg.what == SHOW_MESSAGE) {
+					MsgView mv = new MsgView(XmppActivity.this, msg.getData().getInt("type"), msg.getData().getString("fromaddress"), msg.getData().getString("time"), msg.getData().getString("msg"));
 					linearLayoutMessage.addView(mv);
 					// 将ScrollView滚动到底部
 					scrollToBottom(scrollViewMessage, linearLayoutMessage);
@@ -104,7 +91,7 @@ public class XmppActivity extends Activity {
 		};
 
 		// 读取数据库,创建MsgView
-		createMsgView();
+		readDatabaseAndCreateMsgView();
 
 		// 服务启动按钮
 		buttonServiceStart.setOnClickListener(new OnClickListener() {
@@ -147,9 +134,7 @@ public class XmppActivity extends Activity {
 		});
 
 		// 设置点击即显示下拉列表
-		// autoCompleteTextViewSendMessage.setOnClickListener(new
-		// OnClickListener() {
-		//
+		// autoCompleteTextViewSendMessage.setOnClickListener(new OnClickListener() {
 		// public void onClick(View v) {
 		// autoCompleteTextViewSendMessage.showDropDown();
 		// }
@@ -302,7 +287,7 @@ public class XmppActivity extends Activity {
 	}
 
 	// 读取数据库,创建MsgView
-	private void createMsgView() {
+	private void readDatabaseAndCreateMsgView() {
 		DatabaseHelper dbHelper = new DatabaseHelper(MyApp.getContext(), "database", null, 1);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		Cursor cursor = db.query("messages", new String[] { "time", "fromaddress", "type", "msg" }, null, null, null, null, null);
@@ -312,15 +297,22 @@ public class XmppActivity extends Activity {
 			int type = cursor.getInt(cursor.getColumnIndex("type"));
 			String msg = cursor.getString(cursor.getColumnIndex("msg"));
 
-			android.os.Message handleMsg = new android.os.Message();
-			handleMsg.what = type == XmppActivity.RECEIVE_MESSAGE_DATABASE ? XmppActivity.RECEIVE_MESSAGE : XmppActivity.SEND_MESSAGE;
-			Bundle bundle = new Bundle();
-			bundle.putString("time", time);
-			bundle.putString("fromaddress", fromaddress);
-			bundle.putString("msg", msg);
-			handleMsg.setData(bundle);
-			XmppActivity.MsgHandler.sendMessage(handleMsg);
+			sendHandlerMessageToAddMsgView(type, fromaddress, msg, time);
 		}
 		db.close();
+	}
+
+	public static void sendHandlerMessageToAddMsgView(int type, String fromAddress, String message, String time) {
+		if (null != XmppActivity.MsgHandler) {
+			android.os.Message msg = new android.os.Message();
+			msg.what = XmppActivity.SHOW_MESSAGE;
+			Bundle bundle = new Bundle();
+			bundle.putInt("type", type);
+			bundle.putString("fromaddress", fromAddress);
+			bundle.putString("msg", message);
+			bundle.putString("time", time);
+			msg.setData(bundle);
+			XmppActivity.MsgHandler.sendMessage(msg);
+		}
 	}
 }
