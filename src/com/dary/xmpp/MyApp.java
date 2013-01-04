@@ -6,11 +6,13 @@ import android.content.Context;
 public class MyApp extends Application {
 
 	private static Context mContext;
-	private int status = XmppActivity.NOT_LOGGED_IN;
-	private boolean isShouldRunning = false;
+	private int status;
+	private boolean isShouldRunning;
 
 	public void onCreate() {
 		super.onCreate();
+		isShouldRunning = false;
+		status = XmppActivity.NOT_LOGGED_IN;
 		mContext = getApplicationContext();
 	}
 
@@ -30,7 +32,7 @@ public class MyApp extends Application {
 		return isShouldRunning;
 	}
 
-	public void setIsShouldRunning(boolean b) {
-		this.isShouldRunning = b;
+	public void setIsShouldRunning(boolean isShouldRunning) {
+		this.isShouldRunning = isShouldRunning;
 	}
 }

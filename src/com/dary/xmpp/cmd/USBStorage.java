@@ -1,10 +1,10 @@
 package com.dary.xmpp.cmd;
 
-import com.dary.xmpp.MyApp;
-
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.provider.Settings;
+
+import com.dary.xmpp.MyApp;
 
 public class USBStorage {
 

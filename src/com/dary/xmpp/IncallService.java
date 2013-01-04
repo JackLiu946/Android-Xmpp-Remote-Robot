@@ -1,13 +1,13 @@
 package com.dary.xmpp;
 
-import com.dary.xmpp.cmd.CmdBase;
-
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+
+import com.dary.xmpp.cmd.CmdBase;
 
 public class IncallService extends Service {
 

@@ -165,6 +165,7 @@ public class MainService extends Service {
 
 	@Override
 	public void onDestroy() {
+		Tools.doLog("Service Destroy");
 		sendMsg(XmppActivity.NOT_LOGGED_IN);
 		if (connection.isConnected()) {
 			Presence presence = new Presence(Presence.Type.unavailable);
