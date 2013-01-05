@@ -9,4 +9,4 @@
 
 做的还很粗糙.只是觉得这东西很有意思,当作练手的项目.如果您真的打算使用这样的软件,我更推荐使用目前更为稳定和完善的[GtalkSMS](https://github.com/vovs/gtalksms)
 
-<img src="http://ww1.sinaimg.cn/large/a74ecc4cjw1dxy20dzj7aj.jpg">
+<img src="http://ww2.sinaimg.cn/large/a74eed94jw1e0ij0ox354j.jpg">
