@@ -12,7 +12,7 @@ import com.dary.xmpp.cmd.CmdBase;
 public class IncallService extends Service {
 
 	private mPhoneCallListener phoneListener = new mPhoneCallListener();
-	public static boolean isFirstStart = true;
+	public static boolean isFirstStart;
 
 	private class mPhoneCallListener extends PhoneStateListener {
 		public void onCallStateChanged(int state, String incomingNumber) {
@@ -36,6 +36,7 @@ public class IncallService extends Service {
 	@Override
 	public void onCreate() {
 		// 有问题,改为不调用ServiceManager中的telManager
+		isFirstStart = true;
 		TelephonyManager telManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		telManager.listen(phoneListener, mPhoneCallListener.LISTEN_CALL_STATE);
 		super.onCreate();

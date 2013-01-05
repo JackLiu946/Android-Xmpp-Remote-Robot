@@ -28,6 +28,9 @@ public class CallLogCmd extends CmdBase {
 				if (cursor.moveToPosition(i)) {
 					String strNumber = cursor.getString(0);
 					String strName = cursor.getString(1);
+					if (strName == null) {
+						strName = "Unkown Contact";
+					}
 					intType = cursor.getInt(2);
 
 					if (intType == 1) {

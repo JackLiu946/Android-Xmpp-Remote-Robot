@@ -65,7 +65,6 @@ public class MainService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		IncallService.isFirstStart = true;
 
 		getSetting();
 		// 如果配置不全,显示Toast
