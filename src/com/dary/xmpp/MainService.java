@@ -14,7 +14,6 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -31,9 +30,6 @@ public class MainService extends Service {
 
 	public static Connection connection;
 	private ConnectionConfiguration config;
-	public static int intLevel;
-	public static int intScale;
-	public static String strPlugged = "";
 	public static String notifiedAddress;
 	public static String loginAddress;
 	private String password;
@@ -41,22 +37,19 @@ public class MainService extends Service {
 	private String serverHost;
 	private String serverPort;
 	private String resource;
-	private boolean isautoReconnect;
+	private boolean isAutoReconnect;
 	private boolean isDebugMode;
 	public SMSReceiver smsReceiver = new SMSReceiver();
 	private BatteryReceiver batteryReceiver = new BatteryReceiver();
-	private boolean iscustomServer;
-	private Context mContext = this;
-	public static MyApp myApp;
+	private boolean isCustomServer;
 
 	public static Chat chat;
 
 	@Override
 	public void onCreate() {
-		// 启动InCallService
-		myApp = (MyApp) getApplication();
 		// 提高优先级
 		setForeground(true);
+		// 启动InCallService
 		Intent incallserviceIntent = new Intent();
 		incallserviceIntent.setClass(MainService.this, IncallService.class);
 		startService(incallserviceIntent);
@@ -93,7 +86,7 @@ public class MainService extends Service {
 	class LoginInThread implements Runnable {
 
 		public void run() {
-			if (iscustomServer) {
+			if (isCustomServer) {
 				config = new ConnectionConfiguration(serverHost, Integer.parseInt(serverPort));
 			} else {
 				config = new ConnectionConfiguration(serverHost);
@@ -184,8 +177,8 @@ public class MainService extends Service {
 
 	private void getSetting() {
 		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-		iscustomServer = mPrefs.getBoolean("isCustomServer", false);
-		System.out.println("自定义服务器设置 " + iscustomServer);
+		isCustomServer = mPrefs.getBoolean("isCustomServer", false);
+		System.out.println("自定义服务器设置 " + isCustomServer);
 		serverHost = mPrefs.getString("serverHost", "");
 		System.out.println("服务器主机 " + serverHost);
 		serverPort = mPrefs.getString("serverPort", "5222");
@@ -198,13 +191,14 @@ public class MainService extends Service {
 		System.out.println("提醒地址 " + notifiedAddress);
 		resource = mPrefs.getString("resource", "");
 		System.out.println("资源名 " + resource);
-		isautoReconnect = mPrefs.getBoolean("isAutoReconnect", true);
-		System.out.println("是否重新连接 " + isautoReconnect);
+		isAutoReconnect = mPrefs.getBoolean("isAutoReconnect", true);
+		System.out.println("是否重新连接 " + isAutoReconnect);
 		isDebugMode = mPrefs.getBoolean("isDebugMode", false);
 		System.out.println("调试模式 " + isDebugMode);
 	}
 
 	public static void sendMsg(int tag) {
+		MyApp myApp = (MyApp) MyApp.getContext();
 		myApp.setStatus(tag);
 		// 登录中,发送消息,更新UI.
 		if (null != XmppActivity.MsgHandler) {
@@ -219,9 +213,9 @@ public class MainService extends Service {
 		NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		Notification notification = new Notification(R.drawable.ic_launcher, str, System.currentTimeMillis());
 		notification.flags = Notification.FLAG_AUTO_CANCEL;
-		Intent intent = new Intent(mContext, XmppActivity.class);
-		PendingIntent contentIntent = PendingIntent.getActivity(mContext, 0, intent, 0);
-		notification.setLatestEventInfo(mContext, str, str, contentIntent);
+		Intent intent = new Intent(MyApp.getContext(), XmppActivity.class);
+		PendingIntent contentIntent = PendingIntent.getActivity(MyApp.getContext(), 0, intent, 0);
+		notification.setLatestEventInfo(MyApp.getContext(), str, str, contentIntent);
 		notificationManager.notify(R.drawable.ic_launcher, notification);
 	}
 
