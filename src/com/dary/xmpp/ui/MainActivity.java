@@ -1,4 +1,4 @@
-package com.dary.xmpp;
+package com.dary.xmpp.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -22,9 +22,19 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.dary.xmpp.DatabaseHelper;
+import com.dary.xmpp.MainService;
+import com.dary.xmpp.MyApp;
+import com.dary.xmpp.R;
+import com.dary.xmpp.Tools;
+import com.dary.xmpp.R.array;
+import com.dary.xmpp.R.drawable;
+import com.dary.xmpp.R.id;
+import com.dary.xmpp.R.layout;
+import com.dary.xmpp.R.string;
 import com.dary.xmpp.cmd.CmdBase;
 
-public class XmppActivity extends Activity {
+public class MainActivity extends Activity {
 
 	public TextView loginStatus;
 	private AutoCompleteTextView autoCompleteTextViewSendMessage;
@@ -82,7 +92,7 @@ public class XmppActivity extends Activity {
 
 				// 要展示的消息
 				else if (msg.what == SHOW_MESSAGE) {
-					MsgView mv = new MsgView(XmppActivity.this, msg.getData().getInt("type"), msg.getData().getString("fromaddress"), msg.getData().getString("time"), msg.getData().getString("msg"));
+					MsgView mv = new MsgView(MainActivity.this, msg.getData().getInt("type"), msg.getData().getString("fromaddress"), msg.getData().getString("time"), msg.getData().getString("msg"));
 					linearLayoutMessage.addView(mv);
 					// 将ScrollView滚动到底部
 					scrollToBottom(scrollViewMessage, linearLayoutMessage);
@@ -97,29 +107,23 @@ public class XmppActivity extends Activity {
 		buttonServiceStart.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				Tools.Vibrator(XmppActivity.this, 100);
+				Tools.Vibrator(MainActivity.this, 100);
+				
 				Intent mainserviceIntent = new Intent();
-				mainserviceIntent.setClass(XmppActivity.this, MainService.class);
+				mainserviceIntent.setClass(MainActivity.this, MainService.class);
 				startService(mainserviceIntent);
-				MyApp myApp = (MyApp) getApplication();
-				myApp.setIsShouldRunning(true);
 			}
 		});
 		// 服务停止的按钮
 		buttonServiceStop.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				Tools.Vibrator(XmppActivity.this, 100);
+				Tools.Vibrator(MainActivity.this, 100);
 
-				// 启动两个服务
+				// 停止服务
 				Intent mainserviceIntent = new Intent();
-				mainserviceIntent.setClass(XmppActivity.this, MainService.class);
+				mainserviceIntent.setClass(MainActivity.this, MainService.class);
 				stopService(mainserviceIntent);
-				Intent incallserviceIntent = new Intent();
-				incallserviceIntent.setClass(XmppActivity.this, IncallService.class);
-				stopService(incallserviceIntent);
-				MyApp myApp = (MyApp) getApplication();
-				myApp.setIsShouldRunning(false);
 			}
 		});
 
@@ -144,7 +148,7 @@ public class XmppActivity extends Activity {
 		boolean isDebugMode = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("isDebugMode", false);
 		if (isDebugMode) {
 			Intent mainserviceIntent = new Intent();
-			mainserviceIntent.setClass(XmppActivity.this, MainService.class);
+			mainserviceIntent.setClass(MainActivity.this, MainService.class);
 			startService(mainserviceIntent);
 		}
 
@@ -164,14 +168,14 @@ public class XmppActivity extends Activity {
 		switch (item.getItemId()) {
 		case 0:
 			Intent preferenceIntent = new Intent();
-			preferenceIntent.setClass(XmppActivity.this, PreferenceActivity.class);
+			preferenceIntent.setClass(MainActivity.this, PreferenceActivity.class);
 			startActivity(preferenceIntent);
 			break;
 		case 1:
-			View view = View.inflate(XmppActivity.this, R.layout.about, null);
+			View view = View.inflate(MainActivity.this, R.layout.about, null);
 			TextView tv = (TextView) view.findViewById(R.id.text_about);
-			tv.setText(getResources().getString(R.string.author) + getResources().getString(R.string.author_value) + "\n" + getResources().getString(R.string.email) + getResources().getString(R.string.email_value) + "\n" + getResources().getString(R.string.version) + Tools.getAppVersionName(XmppActivity.this) + "\n" + getResources().getString(R.string.find_more) + "\n" + getResources().getString(R.string.github));
-			new AlertDialog.Builder(XmppActivity.this).setTitle(R.string.app_name).setView(view).setPositiveButton(R.string.ok, null).setIcon(R.drawable.ic_launcher).show();
+			tv.setText(getResources().getString(R.string.author) + getResources().getString(R.string.author_value) + "\n" + getResources().getString(R.string.email) + getResources().getString(R.string.email_value) + "\n" + getResources().getString(R.string.version) + Tools.getAppVersionName(MainActivity.this) + "\n" + getResources().getString(R.string.find_more) + "\n" + getResources().getString(R.string.github));
+			new AlertDialog.Builder(MainActivity.this).setTitle(R.string.app_name).setView(view).setPositiveButton(R.string.ok, null).setIcon(R.drawable.ic_launcher).show();
 			break;
 		case 2:
 			// 移除LinearLayout上的所有TextView
@@ -184,7 +188,7 @@ public class XmppActivity extends Activity {
 			break;
 		case 3:
 			Intent logIntent = new Intent();
-			logIntent.setClass(XmppActivity.this, LogActivity.class);
+			logIntent.setClass(MainActivity.this, LogActivity.class);
 			startActivity(logIntent);
 		}
 		return super.onOptionsItemSelected(item);
@@ -228,7 +232,7 @@ public class XmppActivity extends Activity {
 		String shareText = intent.getStringExtra(Intent.EXTRA_TEXT);
 		if (shareText != null) {
 			// 如果登录成功则直接发送消息
-			if (myApp.getStatus() == XmppActivity.LOGIN_SUCCESSFUL) {
+			if (myApp.getStatus() == MainActivity.LOGIN_SUCCESSFUL) {
 				CmdBase.sendMessageAndUpdateView(MainService.chat, shareText);
 			} else {
 				autoCompleteTextViewSendMessage.setText(shareText);
@@ -303,16 +307,16 @@ public class XmppActivity extends Activity {
 	}
 
 	public static void sendHandlerMessageToAddMsgView(int type, String fromAddress, String message, String time) {
-		if (null != XmppActivity.MsgHandler) {
+		if (null != MainActivity.MsgHandler) {
 			android.os.Message msg = new android.os.Message();
-			msg.what = XmppActivity.SHOW_MESSAGE;
+			msg.what = MainActivity.SHOW_MESSAGE;
 			Bundle bundle = new Bundle();
 			bundle.putInt("type", type);
 			bundle.putString("fromaddress", fromAddress);
 			bundle.putString("msg", message);
 			bundle.putString("time", time);
 			msg.setData(bundle);
-			XmppActivity.MsgHandler.sendMessage(msg);
+			MainActivity.MsgHandler.sendMessage(msg);
 		}
 	}
 }

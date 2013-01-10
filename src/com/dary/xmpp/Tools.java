@@ -8,6 +8,8 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.dary.xmpp.ui.MainActivity;
+
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -49,7 +51,7 @@ public class Tools {
 	}
 
 	public static void doLog(String str) {
-		XmppActivity.sendHandlerMessageToAddMsgView(DatabaseHelper.LOG_MESSAGE, "System Log", str, Tools.getTimeStr());
+		MainActivity.sendHandlerMessageToAddMsgView(DatabaseHelper.LOG_MESSAGE, "System Log", str, Tools.getTimeStr());
 		DatabaseHelper.insertMsgToDatabase(DatabaseHelper.LOG_MESSAGE, "System Log", str, Tools.getTimeStr());
 
 		try {

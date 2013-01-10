@@ -7,7 +7,6 @@ import org.jivesoftware.smack.ChatManager;
 import org.jivesoftware.smack.Connection;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.XMPPConnection;
-import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Presence;
 
 import android.app.Notification;
@@ -25,6 +24,7 @@ import android.preference.PreferenceManager;
 import com.dary.xmpp.cmd.CmdBase;
 import com.dary.xmpp.receivers.BatteryReceiver;
 import com.dary.xmpp.receivers.SMSReceiver;
+import com.dary.xmpp.ui.MainActivity;
 
 public class MainService extends Service {
 
@@ -59,10 +59,12 @@ public class MainService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
+		MyApp myApp = (MyApp) getApplication();
+		myApp.setIsShouldRunning(true);
 		getSetting();
 		// 如果配置不全,显示Toast
 		if (loginAddress.equals("") || password.equals("") || notifiedAddress.equals("")) {
-			sendMsg(XmppActivity.SET_INCOMPLETE);
+			sendMsg(MainActivity.SET_INCOMPLETE);
 		}
 		// 否则才登录
 		else {
@@ -77,7 +79,7 @@ public class MainService extends Service {
 			Tools.doLog("Login");
 			// 登录中,发送消息,更新UI.
 
-			sendMsg(XmppActivity.LOGGING);
+			sendMsg(MainActivity.LOGGING);
 		}
 		return super.onStartCommand(intent, flags, startId);
 	}
@@ -105,52 +107,49 @@ public class MainService extends Service {
 			try {
 				System.out.println("与服务器建立连接");
 				connection.connect();
-
-				try {
-					// 防止重新连接时多次登录.
-					if (!connection.isAuthenticated() && connection.isConnected()) {
-
-						System.out.println("登录,验证口令");
-
-						// connection.login(loginAddress,password,resource);
-						connection.login(loginAddress, password, Tools.getTimeStr());
-
-						// Tools.Vibrator(MainService.this, 500);
-						System.out.println("登录成功");
-						Tools.doLog("Login Successful");
-						makeNotification("Login Successful");
-
-						// 登录成功后发送消息通知Activity改变按钮状态
-						sendMsg(XmppActivity.LOGIN_SUCCESSFUL);
-
-						ChatManager chatmanager = connection.getChatManager();
-
-						// 注册消息监听器
-						chat = chatmanager.createChat(notifiedAddress.toLowerCase(Locale.getDefault()), new MsgListener());
-
-						// 登录成功之后再在程序动态的注册电量改变,短信的广播接收器,注册电量改变的接收器时会设置Presence
-						registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-						registerReceiver(smsReceiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
-
-						// 登录成功后发送消息,用于测试
-						if (isDebugMode) {
-							CmdBase.sendMessageAndUpdateView(chat, "Login is successful");
-						}
-					}
-
-				} catch (XMPPException e) {
-					System.out.println("登录失败");
-					Tools.doLog("Login Failed");
-					makeNotification("Login Failed");
-					sendMsg(XmppActivity.LOGIN_FAILED);
-					e.printStackTrace();
-				}
-			} catch (XMPPException e) {
+			} catch (Exception e) {
 				System.out.println("连接服务器失败");
 				Tools.doLog("Connection Failed");
 				makeNotification("Connection Failed");
-				sendMsg(XmppActivity.CONNECTION_FAILED);
+				sendMsg(MainActivity.CONNECTION_FAILED);
 				e.printStackTrace();
+				return;
+			}
+			// 防止重新连接时多次登录.
+			if (!connection.isAuthenticated() && connection.isConnected()) {
+				System.out.println("登录,验证口令");
+				try {
+					// connection.login(loginAddress,password,resource);
+					connection.login(loginAddress, password, Tools.getTimeStr());
+				} catch (Exception e) {
+					System.out.println("登录失败");
+					Tools.doLog("Login Failed");
+					makeNotification("Login Failed");
+					sendMsg(MainActivity.LOGIN_FAILED);
+					e.printStackTrace();
+					return;
+				}
+				// Tools.Vibrator(MainService.this, 500);
+				System.out.println("登录成功");
+				Tools.doLog("Login Successful");
+				makeNotification("Login Successful");
+
+				// 登录成功后发送消息通知Activity改变按钮状态
+				sendMsg(MainActivity.LOGIN_SUCCESSFUL);
+
+				ChatManager chatmanager = connection.getChatManager();
+
+				// 注册消息监听器
+				chat = chatmanager.createChat(notifiedAddress.toLowerCase(Locale.getDefault()), new MsgListener());
+
+				// 登录成功之后再在程序动态的注册电量改变,短信的广播接收器,注册电量改变的接收器时会设置Presence
+				registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+				registerReceiver(smsReceiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
+
+				// 登录成功后发送消息,用于测试
+				if (isDebugMode) {
+					CmdBase.sendMessageAndUpdateView(chat, "Login is successful");
+				}
 			}
 		}
 	}
@@ -158,12 +157,17 @@ public class MainService extends Service {
 	@Override
 	public void onDestroy() {
 		Tools.doLog("Service Destroy");
-		sendMsg(XmppActivity.NOT_LOGGED_IN);
+		MyApp myApp = (MyApp) getApplication();
+		myApp.setIsShouldRunning(false);
+		sendMsg(MainActivity.NOT_LOGGED_IN);
 		if (connection.isConnected()) {
 			Presence presence = new Presence(Presence.Type.unavailable);
 			connection.sendPacket(presence);
 			connection.disconnect();
 		}
+		Intent incallserviceIntent = new Intent();
+		incallserviceIntent.setClass(MainService.this, IncallService.class);
+		stopService(incallserviceIntent);
 		// 反注册广播接收器
 		unregisterReceiver(batteryReceiver);
 		unregisterReceiver(smsReceiver);
@@ -201,11 +205,11 @@ public class MainService extends Service {
 		MyApp myApp = (MyApp) MyApp.getContext();
 		myApp.setStatus(tag);
 		// 登录中,发送消息,更新UI.
-		if (null != XmppActivity.MsgHandler) {
+		if (null != MainActivity.MsgHandler) {
 			// 考虑修改为,当Activity启动的时候去读取状态
 			Message msg = new Message();
 			msg.what = tag;
-			XmppActivity.MsgHandler.sendMessage(msg);
+			MainActivity.MsgHandler.sendMessage(msg);
 		}
 	}
 
@@ -213,7 +217,7 @@ public class MainService extends Service {
 		NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		Notification notification = new Notification(R.drawable.ic_launcher, str, System.currentTimeMillis());
 		notification.flags = Notification.FLAG_AUTO_CANCEL;
-		Intent intent = new Intent(MyApp.getContext(), XmppActivity.class);
+		Intent intent = new Intent(MyApp.getContext(), MainActivity.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(MyApp.getContext(), 0, intent, 0);
 		notification.setLatestEventInfo(MyApp.getContext(), str, str, contentIntent);
 		notificationManager.notify(R.drawable.ic_launcher, notification);

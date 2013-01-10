@@ -1,4 +1,4 @@
-package com.dary.xmpp;
+package com.dary.xmpp.ui;
 
 import android.content.Context;
 import android.graphics.Color;

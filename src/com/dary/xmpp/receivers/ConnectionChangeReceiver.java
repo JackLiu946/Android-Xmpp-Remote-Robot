@@ -12,14 +12,14 @@ import com.dary.xmpp.IncallService;
 import com.dary.xmpp.MainService;
 import com.dary.xmpp.MyApp;
 import com.dary.xmpp.Tools;
-import com.dary.xmpp.XmppActivity;
+import com.dary.xmpp.ui.MainActivity;
 
 public class ConnectionChangeReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(final Context context, Intent intent) {
 		System.out.println("连接状态改变");
 		Tools.doLog("Connectivty Change");
-		MainService.sendMsg(XmppActivity.NOT_LOGGED_IN);
+		MainService.sendMsg(MainActivity.NOT_LOGGED_IN);
 
 		MyApp myApp = (MyApp) context.getApplicationContext();
 		if (myApp.getIsShouldRunning()) {

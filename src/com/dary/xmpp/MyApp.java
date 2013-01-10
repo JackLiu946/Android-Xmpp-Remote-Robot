@@ -1,5 +1,7 @@
 package com.dary.xmpp;
 
+import com.dary.xmpp.ui.MainActivity;
+
 import android.app.Application;
 import android.content.Context;
 
@@ -12,7 +14,7 @@ public class MyApp extends Application {
 	public void onCreate() {
 		super.onCreate();
 		isShouldRunning = false;
-		status = XmppActivity.NOT_LOGGED_IN;
+		status = MainActivity.NOT_LOGGED_IN;
 		mContext = getApplicationContext();
 	}
 

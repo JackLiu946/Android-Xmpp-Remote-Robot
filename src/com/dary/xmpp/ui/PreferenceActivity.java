@@ -1,4 +1,7 @@
-package com.dary.xmpp;
+package com.dary.xmpp.ui;
+
+import com.dary.xmpp.R;
+import com.dary.xmpp.R.xml;
 
 import android.os.Bundle;
 

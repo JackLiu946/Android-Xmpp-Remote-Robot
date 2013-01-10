@@ -11,7 +11,7 @@ import com.dary.xmpp.DatabaseHelper;
 import com.dary.xmpp.MainService;
 import com.dary.xmpp.MyApp;
 import com.dary.xmpp.Tools;
-import com.dary.xmpp.XmppActivity;
+import com.dary.xmpp.ui.MainActivity;
 
 public class CmdBase {
 	public static void sendMessageAndUpdateView(Chat chat, String message) {
@@ -19,7 +19,7 @@ public class CmdBase {
 		try {
 			chat.sendMessage(message);
 			// 更新UI
-			XmppActivity.sendHandlerMessageToAddMsgView(DatabaseHelper.SEND_MESSAGE, Tools.getAddress(MainService.connection.getUser()), message, Tools.getTimeStr());
+			MainActivity.sendHandlerMessageToAddMsgView(DatabaseHelper.SEND_MESSAGE, Tools.getAddress(MainService.connection.getUser()), message, Tools.getTimeStr());
 			// 插入数据库
 			DatabaseHelper.insertMsgToDatabase(DatabaseHelper.SEND_MESSAGE, Tools.getAddress(MainService.connection.getUser()), message, Tools.getTimeStr());
 
@@ -33,7 +33,7 @@ public class CmdBase {
 			// Intent incallserviceIntent = new Intent();
 			// incallserviceIntent.setClass(MyApp.getContext(), IncallService.class);
 			// MyApp.getContext().stopService(incallserviceIntent);
-			MainService.sendMsg(XmppActivity.NOT_LOGGED_IN);
+			MainService.sendMsg(MainActivity.NOT_LOGGED_IN);
 		}
 	}
 

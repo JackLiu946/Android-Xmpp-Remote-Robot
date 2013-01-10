@@ -8,8 +8,8 @@ import android.telephony.SmsMessage;
 
 import com.dary.xmpp.Contact;
 import com.dary.xmpp.MainService;
-import com.dary.xmpp.XmppActivity;
 import com.dary.xmpp.cmd.CmdBase;
+import com.dary.xmpp.ui.MainActivity;
 
 public class SMSReceiver extends BroadcastReceiver {
 	private static final String mACTION = "android.provider.Telephony.SMS_RECEIVED";
@@ -17,7 +17,7 @@ public class SMSReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		if (intent.getAction().equals(mACTION)) {
-			if (null != XmppActivity.MsgHandler) {
+			if (null != MainActivity.MsgHandler) {
 				StringBuilder sb = new StringBuilder();
 				Bundle bundle = intent.getExtras();
 				if (bundle != null) {

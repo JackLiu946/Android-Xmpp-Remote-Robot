@@ -1,8 +1,13 @@
-package com.dary.xmpp;
+package com.dary.xmpp.ui;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+
+import com.dary.xmpp.R;
+import com.dary.xmpp.R.id;
+import com.dary.xmpp.R.layout;
+import com.dary.xmpp.R.string;
 
 import android.app.Activity;
 import android.graphics.Typeface;

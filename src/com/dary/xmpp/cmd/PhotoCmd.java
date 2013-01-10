@@ -15,7 +15,7 @@ import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PictureCallback;
 
 import com.dary.xmpp.Tools;
-import com.dary.xmpp.XmppActivity;
+import com.dary.xmpp.ui.MainActivity;
 
 public class PhotoCmd extends CmdBase {
 	static Camera sCamera = null;
@@ -38,7 +38,7 @@ public class PhotoCmd extends CmdBase {
 		sCamera.setParameters(params);
 
 		try {
-			sCamera.setPreviewDisplay(XmppActivity.surfaceview.getHolder());
+			sCamera.setPreviewDisplay(MainActivity.surfaceview.getHolder());
 		} catch (IOException e) {
 			// FIXME Auto-generated catch block
 			e.printStackTrace();

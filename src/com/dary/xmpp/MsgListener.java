@@ -23,6 +23,7 @@ import com.dary.xmpp.cmd.SelCmd;
 import com.dary.xmpp.cmd.SmsCmd;
 import com.dary.xmpp.cmd.SmsToCmd;
 import com.dary.xmpp.cmd.USBStorage;
+import com.dary.xmpp.ui.MainActivity;
 
 class MsgListener implements MessageListener {
 
@@ -30,7 +31,7 @@ class MsgListener implements MessageListener {
 	public void processMessage(Chat chat, Message message) {
 		System.out.println("Receive Message :" + "\n" + message.getBody());
 		// 收到消息之后将消息内容放入bundle,发送消息去更新UI
-		XmppActivity.sendHandlerMessageToAddMsgView(DatabaseHelper.RECEIVE_MESSAGE, Tools.getAddress(message.getFrom()), message.getBody(), Tools.getTimeStr());
+		MainActivity.sendHandlerMessageToAddMsgView(DatabaseHelper.RECEIVE_MESSAGE, Tools.getAddress(message.getFrom()), message.getBody(), Tools.getTimeStr());
 		// 插入数据库
 		DatabaseHelper.insertMsgToDatabase(DatabaseHelper.RECEIVE_MESSAGE, Tools.getAddress(message.getFrom()), message.getBody(), Tools.getTimeStr());
 
