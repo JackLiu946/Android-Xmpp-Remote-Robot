@@ -70,8 +70,6 @@
         <receiver android:name=".receivers.ConnectionChangeReceiver" >
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-
-                <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </receiver>
 

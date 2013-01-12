@@ -27,11 +27,6 @@ import com.dary.xmpp.MainService;
 import com.dary.xmpp.MyApp;
 import com.dary.xmpp.R;
 import com.dary.xmpp.Tools;
-import com.dary.xmpp.R.array;
-import com.dary.xmpp.R.drawable;
-import com.dary.xmpp.R.id;
-import com.dary.xmpp.R.layout;
-import com.dary.xmpp.R.string;
 import com.dary.xmpp.cmd.CmdBase;
 
 public class MainActivity extends Activity {
@@ -108,7 +103,7 @@ public class MainActivity extends Activity {
 
 			public void onClick(View v) {
 				Tools.Vibrator(MainActivity.this, 100);
-				
+
 				Intent mainserviceIntent = new Intent();
 				mainserviceIntent.setClass(MainActivity.this, MainService.class);
 				startService(mainserviceIntent);

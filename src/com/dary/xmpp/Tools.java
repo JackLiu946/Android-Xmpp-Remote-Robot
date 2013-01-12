@@ -8,12 +8,12 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.dary.xmpp.ui.MainActivity;
-
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Vibrator;
+
+import com.dary.xmpp.ui.MainActivity;
 
 public class Tools {
 

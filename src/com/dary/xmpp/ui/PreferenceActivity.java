@@ -1,9 +1,8 @@
 package com.dary.xmpp.ui;
 
-import com.dary.xmpp.R;
-import com.dary.xmpp.R.xml;
-
 import android.os.Bundle;
+
+import com.dary.xmpp.R;
 
 public class PreferenceActivity extends android.preference.PreferenceActivity {
 	@Override

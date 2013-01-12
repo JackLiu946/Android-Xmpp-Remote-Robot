@@ -4,17 +4,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
-import com.dary.xmpp.R;
-import com.dary.xmpp.R.id;
-import com.dary.xmpp.R.layout;
-import com.dary.xmpp.R.string;
-
 import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.dary.xmpp.R;
 
 public class LogActivity extends Activity {
 

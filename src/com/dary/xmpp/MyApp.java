@@ -1,9 +1,9 @@
 package com.dary.xmpp;
 
-import com.dary.xmpp.ui.MainActivity;
-
 import android.app.Application;
 import android.content.Context;
+
+import com.dary.xmpp.ui.MainActivity;
 
 public class MyApp extends Application {
 
