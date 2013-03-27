@@ -49,6 +49,7 @@ public class CallLogCmd extends CmdBase {
 		} else {
 			sb.append("CallLog is Empty");
 		}
+		cursor.close();
 		sendMessageAndUpdateView(chat, sb.toString());
 	}
 }

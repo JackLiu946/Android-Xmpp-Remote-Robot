@@ -66,12 +66,15 @@ public class Contact {
 				phoneNumber = phoneNumber.replace("-", "");
 				listPhoneNumber.add(phoneNumber);
 			} while (cursor.moveToNext());
+			cursor.close();
 			return listPhoneNumber;
 		}
+		cursor.close();
 		return listPhoneNumber;
 	}
 
 	// 通过查询名字返回多个包含传入字段的联系人名字
+	// 传入的名字如果为空,会返回全部的联系人信息
 	// 以后会考虑修改实现查询号码邮箱来取得联系人名字
 	// 只返回了含有电话号码的联系人的问题已解决,是查询时输入的第一个参数,即传入的URI导致的
 
@@ -97,6 +100,7 @@ public class Contact {
 				}
 				lastContactName = new String(ContactName);
 			} while (cursor.moveToNext());
+			cursor.close();
 			return listContactNames;
 		}
 		return listContactNames;
@@ -116,6 +120,7 @@ public class Contact {
 				String email = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA1));
 				listEmail.add(email);
 			} while (cursor.moveToNext());
+			cursor.close();
 			return listEmail;
 		}
 		return listEmail;

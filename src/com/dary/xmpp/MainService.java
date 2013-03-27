@@ -48,7 +48,7 @@ public class MainService extends Service {
 	@Override
 	public void onCreate() {
 		// 提高优先级
-		setForeground(true);
+		// setForeground(true);
 		// 启动InCallService
 		Intent incallserviceIntent = new Intent();
 		incallserviceIntent.setClass(MainService.this, IncallService.class);
@@ -58,9 +58,6 @@ public class MainService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-
-		MyApp myApp = (MyApp) getApplication();
-		myApp.setIsShouldRunning(true);
 		getSetting();
 		// 如果配置不全,显示Toast
 		if (loginAddress.equals("") || password.equals("") || notifiedAddress.equals("")) {
@@ -88,15 +85,15 @@ public class MainService extends Service {
 	class LoginInThread implements Runnable {
 
 		public void run() {
+			MyApp myApp = (MyApp) getApplication();
+			myApp.setIsShouldRunning(true);
+
 			if (isCustomServer) {
 				config = new ConnectionConfiguration(serverHost, Integer.parseInt(serverPort));
 			} else {
 				config = new ConnectionConfiguration(serverHost);
 			}
 
-			// config.setTruststorePath("/system/etc/security/cacerts.bks");
-			// config.setTruststorePassword("changeit");
-			// config.setTruststoreType("bks");
 			// config.setSecurityMode(ConnectionConfiguration.SecurityMode.disabled);
 			// config.setReconnectionAllowed(false);
 			// config.setSendPresence(false);

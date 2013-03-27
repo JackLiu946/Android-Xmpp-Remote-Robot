@@ -16,6 +16,7 @@ import com.dary.xmpp.ui.MainActivity;
 public class CmdBase {
 	public static void sendMessageAndUpdateView(Chat chat, String message) {
 
+		System.out.println("Send Message : " + message);
 		try {
 			chat.sendMessage(message);
 			// 更新UI
@@ -82,13 +83,13 @@ public class CmdBase {
 		return message.getBody().split(":", -1)[2];
 	}
 
-	// 判断是否含有参数.(不去判断是否为空),也可去分割消息,判断所得数组的长度.
+	// 判断是否含有参数.(不去判断参数是否为""),也可去分割消息,判断所得数组的长度.
 	static boolean hasArgs(Message message) {
 		// return message.getBody().indexOf(":") != -1;
 		return message.getBody().matches(".*:.*");
 	}
 
-	// 判断是否含有第2个参数.(不判断是否为空),也可去分割消息,判断所得数组的长度.
+	// 判断是否含有第二个参数.(不去判断参数是否为""),也可去分割消息,判断所得数组的长度.
 	static boolean hasSecArgs(Message message) {
 		// return
 		// message.getBody().indexOf(":",message.getBody().indexOf(":")+1) !=

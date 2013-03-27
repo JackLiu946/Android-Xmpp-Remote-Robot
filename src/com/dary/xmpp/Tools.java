@@ -13,8 +13,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Vibrator;
 
-import com.dary.xmpp.ui.MainActivity;
-
 public class Tools {
 
 	public static String delLastLine(StringBuilder sb) {
@@ -51,8 +49,8 @@ public class Tools {
 	}
 
 	public static void doLog(String str) {
-		MainActivity.sendHandlerMessageToAddMsgView(DatabaseHelper.LOG_MESSAGE, "System Log", str, Tools.getTimeStr());
-		DatabaseHelper.insertMsgToDatabase(DatabaseHelper.LOG_MESSAGE, "System Log", str, Tools.getTimeStr());
+		// MainActivity.sendHandlerMessageToAddMsgView(DatabaseHelper.LOG_MESSAGE, "System Log", str, Tools.getTimeStr());
+		// DatabaseHelper.insertMsgToDatabase(DatabaseHelper.LOG_MESSAGE, "System Log", str, Tools.getTimeStr());
 
 		try {
 			// 注意如果文件不存在的时候(确切的说应该是文件的内容为空时),添加新内容之前要先添加换行符.

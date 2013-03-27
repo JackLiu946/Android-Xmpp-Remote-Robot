@@ -5,6 +5,7 @@ import org.jivesoftware.smack.packet.Presence;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.BatteryManager;
 
 import com.dary.xmpp.MainService;
 
@@ -16,9 +17,10 @@ public class BatteryReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		if (intent.getAction().equals(Intent.ACTION_BATTERY_CHANGED)) {
-			int intPlugged = intent.getIntExtra("plugged", 0);
-			intLevel = intent.getIntExtra("level", 0);
-			intScale = intent.getIntExtra("scale", 100);
+			int intPlugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
+			intLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+			intScale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+			int batteryPct = intLevel * 100 / intScale;
 			if (intPlugged == 0) {
 				strPlugged = "Battery";
 			} else {
@@ -26,7 +28,7 @@ public class BatteryReceiver extends BroadcastReceiver {
 			}
 			if (MainService.connection.isConnected()) {
 				Presence presence = new Presence(Presence.Type.available);
-				presence.setStatus(strPlugged + " Power: " + String.valueOf(intLevel * 100 / intScale) + "%");
+				presence.setStatus(strPlugged + " Power: " + String.valueOf(batteryPct) + "%");
 				MainService.connection.sendPacket(presence);
 			}
 		}

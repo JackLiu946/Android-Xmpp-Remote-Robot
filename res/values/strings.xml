@@ -37,7 +37,6 @@
     <string name="preference_is_auto_reconnect_help">Check if you want App reconnect when connection status change</string>
     <string name="buttonsendmessage">Send</string>
     <string name="autocompletetextviewsendmessage_hint">Send Message</string>
-    <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_log">Log</string>
     <string name="github">https://github.com/AnyOfYou/android-xmpp-remote-robot</string>
@@ -45,7 +44,7 @@
     <string name="author">"Author : "</string>
     <string name="author_value">Dary</string>
     <string name="version">"Version : "</string>
-    <string name="find_more">This is a open source project,you can find more information from here :</string>
+    <string name="find_more">This is an open source project,you can find more information from here :</string>
     <string name="email">"Email : "</string>
     <string name="email_value">anyofyou@gmail.com</string>
 

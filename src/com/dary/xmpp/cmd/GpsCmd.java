@@ -39,7 +39,6 @@ public class GpsCmd extends CmdBase {
 			System.out.println(location.getLongitude());
 
 			sendMessageAndUpdateView(chat, "http://maps.google.com/maps?q=" + location.getLatitude() + ",+" + location.getLongitude());
-
 		}
 		// 设置监听器，自动更新的最小时间为间隔N秒(1秒为1*1000，这样写主要为了方便)或最小位移变化超过N米
 		ServiceManager.locManager.requestLocationUpdates(provider, 10 * 1000, 100, new LocationListener() {
