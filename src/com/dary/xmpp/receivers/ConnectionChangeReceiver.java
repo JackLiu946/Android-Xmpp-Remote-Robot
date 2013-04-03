@@ -23,9 +23,9 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 
 		MyApp myApp = (MyApp) context.getApplicationContext();
 		if (myApp.getIsShouldRunning()) {
-			Tools.doLog("isShouldRunning");
+//			Tools.doLog("isShouldRunning");
 		} else {
-			Tools.doLog("isNotShouldRunning");
+//			Tools.doLog("isNotShouldRunning");
 		}
 
 		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
