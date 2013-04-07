@@ -32,7 +32,6 @@ public class MainService extends Service {
 	public static String notifiedAddress;
 	public static String loginAddress;
 	private String password;
-	public Handler myHandler;
 	private String serverHost;
 	private String serverPort;
 	private String resource;
@@ -85,16 +84,16 @@ public class MainService extends Service {
 
 		public void run() {
 			ConnectionConfiguration config;
-			
+
 			MyApp myApp = (MyApp) getApplication();
 			myApp.setIsShouldRunning(true);
-			
+
 			if (isCustomServer) {
 				config = new ConnectionConfiguration(serverHost, Integer.parseInt(serverPort));
 			} else {
 				config = new ConnectionConfiguration(serverHost);
 			}
-			
+
 			// config.setSecurityMode(ConnectionConfiguration.SecurityMode.disabled);
 			// config.setReconnectionAllowed(false);
 			// config.setSendPresence(false);
@@ -167,8 +166,13 @@ public class MainService extends Service {
 		incallserviceIntent.setClass(MainService.this, IncallService.class);
 		stopService(incallserviceIntent);
 		// 反注册广播接收器
-		unregisterReceiver(batteryReceiver);
-		unregisterReceiver(smsReceiver);
+		try {
+			unregisterReceiver(batteryReceiver);
+			unregisterReceiver(smsReceiver);
+		} catch (Exception e) {
+			//尚未注册
+			e.printStackTrace();
+		}
 		super.onDestroy();
 	}
 

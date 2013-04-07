@@ -87,7 +87,8 @@ public class MainActivity extends Activity {
 
 				// 要展示的消息
 				else if (msg.what == SHOW_MESSAGE) {
-					MsgView mv = new MsgView(MainActivity.this, msg.getData().getInt("type"), msg.getData().getString("fromaddress"), msg.getData().getString("time"), msg.getData().getString("msg"));
+					MsgView mv = new MsgView(MainActivity.this, msg.getData().getInt("type"), msg.getData().getString("fromaddress"), msg.getData().getString(
+							"time"), msg.getData().getString("msg"));
 					linearLayoutMessage.addView(mv);
 					// 将ScrollView滚动到底部
 					scrollToBottom(scrollViewMessage, linearLayoutMessage);
@@ -133,7 +134,8 @@ public class MainActivity extends Activity {
 		});
 
 		// 设置点击即显示下拉列表
-		// autoCompleteTextViewSendMessage.setOnClickListener(new OnClickListener() {
+		// autoCompleteTextViewSendMessage.setOnClickListener(new
+		// OnClickListener() {
 		// public void onClick(View v) {
 		// autoCompleteTextViewSendMessage.showDropDown();
 		// }
@@ -169,8 +171,12 @@ public class MainActivity extends Activity {
 		case 1:
 			View view = View.inflate(MainActivity.this, R.layout.about, null);
 			TextView tv = (TextView) view.findViewById(R.id.text_about);
-			tv.setText(getResources().getString(R.string.author) + getResources().getString(R.string.author_value) + "\n" + getResources().getString(R.string.email) + getResources().getString(R.string.email_value) + "\n" + getResources().getString(R.string.version) + Tools.getAppVersionName(MainActivity.this) + "\n" + getResources().getString(R.string.find_more) + "\n" + getResources().getString(R.string.github));
-			new AlertDialog.Builder(MainActivity.this).setTitle(R.string.app_name).setView(view).setPositiveButton(R.string.ok, null).setIcon(R.drawable.ic_launcher).show();
+			tv.setText(getResources().getString(R.string.author) + getResources().getString(R.string.author_value) + "\n"
+					+ getResources().getString(R.string.email) + getResources().getString(R.string.email_value) + "\n"
+					+ getResources().getString(R.string.version) + Tools.getAppVersionName(MainActivity.this) + "\n"
+					+ getResources().getString(R.string.find_more) + "\n" + getResources().getString(R.string.github));
+			new AlertDialog.Builder(MainActivity.this).setTitle(R.string.app_name).setView(view).setPositiveButton(R.string.ok, null)
+					.setIcon(R.drawable.ic_launcher).show();
 			break;
 		case 2:
 			// 移除LinearLayout上的所有TextView
@@ -247,7 +253,7 @@ public class MainActivity extends Activity {
 			break;
 		case LOGGING:
 			buttonServiceStart.setEnabled(false);
-			buttonServiceStop.setEnabled(false);
+			buttonServiceStop.setEnabled(true);
 			buttonSendMessage.setEnabled(false);
 			loginStatus.setTextColor(Color.YELLOW);
 			loginStatus.setText(R.string.loginstatus_logging);
