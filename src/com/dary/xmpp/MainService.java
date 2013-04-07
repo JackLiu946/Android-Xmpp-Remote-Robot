@@ -16,7 +16,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.preference.PreferenceManager;
@@ -170,7 +169,7 @@ public class MainService extends Service {
 			unregisterReceiver(batteryReceiver);
 			unregisterReceiver(smsReceiver);
 		} catch (Exception e) {
-			//尚未注册
+			// 尚未注册
 			e.printStackTrace();
 		}
 		super.onDestroy();

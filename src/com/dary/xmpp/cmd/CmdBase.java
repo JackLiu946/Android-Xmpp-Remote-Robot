@@ -20,7 +20,8 @@ public class CmdBase {
 		try {
 			chat.sendMessage(message);
 			// 更新UI
-			MainActivity.sendHandlerMessageToAddMsgView(DatabaseHelper.SEND_MESSAGE, Tools.getAddress(MainService.connection.getUser()), message, Tools.getTimeStr());
+			MainActivity.sendHandlerMessageToAddMsgView(DatabaseHelper.SEND_MESSAGE, Tools.getAddress(MainService.connection.getUser()), message,
+					Tools.getTimeStr());
 			// 插入数据库
 			DatabaseHelper.insertMsgToDatabase(DatabaseHelper.SEND_MESSAGE, Tools.getAddress(MainService.connection.getUser()), message, Tools.getTimeStr());
 
@@ -29,10 +30,12 @@ public class CmdBase {
 			Tools.doLog("Send Message Failed");
 			Toast.makeText(MyApp.getContext(), "Send Message Failed", Toast.LENGTH_SHORT).show();
 			// Intent mainserviceIntent = new Intent();
-			// mainserviceIntent.setClass(MyApp.getContext(), MainService.class);
+			// mainserviceIntent.setClass(MyApp.getContext(),
+			// MainService.class);
 			// MyApp.getContext().stopService(mainserviceIntent);
 			// Intent incallserviceIntent = new Intent();
-			// incallserviceIntent.setClass(MyApp.getContext(), IncallService.class);
+			// incallserviceIntent.setClass(MyApp.getContext(),
+			// IncallService.class);
 			// MyApp.getContext().stopService(incallserviceIntent);
 			MainService.sendMsg(MainActivity.NOT_LOGGED_IN);
 		}

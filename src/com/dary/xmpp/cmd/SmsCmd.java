@@ -90,7 +90,8 @@ public class SmsCmd extends SmsCmdBase {
 				sendMessageAndUpdateView(chat, "Make Last Message As Read Done");
 			} else {
 				sendSMSAndInsertToLibrary(lastAddress, getArgsCaseSensitive(message));
-				sendMessageAndUpdateView(chat, "Send SMS " + "( Number : " + Contact.getContactNameByNumber(lastAddress) + " Body : " + getArgsCaseSensitive(message) + " )" + "Done");
+				sendMessageAndUpdateView(chat, "Send SMS " + "( Number : " + Contact.getContactNameByNumber(lastAddress) + " Body : "
+						+ getArgsCaseSensitive(message) + " )" + "Done");
 			}
 		}
 	}

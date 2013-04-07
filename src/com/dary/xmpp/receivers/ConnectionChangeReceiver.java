@@ -13,7 +13,6 @@ import android.preference.PreferenceManager;
 import com.dary.xmpp.IncallService;
 import com.dary.xmpp.MainService;
 import com.dary.xmpp.MyApp;
-import com.dary.xmpp.ServiceManager;
 import com.dary.xmpp.Tools;
 import com.dary.xmpp.ui.MainActivity;
 
@@ -53,10 +52,13 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 		if (isAutoReconnect && myApp.getIsShouldRunning()) {
 
 			NetworkInfo netInfo = (NetworkInfo) intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
-			NetworkInfo activeNetInfo = ServiceManager.conManager.getActiveNetworkInfo();
+			// NetworkInfo activeNetInfo =
+			// ServiceManager.conManager.getActiveNetworkInfo();
 
-			System.out.println("!a " + netInfo.isConnected() + " " + netInfo.getType());
-			System.out.println("a " + activeNetInfo.isConnected() + " " + activeNetInfo.getType());
+			// System.out.println("netInfo " + netInfo.isConnected() + " " +
+			// netInfo.getType());
+			// System.out.println("activeNetInfo " + activeNetInfo.isConnected()
+			// + " " + activeNetInfo.getType());
 
 			if (netInfo != null && netInfo.isAvailable() && !netInfo.isFailover() && netInfo.isConnected() && netInfo.getState() == NetworkInfo.State.CONNECTED) {
 				if (null == MainService.connection || MainService.connection.isAuthenticated() != true) {
