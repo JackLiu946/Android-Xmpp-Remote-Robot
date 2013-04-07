@@ -29,7 +29,6 @@ import com.dary.xmpp.ui.MainActivity;
 public class MainService extends Service {
 
 	public static Connection connection;
-	private ConnectionConfiguration config;
 	public static String notifiedAddress;
 	public static String loginAddress;
 	private String password;
@@ -85,15 +84,17 @@ public class MainService extends Service {
 	class LoginInThread implements Runnable {
 
 		public void run() {
+			ConnectionConfiguration config;
+			
 			MyApp myApp = (MyApp) getApplication();
 			myApp.setIsShouldRunning(true);
-
+			
 			if (isCustomServer) {
 				config = new ConnectionConfiguration(serverHost, Integer.parseInt(serverPort));
 			} else {
 				config = new ConnectionConfiguration(serverHost);
 			}
-
+			
 			// config.setSecurityMode(ConnectionConfiguration.SecurityMode.disabled);
 			// config.setReconnectionAllowed(false);
 			// config.setSendPresence(false);
