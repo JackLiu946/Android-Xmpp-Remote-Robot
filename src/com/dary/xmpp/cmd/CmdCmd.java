@@ -3,10 +3,9 @@ package com.dary.xmpp.cmd;
 import java.io.DataInputStream;
 
 import org.jivesoftware.smack.Chat;
-import org.jivesoftware.smack.packet.Message;
 
 public class CmdCmd extends CmdBase {
-	public static void Cmd(Chat chat, Message message) {
+	public static void Cmd(Chat chat, String message) {
 		// 判断参数是否为空.
 		if (!hasArgs(message)) {
 			sendMessageAndUpdateView(chat, "Command is empty");

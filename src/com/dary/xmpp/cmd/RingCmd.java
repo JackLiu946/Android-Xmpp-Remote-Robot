@@ -3,7 +3,6 @@ package com.dary.xmpp.cmd;
 import java.io.IOException;
 
 import org.jivesoftware.smack.Chat;
-import org.jivesoftware.smack.packet.Message;
 
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -15,9 +14,9 @@ public class RingCmd extends CmdBase {
 
 	private static MediaPlayer mediaPlayer;
 
-	public static void Ring(Chat chat, Message message) {
+	public static void Ring(Chat chat, String message) {
 		// 不带参数
-		if (message.getBody().indexOf(":") == -1) {
+		if (!hasArgs(message)) {
 			if (mediaPlayer == null) {
 				mediaPlayer = new MediaPlayer();
 			}

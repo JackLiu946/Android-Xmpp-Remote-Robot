@@ -1,7 +1,6 @@
 package com.dary.xmpp.cmd;
 
 import org.jivesoftware.smack.Chat;
-import org.jivesoftware.smack.packet.Message;
 
 import com.dary.xmpp.Contact;
 import com.dary.xmpp.Tools;
@@ -12,7 +11,7 @@ public class SmsToCmd extends SmsCmdBase {
 	static Chat chat = null;
 
 	// 目前的Smsto命令只能接收明确的联系人姓名.以后要考虑修改为能接受模糊的联系人信息,和直接为号码的方式.
-	public static void Smsto(Chat chat, Message message) {
+	public static void Smsto(Chat chat, String message) {
 		// 判断是否含有两个参数
 		if (hasSecArgs(message)) {
 			SmsToCmd.chat = chat;

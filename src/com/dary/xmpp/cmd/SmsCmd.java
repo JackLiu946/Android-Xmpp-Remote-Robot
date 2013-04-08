@@ -1,7 +1,6 @@
 package com.dary.xmpp.cmd;
 
 import org.jivesoftware.smack.Chat;
-import org.jivesoftware.smack.packet.Message;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -13,7 +12,7 @@ import com.dary.xmpp.Tools;
 
 public class SmsCmd extends SmsCmdBase {
 
-	public static void Sms(Chat chat, Message message) {
+	public static void Sms(Chat chat, String message) {
 
 		Cursor cur;
 		Uri uri;

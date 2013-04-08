@@ -1,12 +1,11 @@
 package com.dary.xmpp.cmd;
 
 import org.jivesoftware.smack.Chat;
-import org.jivesoftware.smack.packet.Message;
 
 import com.dary.xmpp.ServiceManager;
 
 public class CopyCmd extends CmdBase {
-	public static void Copy(Chat chat, Message message) {
+	public static void Copy(Chat chat, String message) {
 
 		// 不带参数,将手机上剪贴板内容返回去
 		if (!hasArgs(message)) {

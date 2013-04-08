@@ -3,7 +3,6 @@ package com.dary.xmpp.cmd;
 import java.util.Locale;
 
 import org.jivesoftware.smack.Chat;
-import org.jivesoftware.smack.packet.Message;
 
 import android.widget.Toast;
 
@@ -18,8 +17,14 @@ public class CmdBase {
 
 		System.out.println("Send Message : " + message);
 		try {
-			chat.sendMessage(message);
+			// chat为null表示为DEBUG模式
+			if (chat != null) {
+				chat.sendMessage(message);
+			}
 			String from = MainService.loginAddress;
+			if (from == null) {
+				from = "Debug";
+			}
 			// String from = Tools.getAddress(MainService.connection.getUser());
 			// 更新UI
 			MainActivity.sendHandlerMessageToAddMsgView(DatabaseHelper.SEND_MESSAGE, from, message, Tools.getTimeStr());
@@ -43,61 +48,61 @@ public class CmdBase {
 	}
 
 	// 解析消息的全部参数部分,区分大小写.
-	static String getArgsCaseSensitive(Message message) {
+	static String getArgsCaseSensitive(String message) {
 		// return message.getBody().substring(message.getBody().indexOf(":") +
 		// 1);
-		return message.getBody().split(":", 2)[1];
+		return message.split(":", 2)[1];
 	}
 
 	// 解析消息的全部参数部分,不区分大小写.
-	static String getArgs(Message message) {
+	static String getArgs(String message) {
 		// return message.getBody().substring(message.getBody().indexOf(":") +
 		// 1).toLowerCase();
-		return message.getBody().split(":", 2)[1].toLowerCase(Locale.getDefault());
+		return message.split(":", 2)[1].toLowerCase(Locale.getDefault());
 	}
 
 	// 解析消息的第一个参数部分,不区分大小写.
-	static String getFirArgs(Message message) {
+	static String getFirArgs(String message) {
 		// return message.getBody().substring(message.getBody().indexOf(":") +
 		// 1, message.getBody().indexOf(":", message.getBody().indexOf(":") +
 		// 1))
 		// .toLowerCase();
-		return message.getBody().split(":", -1)[1].toLowerCase(Locale.getDefault());
+		return message.split(":", -1)[1].toLowerCase(Locale.getDefault());
 	}
 
 	// 解析消息的第一个参数部分,区分大小写.
-	static String getFirArgsCaseSensitive(Message message) {
+	static String getFirArgsCaseSensitive(String message) {
 		// return message.getBody().substring(message.getBody().indexOf(":") +
 		// 1, message.getBody().indexOf(":", message.getBody().indexOf(":") +
 		// 1));
-		return message.getBody().split(":", -1)[1];
+		return message.split(":", -1)[1];
 	}
 
 	// 解析消息的第二个参数部分,不区分大小写.
-	static String getSecArgs(Message message) {
+	static String getSecArgs(String message) {
 		// return message.getBody().substring(message.getBody().indexOf(":",
 		// message.getBody().indexOf(":") + 1) + 1).toLowerCase();
-		return message.getBody().split(":", -1)[2].toLowerCase(Locale.getDefault());
+		return message.split(":", -1)[2].toLowerCase(Locale.getDefault());
 	}
 
 	// 解析消息的第二个参数部分,区分大小写.
-	static String getSecArgsCaseSensitive(Message message) {
+	static String getSecArgsCaseSensitive(String message) {
 		// return message.getBody().substring(message.getBody().indexOf(":",
 		// message.getBody().indexOf(":") + 1) + 1);
-		return message.getBody().split(":", -1)[2];
+		return message.split(":", -1)[2];
 	}
 
 	// 判断是否含有参数.(不去判断参数是否为""),也可去分割消息,判断所得数组的长度.
-	static boolean hasArgs(Message message) {
+	static boolean hasArgs(String message) {
 		// return message.getBody().indexOf(":") != -1;
-		return message.getBody().matches(".*:.*");
+		return message.matches(".*:.*");
 	}
 
 	// 判断是否含有第二个参数.(不去判断参数是否为""),也可去分割消息,判断所得数组的长度.
-	static boolean hasSecArgs(Message message) {
+	static boolean hasSecArgs(String message) {
 		// return
 		// message.getBody().indexOf(":",message.getBody().indexOf(":")+1) !=
 		// -1;
-		return message.getBody().matches(".*:.*:.*");
+		return message.matches(".*:.*:.*");
 	}
 }

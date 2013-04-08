@@ -1,14 +1,13 @@
 package com.dary.xmpp.cmd;
 
 import org.jivesoftware.smack.Chat;
-import org.jivesoftware.smack.packet.Message;
 
 import android.media.AudioManager;
 
 import com.dary.xmpp.ServiceManager;
 
 public class RingerModeCmd extends CmdBase {
-	public static void RingerMode(Chat chat, Message message) {
+	public static void RingerMode(Chat chat, String message) {
 		// 不带参数,返回当前的RingerMode
 		if (!hasArgs(message)) {
 			int RingerMode = ServiceManager.audManager.getRingerMode();

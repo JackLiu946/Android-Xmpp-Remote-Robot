@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import com.dary.xmpp.DatabaseHelper;
 import com.dary.xmpp.MainService;
+import com.dary.xmpp.MsgListener;
 import com.dary.xmpp.MyApp;
 import com.dary.xmpp.R;
 import com.dary.xmpp.Tools;
@@ -106,7 +107,7 @@ public class MainActivity extends Activity {
 		buttonServiceStart.setOnLongClickListener(new OnLongClickListener() {
 
 			public boolean onLongClick(View v) {
-				Tools.Vibrator(MainActivity.this, 100);
+				Tools.Vibrator(MainActivity.this, 500);
 				MyApp myApp = (MyApp) MyApp.getContext();
 				myApp.setStatus(MainActivity.DEBUG);
 				Message msg = new Message();
@@ -132,7 +133,12 @@ public class MainActivity extends Activity {
 		buttonSendMessage.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				if (autoCompleteTextViewSendMessage.getText().toString() != "") {
-					CmdBase.sendMessageAndUpdateView(MainService.chat, autoCompleteTextViewSendMessage.getText().toString());
+					MyApp myApp = (MyApp) getApplication();
+					if (myApp.getStatus() == MainActivity.DEBUG) {
+						MsgListener.handleMessage(null, autoCompleteTextViewSendMessage.getText().toString());
+					} else {
+						CmdBase.sendMessageAndUpdateView(MainService.chat, autoCompleteTextViewSendMessage.getText().toString());
+					}
 					autoCompleteTextViewSendMessage.setText("");
 				}
 			}

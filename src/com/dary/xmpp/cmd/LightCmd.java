@@ -3,7 +3,6 @@ package com.dary.xmpp.cmd;
 import java.io.IOException;
 
 import org.jivesoftware.smack.Chat;
-import org.jivesoftware.smack.packet.Message;
 
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
@@ -26,7 +25,7 @@ public class LightCmd extends CmdBase {
 		}
 	}
 
-	public static void Light(Chat chat, Message message) {
+	public static void Light(Chat chat, String message) {
 
 		if (!hasArgs(message) || getArgs(message).equals("on")) {
 			init();

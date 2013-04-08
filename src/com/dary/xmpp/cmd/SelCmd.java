@@ -2,15 +2,13 @@ package com.dary.xmpp.cmd;
 
 import java.util.ArrayList;
 
-import org.jivesoftware.smack.packet.Message;
-
 import com.dary.xmpp.Tools;
 
 public class SelCmd extends CmdBase {
 	private static ArrayList<String> choices = null;
 	private static String from = null;
 
-	public static void Sel(Message message) {
+	public static void Sel(String message) {
 		// 将Sel命令的String参数专为int类型
 		int sel = Integer.parseInt(getArgs(message));
 		// return choicesALL.get(sel-1).toString();

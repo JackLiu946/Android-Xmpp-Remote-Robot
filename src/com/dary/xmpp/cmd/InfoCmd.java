@@ -3,7 +3,6 @@ package com.dary.xmpp.cmd;
 import java.util.List;
 
 import org.jivesoftware.smack.Chat;
-import org.jivesoftware.smack.packet.Message;
 
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -16,7 +15,7 @@ import com.dary.xmpp.Tools;
 public class InfoCmd extends CmdBase {
 	static Chat chat = null;
 
-	public static void Info(Chat chat, Message message) {
+	public static void Info(Chat chat, String message) {
 		InfoCmd.chat = chat;
 		// 不带参数则返回全部信息(不包含联系人).
 		if (!hasArgs(message)) {
