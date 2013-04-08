@@ -62,10 +62,9 @@ public class MainService extends Service {
 			Thread thread = new Thread(loginInThread);
 			thread.setName("LoginThread");
 			thread.start();
-			System.out.println("登录线程开始运行");
 
 			// 尝试将登录的记录存储下来,先暂时只存储到普通的文本文件中
-			Tools.doLog("Login");
+			Tools.doLog("Login", true, false);
 			// 登录中,发送消息,更新UI.
 
 			sendMsg(MainActivity.LOGGING);
@@ -97,11 +96,10 @@ public class MainService extends Service {
 
 			connection = new XMPPConnection(config);
 			try {
-				System.out.println("与服务器建立连接");
+				Tools.doLog("Connect to Server", false, false);
 				connection.connect();
 			} catch (Exception e) {
-				System.out.println("连接服务器失败");
-				Tools.doLog("Connection Failed");
+				Tools.doLog("Connection Failed", true, false);
 				makeNotification("Connection Failed");
 				sendMsg(MainActivity.CONNECTION_FAILED);
 				e.printStackTrace();
@@ -114,16 +112,14 @@ public class MainService extends Service {
 					// connection.login(loginAddress,password,resource);
 					connection.login(loginAddress, password, Tools.getTimeStr());
 				} catch (Exception e) {
-					System.out.println("登录失败");
-					Tools.doLog("Login Failed");
+					Tools.doLog("Login Failed", true, false);
 					makeNotification("Login Failed");
 					sendMsg(MainActivity.LOGIN_FAILED);
 					e.printStackTrace();
 					return;
 				}
 				// Tools.Vibrator(MainService.this, 500);
-				System.out.println("登录成功");
-				Tools.doLog("Login Successful");
+				Tools.doLog("Login Successful", true, false);
 				makeNotification("Login Successful");
 
 				// 登录成功后发送消息通知Activity改变按钮状态
@@ -148,7 +144,7 @@ public class MainService extends Service {
 
 	@Override
 	public void onDestroy() {
-		Tools.doLog("Service Destroy");
+		Tools.doLog("Service Destroy", true, false);
 		MyApp myApp = (MyApp) getApplication();
 		myApp.setIsShouldRunning(false);
 		sendMsg(MainActivity.NOT_LOGGED_IN);

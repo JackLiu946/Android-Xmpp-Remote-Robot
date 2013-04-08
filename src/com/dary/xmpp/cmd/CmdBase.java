@@ -33,7 +33,7 @@ public class CmdBase {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			Tools.doLog("Send Message Failed");
+			Tools.doLog("Send Message Failed",true,false);
 			Toast.makeText(MyApp.getContext(), "Send Message Failed", Toast.LENGTH_SHORT).show();
 			// Intent mainserviceIntent = new Intent();
 			// mainserviceIntent.setClass(MyApp.getContext(),

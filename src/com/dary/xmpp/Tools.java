@@ -13,6 +13,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Vibrator;
 
+import com.dary.xmpp.ui.MainActivity;
+
 public class Tools {
 
 	public static String delLastLine(StringBuilder sb) {
@@ -48,38 +50,40 @@ public class Tools {
 		vibrator.vibrate(pattern, -1);
 	}
 
-	public static void doLog(String str) {
-		// MainActivity.sendHandlerMessageToAddMsgView(DatabaseHelper.LOG_MESSAGE,
-		// "System Log", str, Tools.getTimeStr());
-		// DatabaseHelper.insertMsgToDatabase(DatabaseHelper.LOG_MESSAGE,
-		// "System Log", str, Tools.getTimeStr());
+	public static void doLog(String str, boolean isLogToFile, boolean isLogToDatabase) {
+		System.out.println(str);
+		if (isLogToFile) {
+			try {
+				// 注意如果文件不存在的时候(确切的说应该是文件的内容为空时),添加新内容之前要先添加换行符.
+				// FileOutputStream outStream =
+				// MyApp.getContext().openFileOutput("Log",
+				// Context.MODE_APPEND);
+				// 会直接创建
+				File file = MyApp.getContext().getFileStreamPath("Log");
 
-		try {
-			// 注意如果文件不存在的时候(确切的说应该是文件的内容为空时),添加新内容之前要先添加换行符.
-			// FileOutputStream outStream =
-			// MyApp.getContext().openFileOutput("Log",
-			// Context.MODE_APPEND);
-			// 会直接创建
-			File file = MyApp.getContext().getFileStreamPath("Log");
-
-			StringBuilder sb = new StringBuilder();
-			if (file.exists()) {
-				sb.append("\n");
-			} else {
-				file.createNewFile();
+				StringBuilder sb = new StringBuilder();
+				if (file.exists()) {
+					sb.append("\n");
+				} else {
+					file.createNewFile();
+				}
+				sb.append(str);
+				// 占满整个一行,对齐
+				int length = 24;
+				for (int i = 0; i < length - str.length(); i++) {
+					sb.append(" ");
+				}
+				sb.append(Tools.getTimeStr());
+				FileOutputStream fos = new FileOutputStream(file, true);
+				fos.write(sb.toString().getBytes());
+				fos.close();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			sb.append(str);
-			// 占满整个一行,对齐
-			int length = 24;
-			for (int i = 0; i < length - str.length(); i++) {
-				sb.append(" ");
-			}
-			sb.append(Tools.getTimeStr());
-			FileOutputStream fos = new FileOutputStream(file, true);
-			fos.write(sb.toString().getBytes());
-			fos.close();
-		} catch (Exception e) {
-			e.printStackTrace();
+		}
+		if (isLogToDatabase) {
+			MainActivity.sendHandlerMessageToAddMsgView(DatabaseHelper.LOG_MESSAGE, "System Log", str, Tools.getTimeStr());
+			DatabaseHelper.insertMsgToDatabase(DatabaseHelper.LOG_MESSAGE, "System Log", str, Tools.getTimeStr());
 		}
 	}
 
