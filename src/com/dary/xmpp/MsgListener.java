@@ -8,6 +8,7 @@ import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.packet.Message;
 
 import com.dary.xmpp.cmd.CallLogCmd;
+import com.dary.xmpp.cmd.ClearCmd;
 import com.dary.xmpp.cmd.CmdBase;
 import com.dary.xmpp.cmd.CmdCmd;
 import com.dary.xmpp.cmd.CopyCmd;
@@ -30,10 +31,12 @@ class MsgListener implements MessageListener {
 	// 消息处理
 	public void processMessage(Chat chat, Message message) {
 		System.out.println("Receive Message :" + "\n" + message.getBody());
+		String from = MainService.notifiedAddress;
+		// String from = Tools.getAddress(message.getFrom());
 		// 收到消息之后将消息内容放入bundle,发送消息去更新UI
-		MainActivity.sendHandlerMessageToAddMsgView(DatabaseHelper.RECEIVE_MESSAGE, Tools.getAddress(message.getFrom()), message.getBody(), Tools.getTimeStr());
+		MainActivity.sendHandlerMessageToAddMsgView(DatabaseHelper.RECEIVE_MESSAGE, from, message.getBody(), Tools.getTimeStr());
 		// 插入数据库
-		DatabaseHelper.insertMsgToDatabase(DatabaseHelper.RECEIVE_MESSAGE, Tools.getAddress(message.getFrom()), message.getBody(), Tools.getTimeStr());
+		DatabaseHelper.insertMsgToDatabase(DatabaseHelper.RECEIVE_MESSAGE, from, message.getBody(), Tools.getTimeStr());
 
 		Roster roster = MainService.connection.getRoster();
 
@@ -101,13 +104,20 @@ class MsgListener implements MessageListener {
 		else if (cmd.equals("photo")) {
 			PhotoCmd.Photo(chat, roster.getPresence("anyofyou@gmail.com").getFrom());
 		}
+
 		// Help命令
 		else if (cmd.equals("help")) {
 			HelpCmd.Help(chat, message);
 		}
 
+		// Usb命令
 		else if (cmd.equals("usb")) {
 			USBStorage.OpenUSBStorage();
+		}
+
+		// Cls命令
+		else if (cmd.equals("cls")) {
+			ClearCmd.Clear();
 		}
 
 		// 所有命令都不匹配时

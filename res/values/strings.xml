@@ -10,12 +10,13 @@
     <string name="clear_msg">Clear Msg</string>
     <string name="clear_log">Clear Log</string>
     <string name="loginstatus">Status: </string>
+    <string name="loginstats_debug">Debug!</string>
     <string name="loginstatus_not_logged_in">Not logged in</string>
     <string name="loginstatus_successful">Successful</string>
     <string name="loginstatus_set_incomplete">Set incomplete</string>
     <string name="loginstatus_login_failure">Login Failure</string>
     <string name="loginstatus_connection_failure">Connection Failure</string>
-    <string name="loginstatus_logging">Logging...</string>
+    <string name="loginstatus_logging">Logging&#8230;</string>
     <string name="preference_notified_address">Address to notify</string>
     <string name="preference_notified_address_help">Enter your notify address</string>
     <string name="preference_login_address">Address to login</string>

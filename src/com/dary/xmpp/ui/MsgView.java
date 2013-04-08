@@ -16,7 +16,7 @@ public class MsgView extends LinearLayout {
 		super(context);
 	}
 
-	public MsgView(Context context, int intFrom, String strFrom, String strTime, String strMsg) {
+	public MsgView(Context context, int type, String strFrom, String strTime, String strMsg) {
 		super(context);
 		TextView from = new TextView(context);
 		TextView time = new TextView(context);
@@ -24,11 +24,11 @@ public class MsgView extends LinearLayout {
 
 		from.setTextColor(Color.WHITE);
 		this.setOrientation(LinearLayout.VERTICAL);
-		if (intFrom == RECEIVE) {
+		if (type == RECEIVE) {
 			msg.setTextColor(Color.YELLOW);
-		} else if (intFrom == SEND) {
+		} else if (type == SEND) {
 			msg.setTextColor(Color.GREEN);
-		} else if (intFrom == LOG) {
+		} else if (type == LOG) {
 			msg.setTextColor(Color.RED);
 		}
 		LinearLayout fromAndTime = new LinearLayout(context);

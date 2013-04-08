@@ -19,11 +19,12 @@ public class CmdBase {
 		System.out.println("Send Message : " + message);
 		try {
 			chat.sendMessage(message);
+			String from = MainService.loginAddress;
+			// String from = Tools.getAddress(MainService.connection.getUser());
 			// 更新UI
-			MainActivity.sendHandlerMessageToAddMsgView(DatabaseHelper.SEND_MESSAGE, Tools.getAddress(MainService.connection.getUser()), message,
-					Tools.getTimeStr());
+			MainActivity.sendHandlerMessageToAddMsgView(DatabaseHelper.SEND_MESSAGE, from, message, Tools.getTimeStr());
 			// 插入数据库
-			DatabaseHelper.insertMsgToDatabase(DatabaseHelper.SEND_MESSAGE, Tools.getAddress(MainService.connection.getUser()), message, Tools.getTimeStr());
+			DatabaseHelper.insertMsgToDatabase(DatabaseHelper.SEND_MESSAGE, from, message, Tools.getTimeStr());
 
 		} catch (Exception e) {
 			e.printStackTrace();

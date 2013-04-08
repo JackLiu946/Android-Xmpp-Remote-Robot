@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -37,11 +38,12 @@ public class MainActivity extends Activity {
 	private Button buttonServiceStop;
 	private Button buttonSendMessage;
 	private ScrollView scrollViewMessage;
-	private LinearLayout linearLayoutMessage;
+	private static LinearLayout linearLayoutMessage;
 	public static Handler MsgHandler = null;
 	public static TextView TVmessage;
 	public static SurfaceView surfaceview;
 
+	public static final int DEBUG = -1;
 	public static final int NOT_LOGGED_IN = 0;
 	public static final int LOGGING = 1;
 	public static final int LOGIN_SUCCESSFUL = 2;
@@ -71,27 +73,17 @@ public class MainActivity extends Activity {
 		// 更新显示收到的消息
 		MsgHandler = new Handler() {
 			public void handleMessage(Message msg) {
-				if (msg.what == LOGIN_SUCCESSFUL) {
-					setViewByStatus(LOGIN_SUCCESSFUL);
-				} else if (msg.what == SET_INCOMPLETE) {
-					setViewByStatus(SET_INCOMPLETE);
-				} else if (msg.what == LOGIN_FAILED) {
-					setViewByStatus(LOGIN_FAILED);
-				} else if (msg.what == CONNECTION_FAILED) {
-					setViewByStatus(CONNECTION_FAILED);
-				} else if (msg.what == LOGGING) {
-					setViewByStatus(LOGGING);
-				} else if (msg.what == NOT_LOGGED_IN) {
-					setViewByStatus(NOT_LOGGED_IN);
-				}
-
 				// 要展示的消息
-				else if (msg.what == SHOW_MESSAGE) {
+				if (msg.what == SHOW_MESSAGE) {
 					MsgView mv = new MsgView(MainActivity.this, msg.getData().getInt("type"), msg.getData().getString("fromaddress"), msg.getData().getString(
 							"time"), msg.getData().getString("msg"));
 					linearLayoutMessage.addView(mv);
 					// 将ScrollView滚动到底部
 					scrollToBottom(scrollViewMessage, linearLayoutMessage);
+				}
+				// 除此之外,仅须改变设置View状态
+				else {
+					setViewByStatus(msg.what);
 				}
 			}
 		};
@@ -108,6 +100,19 @@ public class MainActivity extends Activity {
 				Intent mainserviceIntent = new Intent();
 				mainserviceIntent.setClass(MainActivity.this, MainService.class);
 				startService(mainserviceIntent);
+			}
+		});
+		// 长按按钮,进入Debug模式
+		buttonServiceStart.setOnLongClickListener(new OnLongClickListener() {
+
+			public boolean onLongClick(View v) {
+				Tools.Vibrator(MainActivity.this, 100);
+				MyApp myApp = (MyApp) MyApp.getContext();
+				myApp.setStatus(MainActivity.DEBUG);
+				Message msg = new Message();
+				msg.what = MainActivity.DEBUG;
+				MainActivity.MsgHandler.sendMessage(msg);
+				return false;
 			}
 		});
 		// 服务停止的按钮
@@ -179,13 +184,7 @@ public class MainActivity extends Activity {
 					.setIcon(R.drawable.ic_launcher).show();
 			break;
 		case 2:
-			// 移除LinearLayout上的所有TextView
-			linearLayoutMessage.removeAllViews();
-			// 清空表
-			DatabaseHelper dbHelper = new DatabaseHelper(MyApp.getContext(), "database", null, 1);
-			SQLiteDatabase db = dbHelper.getReadableDatabase();
-			db.delete("messages", null, null);
-			db.close();
+			clearMsg();
 			break;
 		case 3:
 			Intent logIntent = new Intent();
@@ -193,6 +192,17 @@ public class MainActivity extends Activity {
 			startActivity(logIntent);
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	// 移除所有MsgView并清空数据库
+	public static void clearMsg() {
+		// 移除LinearLayout上的所有TextView
+		linearLayoutMessage.removeAllViews();
+		// 清空表
+		DatabaseHelper dbHelper = new DatabaseHelper(MyApp.getContext(), "database", null, 1);
+		SQLiteDatabase db = dbHelper.getReadableDatabase();
+		db.delete("messages", null, null);
+		db.close();
 	}
 
 	// @Override
@@ -244,6 +254,13 @@ public class MainActivity extends Activity {
 
 	private void setViewByStatus(int s) {
 		switch (s) {
+		case DEBUG:
+			buttonServiceStart.setEnabled(false);
+			buttonServiceStop.setEnabled(true);
+			buttonSendMessage.setEnabled(true);
+			loginStatus.setTextColor(Color.BLUE);
+			loginStatus.setText(R.string.loginstats_debug);
+			break;
 		case NOT_LOGGED_IN:
 			buttonServiceStart.setEnabled(true);
 			buttonServiceStop.setEnabled(false);
