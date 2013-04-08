@@ -136,7 +136,7 @@ public class MainActivity extends Activity {
 				if (myApp.getStatus() == DEBUG) {
 					MainService.sendMsg(MainActivity.NOT_LOGGED_IN);
 				}
-				// 这里可以是logging和login_successful两种状态
+				// 正在登录,登录成功时则停止掉服务,连接/登录失败的时候,也应该可以去停止程序以后的自动登录.
 				else {
 					// 停止服务
 					Intent mainserviceIntent = new Intent();
@@ -319,7 +319,7 @@ public class MainActivity extends Activity {
 			break;
 		case CONNECTION_FAILED:
 			buttonServiceStart.setEnabled(true);
-			buttonServiceStop.setEnabled(false);
+			buttonServiceStop.setEnabled(true);
 			buttonSendMessage.setEnabled(false);
 			// Tools.Vibrator(XmppActivity.this, 1000);
 			loginStatus.setText(R.string.loginstatus_connection_failure);
@@ -327,8 +327,8 @@ public class MainActivity extends Activity {
 			break;
 		case LOGIN_FAILED:
 			buttonServiceStart.setEnabled(true);
+			buttonServiceStop.setEnabled(true);
 			buttonSendMessage.setEnabled(false);
-			buttonServiceStop.setEnabled(false);
 			// Tools.Vibrator(XmppActivity.this, 1000);
 			loginStatus.setText(R.string.loginstatus_login_failure);
 			loginStatus.setTextColor(Color.RED);
@@ -352,6 +352,7 @@ public class MainActivity extends Activity {
 		db.close();
 	}
 
+	// 发送Handler,创建MsgView
 	public static void sendHandlerMessageToAddMsgView(int type, String fromAddress, String message, String time) {
 		if (null != MainActivity.MsgHandler) {
 			android.os.Message msg = new android.os.Message();

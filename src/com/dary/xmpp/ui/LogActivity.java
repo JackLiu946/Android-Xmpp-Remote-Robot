@@ -30,7 +30,7 @@ public class LogActivity extends Activity {
 	protected void onStart() {
 
 		StringBuilder sb = new StringBuilder();
-		File file = new File("/data/data/com.dary.xmpp/files/LoginLog");
+		File file = new File("/data/data/com.dary.xmpp/files/Log");
 		try {
 			InputStream is = new FileInputStream(file);
 			byte[] buffer = new byte[200];
@@ -57,7 +57,7 @@ public class LogActivity extends Activity {
 		super.onOptionsItemSelected(item);
 		switch (item.getItemId()) {
 		case 0:
-			File file = new File("/data/data/com.dary.xmpp/files/LoginLog");
+			File file = new File("/data/data/com.dary.xmpp/files/Log");
 			if (file.exists())
 				file.delete();
 			textViewLog.setText("Log dose not exist");
