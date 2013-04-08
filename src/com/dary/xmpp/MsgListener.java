@@ -26,10 +26,9 @@ import com.dary.xmpp.cmd.USBStorage;
 import com.dary.xmpp.ui.MainActivity;
 
 public class MsgListener implements MessageListener {
-
 	// 消息处理
 	public void processMessage(Chat chat, Message message) {
-		System.out.println("Receive Message :" + "\n" + message.getBody());
+
 		handleMessage(chat, message.getBody());
 	}
 
@@ -40,9 +39,9 @@ public class MsgListener implements MessageListener {
 	}
 
 	public static void handleMessage(Chat chat, String message) {
+		System.out.println("Receive Message :" + "\n" + message);
 		String from = MainService.notifiedAddress;
-		if (from == null)
-		{
+		if (from == null) {
 			from = "Debug";
 		}
 		// String from = Tools.getAddress(message.getFrom());

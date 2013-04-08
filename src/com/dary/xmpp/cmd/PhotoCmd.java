@@ -53,7 +53,6 @@ public class PhotoCmd extends CmdBase {
 		PictureCallback pictureCallback = new PictureCallback() {
 
 			public void onPictureTaken(byte[] data, Camera camera) {
-				// FIXME Auto-generated method stub
 				Bitmap bm = BitmapFactory.decodeByteArray(data, 0, data.length);
 
 				file = new File(filePath + "/" + fileName);

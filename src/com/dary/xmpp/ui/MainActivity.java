@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceView;
@@ -22,6 +23,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.dary.xmpp.DatabaseHelper;
 import com.dary.xmpp.MainService;
@@ -70,6 +72,14 @@ public class MainActivity extends Activity {
 		// 设置AutoCompleteTextView的Adapter
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.auto_cmd_string_item, getResources().getStringArray(R.array.autoCmdString));
 		autoCompleteTextViewSendMessage.setAdapter(adapter);
+
+		autoCompleteTextViewSendMessage.setOnEditorActionListener(new OnEditorActionListener() {
+
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				sendMsg();
+				return false;
+			}
+		});
 
 		// 更新显示收到的消息
 		MsgHandler = new Handler() {
@@ -121,26 +131,25 @@ public class MainActivity extends Activity {
 
 			public void onClick(View v) {
 				Tools.Vibrator(MainActivity.this, 100);
+				MyApp myApp = (MyApp) MyApp.getContext();
 
-				// 停止服务
-				Intent mainserviceIntent = new Intent();
-				mainserviceIntent.setClass(MainActivity.this, MainService.class);
-				stopService(mainserviceIntent);
+				if (myApp.getStatus() == DEBUG) {
+					MainService.sendMsg(MainActivity.NOT_LOGGED_IN);
+				}
+				// 这里可以是logging和login_successful两种状态
+				else {
+					// 停止服务
+					Intent mainserviceIntent = new Intent();
+					mainserviceIntent.setClass(MainActivity.this, MainService.class);
+					stopService(mainserviceIntent);
+				}
 			}
 		});
 
 		// 发送按钮
 		buttonSendMessage.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				if (autoCompleteTextViewSendMessage.getText().toString() != "") {
-					MyApp myApp = (MyApp) getApplication();
-					if (myApp.getStatus() == MainActivity.DEBUG) {
-						MsgListener.handleMessage(null, autoCompleteTextViewSendMessage.getText().toString());
-					} else {
-						CmdBase.sendMessageAndUpdateView(MainService.chat, autoCompleteTextViewSendMessage.getText().toString());
-					}
-					autoCompleteTextViewSendMessage.setText("");
-				}
+				sendMsg();
 			}
 		});
 
@@ -160,6 +169,19 @@ public class MainActivity extends Activity {
 			startService(mainserviceIntent);
 		}
 
+	}
+
+	// 这里是指发送xmpp消息
+	public void sendMsg() {
+		if (autoCompleteTextViewSendMessage.getText().toString().trim().length() != 0) {
+			MyApp myApp = (MyApp) getApplication();
+			if (myApp.getStatus() == MainActivity.DEBUG) {
+				MsgListener.handleMessage(null, autoCompleteTextViewSendMessage.getText().toString());
+			} else if (myApp.getStatus() == MainActivity.LOGIN_SUCCESSFUL) {
+				CmdBase.sendMessageAndUpdateView(MainService.chat, autoCompleteTextViewSendMessage.getText().toString());
+			}
+			autoCompleteTextViewSendMessage.setText("");
+		}
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {

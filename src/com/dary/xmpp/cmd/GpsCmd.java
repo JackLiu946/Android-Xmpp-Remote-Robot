@@ -4,8 +4,6 @@ import org.jivesoftware.smack.Chat;
 
 import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
-import android.os.Bundle;
 
 import com.dary.xmpp.ServiceManager;
 
@@ -40,41 +38,43 @@ public class GpsCmd extends CmdBase {
 
 			sendMessageAndUpdateView(chat, "http://maps.google.com/maps?q=" + location.getLatitude() + ",+" + location.getLongitude());
 		}
-		// 设置监听器，自动更新的最小时间为间隔N秒(1秒为1*1000，这样写主要为了方便)或最小位移变化超过N米
-		ServiceManager.locManager.requestLocationUpdates(provider, 10 * 1000, 100, new LocationListener() {
-
-			public void onLocationChanged(Location location) {
-				// // method stub
-				// if (location != null)
-				// {
-				// System.out.println(location.getLatitude());
-				// System.out.println(location.getLongitude());
-				// try
-				// {
-				// chat.sendMessage("http://maps.google.com/maps?q="+
-				// location.getLatitude() + ",+" +
-				// location.getLongitude());
-				// }
-				// catch (XMPPException e)
-				// {
-				// e.printStackTrace();
-				// }
-				// }
-
-			}
-
-			public void onProviderDisabled(String provider) {
-
-			}
-
-			public void onProviderEnabled(String provider) {
-
-			}
-
-			public void onStatusChanged(String provider, int status, Bundle extras) {
-
-			}
-
-		});
+		// 设置监听器,自动更新的最小时间为间隔N秒(1秒为1*1000,这样写主要为了方便)或最小位移变化超过N米
+		// ServiceManager.locManager.requestLocationUpdates(provider, 10 * 1000,
+		// 100, new LocationListener() {
+		//
+		// public void onLocationChanged(Location location) {
+		// // // method stub
+		// // if (location != null)
+		// // {
+		// // System.out.println(location.getLatitude());
+		// // System.out.println(location.getLongitude());
+		// // try
+		// // {
+		// // chat.sendMessage("http://maps.google.com/maps?q="+
+		// // location.getLatitude() + ",+" +
+		// // location.getLongitude());
+		// // }
+		// // catch (XMPPException e)
+		// // {
+		// // e.printStackTrace();
+		// // }
+		// // }
+		//
+		// }
+		//
+		// public void onProviderDisabled(String provider) {
+		//
+		// }
+		//
+		// public void onProviderEnabled(String provider) {
+		//
+		// }
+		//
+		// public void onStatusChanged(String provider, int status, Bundle
+		// extras) {
+		//
+		// }
+		//
+		// });
 	}
 }
