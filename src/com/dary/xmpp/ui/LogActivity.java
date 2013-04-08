@@ -58,9 +58,11 @@ public class LogActivity extends Activity {
 		switch (item.getItemId()) {
 		case 0:
 			File file = new File("/data/data/com.dary.xmpp/files/Log");
-			if (file.exists())
-				file.delete();
-			textViewLog.setText("Log dose not exist");
+			if (file.exists()) {
+				if (file.delete()) {
+					textViewLog.setText("Log dose not exist");
+				}
+			}
 			break;
 		}
 		return super.onOptionsItemSelected(item);

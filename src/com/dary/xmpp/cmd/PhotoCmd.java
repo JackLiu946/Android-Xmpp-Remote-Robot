@@ -71,7 +71,7 @@ public class PhotoCmd extends CmdBase {
 						sCamera = null;
 					}
 
-					// 这里始终有问题,未解决.
+					// // 这里始终有问题,未解决.
 					// ConfigureProviderManager.configure(ProviderManager.getInstance());
 					// new ServiceDiscoveryManager(MainService.connection);
 					// FileTransferManager FTmanager = new
@@ -79,18 +79,16 @@ public class PhotoCmd extends CmdBase {
 					//
 					// // 这里是完整的用户ID,包括资源名
 					// OutgoingFileTransfer transfer =
-					// FTmanager.createOutgoingFileTransfer(From);
-					// try
-					// {
+					// FTmanager.createOutgoingFileTransfer(MainService.notifiedAddress);
+					// try {
 					// System.out.println("sendFile");
 					// transfer.sendFile(file, "You won't believe this!");
-					// }
-					// catch (XMPPException e)
-					// {
+					// } catch (XMPPException e) {
 					// // FIXME Auto-generated catch
 					// // block
 					// e.printStackTrace();
 					// }
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

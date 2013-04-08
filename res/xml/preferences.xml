@@ -45,6 +45,13 @@
             android:numeric="integer"
             android:summary="@string/preference_server_port_help"
             android:title="@string/preference_server_port" />
+         <EditTextPreference
+            android:defaultValue=""
+            android:dependency="isCustomServer"
+            android:inputType="textUri"
+            android:key="serverDomain"
+            android:summary="@string/preference_server_domain_help"
+            android:title="@string/preference_server_domain" />
     </PreferenceScreen>
 
     <CheckBoxPreference

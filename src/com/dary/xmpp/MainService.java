@@ -33,6 +33,7 @@ public class MainService extends Service {
 	private String password;
 	private String serverHost;
 	private String serverPort;
+	private String serverDomain;
 	private String resource;
 	private boolean isAutoReconnect;
 	private boolean isDebugMode;
@@ -55,13 +56,7 @@ public class MainService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		getSetting();
-		// 如果配置不全,显示Toast
-		if (loginAddress.equals("") || password.equals("") || notifiedAddress.equals("")) {
-			sendMsg(MainActivity.SET_INCOMPLETE);
-		}
-		// 否则才登录
-		else {
+		if (isSetComplete()) {
 			// 启动登录线程
 			LoginInThread loginInThread = new LoginInThread();
 			Thread thread = new Thread(loginInThread);
@@ -88,7 +83,7 @@ public class MainService extends Service {
 			myApp.setIsShouldRunning(true);
 
 			if (isCustomServer) {
-				config = new ConnectionConfiguration(serverHost, Integer.parseInt(serverPort));
+				config = new ConnectionConfiguration(serverHost, Integer.parseInt(serverPort), serverDomain);
 			} else {
 				config = new ConnectionConfiguration(serverHost);
 			}
@@ -97,6 +92,7 @@ public class MainService extends Service {
 			// config.setReconnectionAllowed(false);
 			// config.setSendPresence(false);
 			// config.setCompressionEnabled(false);
+			// config.setSecurityMode(SecurityMode.enabled);
 			// config.setSASLAuthenticationEnabled(true);
 
 			connection = new XMPPConnection(config);
@@ -188,6 +184,8 @@ public class MainService extends Service {
 		System.out.println("服务器主机 " + serverHost);
 		serverPort = mPrefs.getString("serverPort", "5222");
 		System.out.println("服务器端口 " + serverPort);
+		serverDomain = mPrefs.getString("serverDomain", "");
+		System.out.println("服务器域名 " + serverDomain);
 		loginAddress = mPrefs.getString("loginAddress", "");
 		System.out.println("登录地址 " + loginAddress);
 		password = mPrefs.getString("password", "");
@@ -224,4 +222,20 @@ public class MainService extends Service {
 		notificationManager.notify(R.drawable.ic_launcher, notification);
 	}
 
+	// 如果配置不全,显示Toast
+	// 如果是自定义服务器,判断应有区别.
+	private boolean isSetComplete() {
+		getSetting();
+		if (isCustomServer) {
+			if (serverHost.equals("") || serverPort.equals("") || serverDomain.equals("")) {
+				sendMsg(MainActivity.SET_INCOMPLETE);
+				return false;
+			}
+		}
+		if (loginAddress.equals("") || password.equals("") || notifiedAddress.equals("")) {
+			sendMsg(MainActivity.SET_INCOMPLETE);
+			return false;
+		}
+		return true;
+	}
 }

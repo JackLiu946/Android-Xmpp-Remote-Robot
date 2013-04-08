@@ -32,6 +32,8 @@
     <string name="preference_server_host">Server Host</string>
     <string name="preference_server_port_help">Enter Server Port</string>
     <string name="preference_server_port">Server Port</string>
+    <string name="preference_server_domain_help">Enter Server Domain</string>
+    <string name="preference_server_domain">Server Domain</string>
     <string name="preference_is_start_at_boot">Start at Boot</string>
     <string name="preference_is_start_at_boot_help">Check if you want App to start at boot</string>
     <string name="preference_is_auto_reconnect">Auto Reconnect</string>
