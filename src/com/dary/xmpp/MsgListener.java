@@ -41,6 +41,10 @@ public class MsgListener implements MessageListener {
 
 	public static void handleMessage(Chat chat, String message) {
 		String from = MainService.notifiedAddress;
+		if (from == null)
+		{
+			from = "Debug";
+		}
 		// String from = Tools.getAddress(message.getFrom());
 		// 收到消息之后将消息内容放入bundle,发送消息去更新UI
 		MainActivity.sendHandlerMessageToAddMsgView(DatabaseHelper.RECEIVE_MESSAGE, from, message, Tools.getTimeStr());
