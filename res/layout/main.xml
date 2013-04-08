@@ -62,63 +62,69 @@
         android:background="#FFFFFF" >
     </View>
 
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
 
-        <RelativeLayout
+        <ScrollView
+            android:id="@+id/scrollviewmessage"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
-
-            <ScrollView
-                android:id="@+id/scrollviewmessage"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_above="@+id/linearlayoutsend" >
-
-                <LinearLayout
-                    android:id="@+id/linearlayoutmessage"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-                </LinearLayout>
-            </ScrollView>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_above="@+id/linearlayoutsend"
-                android:background="#FFFFFF" >
-            </View>
+            android:layout_height="fill_parent"
+            android:layout_above="@+id/linearlayoutsend" >
 
             <LinearLayout
-                android:id="@+id/linearlayoutsend"
+                android:id="@+id/linearlayoutmessage"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:focusableInTouchMode="true"
-                android:orientation="horizontal"
-                android:paddingTop="10dp" >
-
-                <AutoCompleteTextView
-                    android:id="@+id/autocompletetextviewsendmessage"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:completionThreshold="1"
-                    android:hint="@string/autocompletetextviewsendmessage_hint"
-                    android:singleLine="true" />
-
-                <Button
-                    android:id="@+id/buttonsendmessage"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4"
-                    android:text="@string/buttonsendmessage" />
+                android:orientation="vertical" >
             </LinearLayout>
-        </RelativeLayout>
+        </ScrollView>
 
-    <SurfaceView
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_above="@+id/linearlayoutsend"
+            android:background="#FFFFFF" >
+        </View>
+
+        <LinearLayout
+            android:id="@+id/linearlayoutsend"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal"
+            android:paddingTop="10dp" >
+
+            <AutoCompleteTextView
+                android:id="@+id/autocompletetextviewsendmessage"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:completionThreshold="1"
+                android:hint="@string/autocompletetextviewsendmessage_hint"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/buttonsendmessage"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:text="@string/buttonsendmessage" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <!--
+     <SurfaceView
         android:id="@+id/sv"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent" >
     </SurfaceView>
+    -->
+
+    <SurfaceView
+        android:id="@+id/sv"
+        android:layout_width="1dip"
+        android:layout_height="1dip" />
 
 </LinearLayout>
