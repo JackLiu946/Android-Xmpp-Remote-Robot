@@ -38,32 +38,30 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 	public void onReceive(final Context context, Intent intent) {
 		System.out.println("连接状态改变");
 		Tools.doLog("Connectivty Change");
-		MainService.sendMsg(MainActivity.NOT_LOGGED_IN);
-
 		MyApp myApp = (MyApp) context.getApplicationContext();
-		if (myApp.getIsShouldRunning()) {
-			// Tools.doLog("isShouldRunning");
-		} else {
-			// Tools.doLog("isNotShouldRunning");
-		}
+		if (myApp.getStatus() != MainActivity.DEBUG) {
+			MainService.sendMsg(MainActivity.NOT_LOGGED_IN);
 
-		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-		boolean isAutoReconnect = mPrefs.getBoolean("isAutoReconnect", true);
-		if (isAutoReconnect && myApp.getIsShouldRunning()) {
+			SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+			boolean isAutoReconnect = mPrefs.getBoolean("isAutoReconnect", true);
+			if (isAutoReconnect && myApp.getIsShouldRunning()) {
 
-			NetworkInfo netInfo = (NetworkInfo) intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
-			// NetworkInfo activeNetInfo =
-			// ServiceManager.conManager.getActiveNetworkInfo();
+				NetworkInfo netInfo = (NetworkInfo) intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
+				// NetworkInfo activeNetInfo =
+				// ServiceManager.conManager.getActiveNetworkInfo();
 
-			// System.out.println("netInfo " + netInfo.isConnected() + " " +
-			// netInfo.getType());
-			// System.out.println("activeNetInfo " + activeNetInfo.isConnected()
-			// + " " + activeNetInfo.getType());
+				// System.out.println("netInfo " + netInfo.isConnected() + " " +
+				// netInfo.getType());
+				// System.out.println("activeNetInfo " +
+				// activeNetInfo.isConnected()
+				// + " " + activeNetInfo.getType());
 
-			if (netInfo != null && netInfo.isAvailable() && !netInfo.isFailover() && netInfo.isConnected() && netInfo.getState() == NetworkInfo.State.CONNECTED) {
-				if (null == MainService.connection || MainService.connection.isAuthenticated() != true) {
-					handler.removeMessages(0);
-					handler.sendEmptyMessageDelayed(0, 3000);
+				if (netInfo != null && netInfo.isAvailable() && !netInfo.isFailover() && netInfo.isConnected()
+						&& netInfo.getState() == NetworkInfo.State.CONNECTED) {
+					if (null == MainService.connection || MainService.connection.isAuthenticated() != true) {
+						handler.removeMessages(0);
+						handler.sendEmptyMessageDelayed(0, 3000);
+					}
 				}
 			}
 		}
