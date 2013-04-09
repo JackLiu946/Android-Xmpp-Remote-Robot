@@ -6,8 +6,6 @@ import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManager;
 import org.jivesoftware.smack.Connection;
 import org.jivesoftware.smack.ConnectionConfiguration;
-import org.jivesoftware.smack.ConnectionConfiguration.SecurityMode;
-import org.jivesoftware.smack.SASLAuthentication;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.packet.Presence;
 
@@ -100,7 +98,7 @@ public class MainService extends Service {
 			try {
 				Tools.doLogJustPrint("Connect to Server");
 				connection.connect();
-//				SASLAuthentication.supportSASLMechanism("PLAIN", 0);
+				// SASLAuthentication.supportSASLMechanism("PLAIN", 0);
 			} catch (Exception e) {
 				Tools.doLogAll("Connection Failed");
 				makeNotification("Connection Failed");

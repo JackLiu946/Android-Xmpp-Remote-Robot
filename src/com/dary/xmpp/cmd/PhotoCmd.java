@@ -64,6 +64,7 @@ public class PhotoCmd extends CmdBase {
 					bos.close();
 
 					if (sCamera != null) {
+						sCamera.setPreviewDisplay(null);
 						sCamera.stopPreview();
 						sCamera.setPreviewCallback(null);
 						sCamera.unlock();
