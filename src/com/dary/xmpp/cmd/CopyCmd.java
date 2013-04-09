@@ -13,7 +13,7 @@ public class CopyCmd extends CmdBase {
 		ClipboardManager cliManager = (ClipboardManager) MyApp.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
 		// 不带参数,将手机上剪贴板内容返回去
 		if (!hasArgs(message)) {
-			if (cliManager.getText().length() > 0) {
+			if ((cliManager.getText().length() > 0)) {
 				sendMessageAndUpdateView(chat, "Phone's Clipboard : " + cliManager.getText());
 			}
 			// 如果剪贴板返回Null,说明内容为空,或者不是文本
