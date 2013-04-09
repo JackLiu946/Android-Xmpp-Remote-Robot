@@ -39,7 +39,7 @@ public class MsgListener implements MessageListener {
 	}
 
 	public static void handleMessage(Chat chat, String message) {
-		System.out.println("Receive Message :" + "\n" + message);
+		Tools.doLogJustPrint("Receive Message :" + "\n" + message);
 		String from = MainService.notifiedAddress;
 		if (from == null) {
 			from = "Debug";

@@ -29,7 +29,6 @@ public class Contact {
 
 	// 通过查询号码获取联系人姓名.如果找不到返回原号码
 	public static String getContactNameByNumber(String mNumber) {
-		System.out.println(mNumber);
 		mNumber = mNumber.replace("+86", "");
 		String[] projection = { ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.NUMBER };
 		Cursor c = MyApp
@@ -64,7 +63,7 @@ public class Contact {
 						ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " = '" + mName + "'", null, null);
 
 		if (null == cursor) {
-			System.out.println("cursor null");
+			Tools.doLogJustPrint("cursor null");
 			return listPhoneNumber;
 		}
 		if (cursor.moveToFirst()) {
@@ -98,7 +97,7 @@ public class Contact {
 
 		// 找不到指定联系人
 		if (null == cursor) {
-			System.out.println("cursor null,找不到制定联系人");
+			Tools.doLogJustPrint("cursor null,找不到制定联系人");
 			return listContactNames;
 		}
 
@@ -128,7 +127,7 @@ public class Contact {
 						null, null);
 
 		if (null == cursor) {
-			System.out.println("cursor null");
+			Tools.doLogJustPrint("cursor null");
 			return listEmail;
 		}
 		if (cursor.moveToFirst()) {

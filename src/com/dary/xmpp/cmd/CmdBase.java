@@ -14,8 +14,7 @@ import com.dary.xmpp.ui.MainActivity;
 
 public class CmdBase {
 	public static void sendMessageAndUpdateView(Chat chat, String message) {
-
-		System.out.println("Send Message : " + message);
+		Tools.doLogJustPrint("Send Message :" + "\n" + message);
 		try {
 			// chat为null表示为DEBUG模式
 			if (chat != null) {
@@ -33,7 +32,7 @@ public class CmdBase {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			Tools.doLog("Send Message Failed",true,false);
+			Tools.doLogAll("Send Message Failed");
 			Toast.makeText(MyApp.getContext(), "Send Message Failed", Toast.LENGTH_SHORT).show();
 			// Intent mainserviceIntent = new Intent();
 			// mainserviceIntent.setClass(MyApp.getContext(),

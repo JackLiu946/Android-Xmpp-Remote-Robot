@@ -20,13 +20,13 @@ public class IncallService extends Service {
 				if (state == TelephonyManager.CALL_STATE_RINGING) {
 					CmdBase.sendMessageAndUpdateView(MainService.chat, "RINGING");
 					CmdBase.sendMessageAndUpdateView(MainService.chat, "From : " + Contact.getContactNameByNumber(incomingNumber));
-					System.out.println("RINGING: Number " + incomingNumber);
+					Tools.doLogJustPrint("RINGING: Number " + incomingNumber);
 				} else if (state == TelephonyManager.CALL_STATE_IDLE) {
 					CmdBase.sendMessageAndUpdateView(MainService.chat, "IDLE");
-					System.out.println("IDLE");
+					Tools.doLogJustPrint("IDLE");
 				} else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
 					CmdBase.sendMessageAndUpdateView(MainService.chat, "OFFHOOK");
-					System.out.println("OFFHOOK");
+					Tools.doLogJustPrint("OFFHOOK");
 				}
 			}
 			isFirstStart = false;

@@ -87,6 +87,18 @@ public class Tools {
 		}
 	}
 
+	public static void doLogJustPrint(String str) {
+		doLog(str, false, false);
+	}
+
+	public static void doLogPrintAndFile(String str) {
+		doLog(str, false, false);
+	}
+
+	public static void doLogAll(String str) {
+		doLog(str, true, true);
+	}
+
 	public static String getAppVersionName(Context context) {
 		String versionName = "";
 		try {

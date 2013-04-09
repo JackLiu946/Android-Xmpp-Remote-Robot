@@ -6,6 +6,8 @@ import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManager;
 import org.jivesoftware.smack.Connection;
 import org.jivesoftware.smack.ConnectionConfiguration;
+import org.jivesoftware.smack.ConnectionConfiguration.SecurityMode;
+import org.jivesoftware.smack.SASLAuthentication;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.packet.Presence;
 
@@ -64,7 +66,7 @@ public class MainService extends Service {
 			thread.start();
 
 			// 尝试将登录的记录存储下来,先暂时只存储到普通的文本文件中
-			Tools.doLog("Login", true, false);
+			Tools.doLogAll("Login");
 			// 登录中,发送消息,更新UI.
 
 			sendMsg(MainActivity.LOGGING);
@@ -87,7 +89,7 @@ public class MainService extends Service {
 				config = new ConnectionConfiguration(serverHost);
 			}
 
-			// config.setSecurityMode(ConnectionConfiguration.SecurityMode.disabled);
+			// config.setSecurityMode(ConnectionConfiguration.SecurityMode.enabled);
 			// config.setReconnectionAllowed(false);
 			// config.setSendPresence(false);
 			// config.setCompressionEnabled(false);
@@ -96,10 +98,11 @@ public class MainService extends Service {
 
 			connection = new XMPPConnection(config);
 			try {
-				Tools.doLog("Connect to Server", false, false);
+				Tools.doLogJustPrint("Connect to Server");
 				connection.connect();
+//				SASLAuthentication.supportSASLMechanism("PLAIN", 0);
 			} catch (Exception e) {
-				Tools.doLog("Connection Failed", true, false);
+				Tools.doLogAll("Connection Failed");
 				makeNotification("Connection Failed");
 				sendMsg(MainActivity.CONNECTION_FAILED);
 				e.printStackTrace();
@@ -107,19 +110,19 @@ public class MainService extends Service {
 			}
 			// 防止重新连接时多次登录.
 			if (!connection.isAuthenticated() && connection.isConnected()) {
-				System.out.println("登录,验证口令");
+				Tools.doLogPrintAndFile("Verify Password");
 				try {
 					// connection.login(loginAddress,password,resource);
 					connection.login(loginAddress, password, Tools.getTimeStr());
 				} catch (Exception e) {
-					Tools.doLog("Login Failed", true, false);
+					Tools.doLogAll("Login Failed");
 					makeNotification("Login Failed");
 					sendMsg(MainActivity.LOGIN_FAILED);
 					e.printStackTrace();
 					return;
 				}
 				// Tools.Vibrator(MainService.this, 500);
-				Tools.doLog("Login Successful", true, false);
+				Tools.doLogAll("Login Successful");
 				makeNotification("Login Successful");
 
 				// 登录成功后发送消息通知Activity改变按钮状态
@@ -136,7 +139,7 @@ public class MainService extends Service {
 
 				// 登录成功后发送消息,用于测试
 				if (isDebugMode) {
-					CmdBase.sendMessageAndUpdateView(chat, "Login is successful");
+					CmdBase.sendMessageAndUpdateView(chat, "Login Successful");
 				}
 			}
 		}
@@ -144,7 +147,7 @@ public class MainService extends Service {
 
 	@Override
 	public void onDestroy() {
-		Tools.doLog("Service Destroy", true, false);
+		Tools.doLogAll("Service Destroy");
 		MyApp myApp = (MyApp) getApplication();
 		myApp.setIsShouldRunning(false);
 		sendMsg(MainActivity.NOT_LOGGED_IN);
@@ -175,25 +178,25 @@ public class MainService extends Service {
 	private void getSetting() {
 		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		isCustomServer = mPrefs.getBoolean("isCustomServer", false);
-		System.out.println("自定义服务器设置 " + isCustomServer);
+		Tools.doLogJustPrint("isCustomServer " + isCustomServer);
 		serverHost = mPrefs.getString("serverHost", "");
-		System.out.println("服务器主机 " + serverHost);
+		Tools.doLogJustPrint("serverHost " + serverHost);
 		serverPort = mPrefs.getString("serverPort", "5222");
-		System.out.println("服务器端口 " + serverPort);
+		Tools.doLogJustPrint("serverPort " + serverPort);
 		serverDomain = mPrefs.getString("serverDomain", "");
-		System.out.println("服务器域名 " + serverDomain);
+		Tools.doLogJustPrint("serverDomain " + serverDomain);
 		loginAddress = mPrefs.getString("loginAddress", "");
-		System.out.println("登录地址 " + loginAddress);
+		Tools.doLogJustPrint("loginAddress " + loginAddress);
 		password = mPrefs.getString("password", "");
-		System.out.println("密码 " + password);
+		Tools.doLogJustPrint("password " + password);
 		notifiedAddress = mPrefs.getString("notifiedAddress", "");
-		System.out.println("提醒地址 " + notifiedAddress);
+		Tools.doLogJustPrint("notifiedAddress " + notifiedAddress);
 		resource = mPrefs.getString("resource", "");
-		System.out.println("资源名 " + resource);
+		Tools.doLogJustPrint("resource " + resource);
 		isAutoReconnect = mPrefs.getBoolean("isAutoReconnect", true);
-		System.out.println("是否重新连接 " + isAutoReconnect);
+		Tools.doLogJustPrint("isAutoReconnect " + isAutoReconnect);
 		isDebugMode = mPrefs.getBoolean("isDebugMode", false);
-		System.out.println("调试模式 " + isDebugMode);
+		Tools.doLogJustPrint("isDebugMode " + isDebugMode);
 	}
 
 	public static void sendMsg(int tag) {
@@ -225,11 +228,13 @@ public class MainService extends Service {
 		if (isCustomServer) {
 			if (serverHost.equals("") || serverPort.equals("") || serverDomain.equals("")) {
 				sendMsg(MainActivity.SET_INCOMPLETE);
+				Tools.doLogAll("Set Incomplete");
 				return false;
 			}
 		}
 		if (loginAddress.equals("") || password.equals("") || notifiedAddress.equals("")) {
 			sendMsg(MainActivity.SET_INCOMPLETE);
+			Tools.doLogAll("Set Incomplete");
 			return false;
 		}
 		return true;
