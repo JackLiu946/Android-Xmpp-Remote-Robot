@@ -18,8 +18,7 @@ public class CallLogCmd extends CmdBase {
 		String time = "";
 		StringBuilder sb = new StringBuilder();
 		ContentResolver cr = MyApp.getContext().getContentResolver();
-		final Cursor cursor = cr.query(CallLog.Calls.CONTENT_URI, new String[] { CallLog.Calls.NUMBER, CallLog.Calls.CACHED_NAME, CallLog.Calls.TYPE,
-				CallLog.Calls.DATE }, null, null, CallLog.Calls.DEFAULT_SORT_ORDER);
+		final Cursor cursor = cr.query(CallLog.Calls.CONTENT_URI, new String[] { CallLog.Calls.NUMBER, CallLog.Calls.CACHED_NAME, CallLog.Calls.TYPE, CallLog.Calls.DATE }, null, null, CallLog.Calls.DEFAULT_SORT_ORDER);
 		// 判断是否有记录
 		if (cursor.moveToFirst()) {
 			for (int i = 0; i < defaultShowNumber; i++)

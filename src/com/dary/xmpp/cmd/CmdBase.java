@@ -42,7 +42,9 @@ public class CmdBase {
 			// incallserviceIntent.setClass(MyApp.getContext(),
 			// IncallService.class);
 			// MyApp.getContext().stopService(incallserviceIntent);
-			MainService.sendMsg(MainActivity.NOT_LOGGED_IN);
+			// 消息发送失败时不能简单设置为Not Logged In的状态
+			// 可以考虑单独增加一个状态
+			MainService.sendMsg(MainActivity.CONNECTION_FAILED);
 		}
 	}
 
