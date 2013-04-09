@@ -2,17 +2,23 @@ package com.dary.xmpp.cmd;
 
 import java.util.ArrayList;
 
+import org.jivesoftware.smack.Chat;
+
 import com.dary.xmpp.Tools;
 
 public class SelCmd extends CmdBase {
 	private static ArrayList<String> choices = null;
 	private static String from = null;
 
-	public static void Sel(String message) {
+	public static void Sel(Chat chat, String message) {
 		// 将Sel命令的String参数专为int类型
-		int sel = Integer.parseInt(getArgs(message));
-		// return choicesALL.get(sel-1).toString();
-		selDone(choices.get(sel - 1).toString());
+		if (hasArgs(message)) {
+			int sel = Integer.parseInt(getArgs(message));
+			// return choicesALL.get(sel-1).toString();
+			selDone(choices.get(sel - 1).toString());
+		} else {
+			sendMessageAndUpdateView(chat, "Parameters incomplete");
+		}
 	}
 
 	// 创建选择

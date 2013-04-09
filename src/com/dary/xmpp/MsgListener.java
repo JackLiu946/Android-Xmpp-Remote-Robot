@@ -106,7 +106,7 @@ public class MsgListener implements MessageListener {
 
 		// Sel命令
 		else if (cmd.equals("sel")) {
-			SelCmd.Sel(message);
+			SelCmd.Sel(chat, message);
 		}
 
 		// Photo命令
