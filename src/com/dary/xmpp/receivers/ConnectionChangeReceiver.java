@@ -45,14 +45,15 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 			if (isAutoReconnect && myApp.getIsShouldRunning()) {
 
 				NetworkInfo netInfo = (NetworkInfo) intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
-				// NetworkInfo activeNetInfo =
-				// ServiceManager.conManager.getActiveNetworkInfo();
 
-				// System.out.println("netInfo " + netInfo.isConnected() + " " +
-				// netInfo.getType());
-				// System.out.println("activeNetInfo " +
-				// activeNetInfo.isConnected()
-				// + " " + activeNetInfo.getType());
+				// ConnectivityManager conManager = (ConnectivityManager)
+				// MyApp.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+				// NetworkInfo activeNetInfo =
+				// conManager.getActiveNetworkInfo();
+				// Tools.doLogJustPrint("netInfo " + netInfo.isConnected() + " "
+				// + netInfo.getType());
+				// Tools.doLogJustPrint("activeNetInfo " +
+				// activeNetInfo.isConnected() + " " + activeNetInfo.getType());
 
 				if (netInfo != null && netInfo.isAvailable() && !netInfo.isFailover() && netInfo.isConnected()
 						&& netInfo.getState() == NetworkInfo.State.CONNECTED) {

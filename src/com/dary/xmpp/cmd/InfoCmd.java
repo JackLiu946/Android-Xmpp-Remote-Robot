@@ -4,12 +4,15 @@ import java.util.List;
 
 import org.jivesoftware.smack.Chat;
 
+import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.wifi.WifiManager;
+import android.telephony.TelephonyManager;
 
 import com.dary.xmpp.Contact;
-import com.dary.xmpp.ServiceManager;
+import com.dary.xmpp.MyApp;
 import com.dary.xmpp.Tools;
 
 public class InfoCmd extends CmdBase {
@@ -43,13 +46,15 @@ public class InfoCmd extends CmdBase {
 		}
 	}
 
-	static String getAppInfo() {
-		List<PackageInfo> list = ServiceManager.pacManager.getInstalledPackages(PackageManager.GET_PERMISSIONS);
+	private static String getAppInfo() {
+		PackageManager pacManager = (PackageManager) MyApp.getContext().getPackageManager();
+		// 这里不应该只获取需要权限的应用
+		List<PackageInfo> list = pacManager.getInstalledPackages(PackageManager.GET_PERMISSIONS);
 		StringBuilder appInfo = new StringBuilder();
 		appInfo.append("App Info : " + "\n\n");
 		for (PackageInfo info : list) {
 			ApplicationInfo aInfo = info.applicationInfo;
-			appInfo.append("Application Name:" + aInfo.loadLabel(ServiceManager.pacManager) + "\n");
+			appInfo.append("Application Name:" + aInfo.loadLabel(pacManager) + "\n");
 			appInfo.append("Package Name : " + info.packageName + "\n");
 			// appInfo.append("" + "\n");
 			// if (info.permissions != null) {
@@ -63,39 +68,41 @@ public class InfoCmd extends CmdBase {
 		return appInfo.toString();
 	}
 
-	static String getTelInfo() {
+	private static String getTelInfo() {
+		TelephonyManager telManager = (TelephonyManager) MyApp.getContext().getSystemService(Context.TELEPHONY_SERVICE);
 		StringBuilder telInfo = new StringBuilder();
 		telInfo.append("Tel Info : " + "\n\n");
-		telInfo.append("DeviceID : " + ServiceManager.telManager.getDeviceId() + "\n");
-		telInfo.append("Line1Number : " + ServiceManager.telManager.getLine1Number() + "\n");
-		telInfo.append("Current operator : " + ServiceManager.telManager.getNetworkOperatorName() + "\n");
-		telInfo.append("SimCountryIso : " + ServiceManager.telManager.getSimCountryIso() + "\n");
-		telInfo.append("Device Software Version : " + ServiceManager.telManager.getDeviceSoftwareVersion() + "\n");
-		telInfo.append("SIM Serial : " + ServiceManager.telManager.getSimSerialNumber() + "\n");
-		telInfo.append("Subscriber ID : " + ServiceManager.telManager.getSubscriberId() + "\n");
-		telInfo.append("Voice Mail Alpha Tag : " + ServiceManager.telManager.getVoiceMailAlphaTag() + "\n");
-		telInfo.append("Voice Mail Number : " + ServiceManager.telManager.getVoiceMailNumber() + "\n");
-		telInfo.append("Sim operator : " + ServiceManager.telManager.getSimOperatorName() + "\n");
-		telInfo.append("Roaming activated : " + ServiceManager.telManager.isNetworkRoaming() + "\n");
+		telInfo.append("DeviceID : " + telManager.getDeviceId() + "\n");
+		telInfo.append("Line1Number : " + telManager.getLine1Number() + "\n");
+		telInfo.append("Current operator : " + telManager.getNetworkOperatorName() + "\n");
+		telInfo.append("SimCountryIso : " + telManager.getSimCountryIso() + "\n");
+		telInfo.append("Device Software Version : " + telManager.getDeviceSoftwareVersion() + "\n");
+		telInfo.append("SIM Serial : " + telManager.getSimSerialNumber() + "\n");
+		telInfo.append("Subscriber ID : " + telManager.getSubscriberId() + "\n");
+		telInfo.append("Voice Mail Alpha Tag : " + telManager.getVoiceMailAlphaTag() + "\n");
+		telInfo.append("Voice Mail Number : " + telManager.getVoiceMailNumber() + "\n");
+		telInfo.append("Sim operator : " + telManager.getSimOperatorName() + "\n");
+		telInfo.append("Roaming activated : " + telManager.isNetworkRoaming() + "\n");
 		return telInfo.toString();
 	}
 
-	static String getWiFiInfo() {
+	private static String getWiFiInfo() {
+		WifiManager wifManager = (WifiManager) MyApp.getContext().getSystemService(Context.WIFI_SERVICE);
 		StringBuilder wifiInfo = new StringBuilder();
 		wifiInfo.append("WiFi Info : " + "\n\n");
-		wifiInfo.append("WiFi is Enabled : " + ServiceManager.wifManager.isWifiEnabled() + "\n");
-		wifiInfo.append("WiFi Mac Address : " + ServiceManager.wifManager.getConnectionInfo().getMacAddress() + "\n");
-		wifiInfo.append("WiFi Link Speed : " + ServiceManager.wifManager.getConnectionInfo().getLinkSpeed() + "\n");
-		wifiInfo.append("WiFi SSID : " + ServiceManager.wifManager.getConnectionInfo().getSSID() + "\n");
+		wifiInfo.append("WiFi is Enabled : " + wifManager.isWifiEnabled() + "\n");
+		wifiInfo.append("WiFi Mac Address : " + wifManager.getConnectionInfo().getMacAddress() + "\n");
+		wifiInfo.append("WiFi Link Speed : " + wifManager.getConnectionInfo().getLinkSpeed() + "\n");
+		wifiInfo.append("WiFi SSID : " + wifManager.getConnectionInfo().getSSID() + "\n");
 		// 转换IP地址格式
-		int ip = ServiceManager.wifManager.getConnectionInfo().getIpAddress();
+		int ip = wifManager.getConnectionInfo().getIpAddress();
 		String ipaddress = String.format("%d.%d.%d.%d", (ip & 0xff), (ip >> 8 & 0xff), (ip >> 16 & 0xff), (ip >> 24 & 0xff));
 		wifiInfo.append("WiFi IP Address : " + ipaddress + "\n");
 		return wifiInfo.toString();
 	}
 
 	// 通过联系人姓名信息去查找联系人,返回电话.尝试再去获取如邮件,地址,公司等等的其他信息.
-	static String getContactInfo(String findStr) {
+	private static String getContactInfo(String findStr) {
 
 		if (Contact.getSingleContactName(findStr, "Contact Info").equals(findStr)) {
 			return getContactPhoneInfo(findStr);
@@ -104,7 +111,7 @@ public class InfoCmd extends CmdBase {
 		}
 	}
 
-	static String getContactPhoneInfo(String ContactName) {
+	private static String getContactPhoneInfo(String ContactName) {
 		// 取得联系人的电话号码的数量
 		int numberOfPhoneNumber = Contact.getContactNumberByName(ContactName).size();
 		// 如果联系人存在电话号码

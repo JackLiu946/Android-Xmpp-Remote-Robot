@@ -2,13 +2,17 @@ package com.dary.xmpp.cmd;
 
 import org.jivesoftware.smack.Chat;
 
+import android.content.Context;
 import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationManager;
 
-import com.dary.xmpp.ServiceManager;
+import com.dary.xmpp.MyApp;
 
 public class GpsCmd extends CmdBase {
 	public static void Gps(Chat chat) {
+		LocationManager locManager = (LocationManager) MyApp.getContext().getSystemService(Context.LOCATION_SERVICE);
+
 		// if (MainService.locationmanager
 		// .isProviderEnabled(android.location.LocationManager.GPS_PROVIDER))
 		// {
@@ -30,8 +34,8 @@ public class GpsCmd extends CmdBase {
 		// criteria.setBearingRequired(false); //方向
 		criteria.setCostAllowed(false); // 免费
 		// criteria.setPowerRequirement(Criteria.POWER_LOW); 电量
-		String provider = ServiceManager.locManager.getBestProvider(criteria, true); // 获取GPS信息
-		Location location = ServiceManager.locManager.getLastKnownLocation(provider); // 通过GPS获取位置
+		String provider = locManager.getBestProvider(criteria, true); // 获取GPS信息
+		Location location = locManager.getLastKnownLocation(provider); // 通过GPS获取位置
 		if (location != null) {
 			System.out.println(location.getLatitude());
 			System.out.println(location.getLongitude());

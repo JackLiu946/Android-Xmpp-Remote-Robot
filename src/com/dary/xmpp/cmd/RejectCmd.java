@@ -5,15 +5,19 @@ import java.lang.reflect.Method;
 
 import org.jivesoftware.smack.Chat;
 
+import android.content.Context;
+import android.telephony.TelephonyManager;
+
 import com.android.internal.telephony.ITelephony;
-import com.dary.xmpp.ServiceManager;
+import com.dary.xmpp.MyApp;
 
 public class RejectCmd extends CmdBase {
 	public static void Reject(Chat chat) {
 		com.android.internal.telephony.ITelephony telephonyService = null;
+		TelephonyManager telManager = (TelephonyManager) MyApp.getContext().getSystemService(Context.TELEPHONY_SERVICE);
 		Class<?> c = null;
 		try {
-			c = Class.forName(ServiceManager.telManager.getClass().getName());
+			c = Class.forName(telManager.getClass().getName());
 		} catch (ClassNotFoundException e2) {
 			e2.printStackTrace();
 		}
@@ -27,7 +31,7 @@ public class RejectCmd extends CmdBase {
 		}
 		m.setAccessible(true);
 		try {
-			telephonyService = (ITelephony) m.invoke(ServiceManager.telManager);
+			telephonyService = (ITelephony) m.invoke(telManager);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
