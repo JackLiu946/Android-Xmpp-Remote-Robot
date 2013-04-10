@@ -55,7 +55,8 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 				// Tools.doLogJustPrint("activeNetInfo " +
 				// activeNetInfo.isConnected() + " " + activeNetInfo.getType());
 
-				if (netInfo != null && netInfo.isAvailable() && !netInfo.isFailover() && netInfo.isConnected() && netInfo.getState() == NetworkInfo.State.CONNECTED) {
+				if (netInfo != null && netInfo.isAvailable() && !netInfo.isFailover() && netInfo.isConnected()
+						&& netInfo.getState() == NetworkInfo.State.CONNECTED) {
 					if (null == MainService.connection || MainService.connection.isAuthenticated() != true) {
 						int delay = 3000;
 						handler.removeMessages(0);

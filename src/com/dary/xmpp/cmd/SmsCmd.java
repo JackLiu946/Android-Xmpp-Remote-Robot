@@ -16,41 +16,67 @@ public class SmsCmd extends SmsCmdBase {
 
 		Cursor cur;
 		Uri uri;
+		final int RECEIVE = 1;
+		final int SEND = 2;
+		final int DRAFT = 3;
+		final int OUTBOX = 4;
+		final int FAILED = 5;
+		final int QUEUED = 6;
 
 		// 不带参数,则返回短信记录.
 		if (!hasArgs(message)) {
-			uri = Uri.parse("content://sms/");
+			uri = Uri.parse("content://sms");
 			String[] projection = new String[] { "_id", "address", "body", "date", "type" };
 			cur = MyApp.getContext().getContentResolver().query(uri, projection, null, null, null);
 			StringBuilder smsBuilder = new StringBuilder();
 			int smsNumber = 0;
 			if (cur.moveToFirst()) {
-				int index_Address = cur.getColumnIndex("address");
-				int index_Body = cur.getColumnIndex("body");
 				int index_Date = cur.getColumnIndex("date");
 				int index_Type = cur.getColumnIndex("type");
+				int index_Address = cur.getColumnIndex("address");
+				int index_Body = cur.getColumnIndex("body");
 				do {
-					String strAddress = cur.getString(index_Address);
+					String strAddress = "";
+
 					String strbody = cur.getString(index_Body);
 					long longDate = cur.getLong(index_Date);
 					int intType = cur.getInt(index_Type);
-
+					// 如果短信类型不为Draft,才取取字段
+					if (intType != DRAFT) {
+						strAddress = cur.getString(index_Address);
+					}
 					String strDate = Tools.getTimeStr(longDate);
 
 					String strType = "";
-					if (intType == 1) {
+
+					switch (intType) {
+					case RECEIVE:
 						strType = "Receive";
-					} else if (intType == 2) {
+						break;
+					case SEND:
 						strType = "Send";
-					} else {
-						strType = "Null";
+						break;
+					case DRAFT:
+						strType = "Draft";
+						break;
+					case OUTBOX:
+						strType = "Outbox";
+						break;
+					case FAILED:
+						strType = "Failed";
+						break;
+					case QUEUED:
+						strType = "Queued";
 					}
 
 					smsBuilder.append("[ ");
 					smsBuilder.append(strDate + " , ");
-					// smsBuilder.append(intPerson + ", ");
 					smsBuilder.append(strType + " , ");
-					smsBuilder.append(Contact.getContactNameByNumber(strAddress) + " , ");
+					if (intType != DRAFT) {
+						smsBuilder.append(Contact.getContactNameByNumber(strAddress) + " , ");
+					} else {
+						smsBuilder.append("UnKnown" + " , ");
+					}
 					smsBuilder.append(strbody);
 					smsBuilder.append(" ]\n\n");
 					smsNumber++;
@@ -89,7 +115,8 @@ public class SmsCmd extends SmsCmdBase {
 				sendMessageAndUpdateView(chat, "Make Last Message As Read Done");
 			} else {
 				sendSMSAndInsertToLibrary(lastAddress, getArgsCaseSensitive(message));
-				sendMessageAndUpdateView(chat, "Send SMS " + "( Number : " + Contact.getContactNameByNumber(lastAddress) + " Body : " + getArgsCaseSensitive(message) + " )" + "Done");
+				sendMessageAndUpdateView(chat, "Send SMS " + "( Number : " + Contact.getContactNameByNumber(lastAddress) + " Body : "
+						+ getArgsCaseSensitive(message) + " )" + "Done");
 			}
 		}
 	}
