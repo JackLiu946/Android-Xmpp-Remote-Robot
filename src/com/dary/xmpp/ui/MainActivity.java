@@ -70,7 +70,7 @@ public class MainActivity extends Activity {
 		// 拍照相关
 		surfaceview = (SurfaceView) findViewById(R.id.sv);
 		// 设置AutoCompleteTextView的Adapter
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.auto_cmd_string_item, getResources().getStringArray(R.array.autoCmdString));
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.auto_cmd_string_item, getResources().getStringArray(R.array.autoSendCmdString));
 		autoCompleteTextViewSendMessage.setAdapter(adapter);
 
 		autoCompleteTextViewSendMessage.setOnEditorActionListener(new OnEditorActionListener() {
@@ -287,6 +287,10 @@ public class MainActivity extends Activity {
 			buttonSendMessage.setEnabled(true);
 			loginStatus.setTextColor(Color.BLUE);
 			loginStatus.setText(R.string.loginstats_debug);
+			// 对于Debug模式,要修改autoCompleteTextViewSendMessage的adapter
+			ArrayAdapter<String> autoDebugCmdStringAdapter = new ArrayAdapter<String>(this, R.layout.auto_cmd_string_item, getResources().getStringArray(
+					R.array.autoDebugCmdString));
+			autoCompleteTextViewSendMessage.setAdapter(autoDebugCmdStringAdapter);
 			break;
 		case NOT_LOGGED_IN:
 			buttonServiceStart.setEnabled(true);
@@ -301,6 +305,10 @@ public class MainActivity extends Activity {
 			buttonSendMessage.setEnabled(false);
 			loginStatus.setTextColor(Color.YELLOW);
 			loginStatus.setText(R.string.loginstatus_logging);
+			// 对于Debug模式,要修改autoCompleteTextViewSendMessage的adapter
+			ArrayAdapter<String> autoSendCmdStringAdapter = new ArrayAdapter<String>(this, R.layout.auto_cmd_string_item, getResources().getStringArray(
+					R.array.autoSendCmdString));
+			autoCompleteTextViewSendMessage.setAdapter(autoSendCmdStringAdapter);
 			break;
 		case LOGIN_SUCCESSFUL:
 			buttonServiceStart.setEnabled(false);

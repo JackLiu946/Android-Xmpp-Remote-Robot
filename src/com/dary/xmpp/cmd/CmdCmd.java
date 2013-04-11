@@ -7,7 +7,7 @@ import org.jivesoftware.smack.Chat;
 public class CmdCmd extends CmdBase {
 	public static void Cmd(Chat chat, String message) {
 		// 判断参数是否为空.
-		if (!hasArgs(message)) {
+		if (!hasArgs(message) || getArgs(message).trim().length() == 0) {
 			sendMessageAndUpdateView(chat, "Command is empty");
 		} else {
 			Process process = null;

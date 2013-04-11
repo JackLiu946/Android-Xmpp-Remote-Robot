@@ -1,12 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="autoCmdString">
+    <string-array name="autoSendCmdString">
         <item>FB2K</item>
         <item>Lock</item>
         <item>ShutDown</item>
         <item>PlayOrPause</item>
         <item>Sound</item>
+    </string-array>
+    <string-array name="autoDebugCmdString">
+        <item>calllog</item>
+        <item>cls</item>
+        <item>cmd:</item>
+        <item>copy</item>
+        <item>gps</item>
+        <item>help</item>
+        <item>info</item>
+        <item>light</item>
+        <item>photo</item>
+        <item>reject</item>
+        <item>ring</item>
+        <item>ringermode</item>
+        <item>sel:</item>
+        <item>sms</item>
+        <item>smsto:</item>
+        <item>usb</item>
     </string-array>
 
 </resources>
