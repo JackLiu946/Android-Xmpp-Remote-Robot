@@ -41,7 +41,7 @@ public class MainActivity extends Activity {
 	private Button buttonServiceStop;
 	private Button buttonSendMessage;
 	private ScrollView scrollViewMessage;
-	private static LinearLayout linearLayoutMessage;
+	private LinearLayout linearLayoutMessage;
 	public static Handler MsgHandler = null;
 	public static TextView TVmessage;
 	public static SurfaceView surfaceview;
@@ -54,6 +54,7 @@ public class MainActivity extends Activity {
 	public static final int CONNECTION_FAILED = 4;
 	public static final int LOGIN_FAILED = 5;
 	public static final int SHOW_MESSAGE = 6;
+	public static final int CLEAR_MSG = 7;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -91,6 +92,8 @@ public class MainActivity extends Activity {
 					linearLayoutMessage.addView(mv);
 					// 将ScrollView滚动到底部
 					scrollToBottom(scrollViewMessage, linearLayoutMessage);
+				} else if (msg.what == CLEAR_MSG) {
+					clearMsg();
 				}
 				// 除此之外,仅须改变设置View状态
 				else {
@@ -222,7 +225,7 @@ public class MainActivity extends Activity {
 	}
 
 	// 移除所有MsgView并清空数据库
-	public static void clearMsg() {
+	public void clearMsg() {
 		// 移除LinearLayout上的所有TextView
 		linearLayoutMessage.removeAllViews();
 		// 清空表
