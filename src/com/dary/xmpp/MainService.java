@@ -45,8 +45,6 @@ public class MainService extends Service {
 
 	@Override
 	public void onCreate() {
-		// 提高优先级
-		// setForeground(true);
 		// 启动InCallService
 		Intent incallserviceIntent = new Intent();
 		incallserviceIntent.setClass(MainService.this, IncallService.class);
@@ -65,7 +63,7 @@ public class MainService extends Service {
 
 			// 尝试将登录的记录存储下来,先暂时只存储到普通的文本文件中
 			Tools.doLogAll("Login");
-			// 登录中,发送消息,更新UI.
+			// 登录中,发送消息,更新UI
 
 			sendMsg(MainActivity.LOGGING);
 		}
@@ -106,7 +104,7 @@ public class MainService extends Service {
 				e.printStackTrace();
 				return;
 			}
-			// 防止重新连接时多次登录.
+			// 防止重新连接时多次登录
 			if (!connection.isAuthenticated() && connection.isConnected()) {
 				Tools.doLogPrintAndFile("Verify Password");
 				try {
@@ -118,6 +116,14 @@ public class MainService extends Service {
 					sendMsg(MainActivity.LOGIN_FAILED);
 					e.printStackTrace();
 					return;
+				}
+				// 如果用户在登录只取消了登录,并且登录成功,需要Disconnect
+				if (!((MyApp) getApplication()).getIsShouldRunning()) {
+					if (connection.isConnected()) {
+						Presence presence = new Presence(Presence.Type.unavailable);
+						connection.sendPacket(presence);
+						connection.disconnect();
+					}
 				}
 				// Tools.Vibrator(MainService.this, 500);
 				Tools.doLogAll("Login Successful");
@@ -143,6 +149,7 @@ public class MainService extends Service {
 		}
 	}
 
+	// 如果正在登录中时进行中断,并不会立即处理
 	@Override
 	public void onDestroy() {
 		Tools.doLogAll("Service Destroy");
@@ -200,7 +207,7 @@ public class MainService extends Service {
 	public static void sendMsg(int tag) {
 		MyApp myApp = (MyApp) MyApp.getContext();
 		myApp.setStatus(tag);
-		// 登录中,发送消息,更新UI.
+		// 登录中,发送消息,更新UI
 		if (null != MainActivity.MsgHandler) {
 			// 考虑修改为,当Activity启动的时候去读取状态
 			Message msg = new Message();
@@ -210,17 +217,20 @@ public class MainService extends Service {
 	}
 
 	private void makeNotification(String str) {
-		NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		Notification notification = new Notification(R.drawable.ic_launcher, str, System.currentTimeMillis());
-		notification.flags = Notification.FLAG_AUTO_CANCEL;
-		Intent intent = new Intent(MyApp.getContext(), MainActivity.class);
-		PendingIntent contentIntent = PendingIntent.getActivity(MyApp.getContext(), 0, intent, 0);
-		notification.setLatestEventInfo(MyApp.getContext(), str, str, contentIntent);
-		notificationManager.notify(R.drawable.ic_launcher, notification);
+		// 需要先判断用户是否已经停止登录
+		if (((MyApp) getApplication()).getIsShouldRunning()) {
+			NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+			Notification notification = new Notification(R.drawable.ic_launcher, str, System.currentTimeMillis());
+			notification.flags = Notification.FLAG_AUTO_CANCEL;
+			Intent intent = new Intent(MyApp.getContext(), MainActivity.class);
+			PendingIntent contentIntent = PendingIntent.getActivity(MyApp.getContext(), 0, intent, 0);
+			notification.setLatestEventInfo(MyApp.getContext(), str, str, contentIntent);
+			notificationManager.notify(R.drawable.ic_launcher, notification);
+		}
 	}
 
 	// 如果配置不全,显示Toast
-	// 如果是自定义服务器,判断应有区别.
+	// 如果是自定义服务器,判断应有区别
 	private boolean isSetComplete() {
 		getSetting();
 		if (isCustomServer) {
