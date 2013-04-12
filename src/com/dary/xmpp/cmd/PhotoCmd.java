@@ -6,6 +6,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.jivesoftware.smack.Chat;
+import org.jivesoftware.smack.provider.ProviderManager;
+import org.jivesoftware.smackx.ServiceDiscoveryManager;
+import org.jivesoftware.smackx.filetransfer.FileTransferManager;
+import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +18,8 @@ import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PictureCallback;
 
+import com.dary.xmpp.ConfigureProviderManager;
+import com.dary.xmpp.MainService;
 import com.dary.xmpp.Tools;
 import com.dary.xmpp.ui.MainActivity;
 
@@ -21,7 +27,6 @@ public class PhotoCmd extends CmdBase {
 	static Camera sCamera = null;
 	static String fileName = null;
 	static String filePath = null;
-	static File file = null;
 
 	public static void Photo(Chat chat) {
 		// 照片的名字和存储的地址.
@@ -40,7 +45,6 @@ public class PhotoCmd extends CmdBase {
 		try {
 			sCamera.setPreviewDisplay(MainActivity.surfaceview.getHolder());
 		} catch (IOException e) {
-			// FIXME Auto-generated catch block
 			e.printStackTrace();
 		}
 		sCamera.startPreview();
@@ -55,7 +59,7 @@ public class PhotoCmd extends CmdBase {
 			public void onPictureTaken(byte[] data, Camera camera) {
 				Bitmap bm = BitmapFactory.decodeByteArray(data, 0, data.length);
 
-				file = new File(filePath + "/" + fileName);
+				File file = new File(filePath + "/" + fileName);
 				try {
 					BufferedOutputStream bos = null;
 					bos = new BufferedOutputStream(new FileOutputStream(file));
@@ -72,31 +76,22 @@ public class PhotoCmd extends CmdBase {
 						sCamera = null;
 					}
 
-					// // 这里始终有问题,未解决.
-					// ConfigureProviderManager.configure(ProviderManager.getInstance());
-					// new ServiceDiscoveryManager(MainService.connection);
-					// FileTransferManager FTmanager = new
-					// FileTransferManager(MainService.connection);
-					//
-					// // 这里是完整的用户ID,包括资源名
-					// OutgoingFileTransfer transfer =
-					// FTmanager.createOutgoingFileTransfer(MainService.notifiedAddress);
-					// try {
-					// System.out.println("sendFile");
-					// transfer.sendFile(file, "You won't believe this!");
-					// } catch (XMPPException e) {
-					// // FIXME Auto-generated catch
-					// // block
-					// e.printStackTrace();
-					// }
+					// 这里始终有问题,未解决.
+					ConfigureProviderManager.configure(ProviderManager.getInstance());
+					new ServiceDiscoveryManager(MainService.connection);
+					FileTransferManager FTmanager = new FileTransferManager(MainService.connection);
 
+					// 这里是完整的用户ID,包括资源名
+					OutgoingFileTransfer transfer = FTmanager.createOutgoingFileTransfer(MainService.notifiedAddress);
+					// TODO 会报404,搞不懂
+					transfer.sendFile(file, "You won't believe this!");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		};
+
 		sCamera.takePicture(cb, null, pictureCallback);
 		sendMessageAndUpdateView(chat, "Take Photo Done,Save as " + filePath + "/" + fileName);
 	}
-
 }
