@@ -53,6 +53,22 @@
             android:summary="@string/preference_server_domain_help"
             android:title="@string/preference_server_domain" />
     </PreferenceScreen>
+    <PreferenceScreen android:title="@string/preference_command_setting" >
+        <EditTextPreference
+            android:defaultValue="5"
+            android:inputType="number"
+            android:key="smsCommandDisplayItemsNumber"
+            android:numeric="integer"
+            android:summary="@string/preference_sms_command_display_items_number_summary"
+            android:title="@string/preference_sms_command_display_items_number" />
+        <EditTextPreference
+            android:defaultValue="5"
+            android:inputType="number"
+            android:key="calllogCommandDisplayItemsNumber"
+            android:numeric="integer"
+            android:summary="@string/preference_calllog_command_display_items_number_summary"
+            android:title="@string/preference_calllog_command_display_items_number" />
+    </PreferenceScreen>
 
     <CheckBoxPreference
         android:defaultValue="true"
@@ -76,7 +92,7 @@
     <CheckBoxPreference
         android:defaultValue="false"
         android:key="isDebugMode"
-        android:summary="DeBug Mode"
-        android:title="DeBug Mode" />
+        android:summary="@string/preference_debug_mode_summary"
+        android:title="@string/preference_debug_mode" />
 
 </PreferenceScreen>

@@ -5,6 +5,7 @@ import org.jivesoftware.smack.Chat;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 
 import com.dary.xmpp.Contact;
 import com.dary.xmpp.MyApp;
@@ -25,10 +26,16 @@ public class SmsCmd extends SmsCmdBase {
 
 		// 不带参数,则返回短信记录.
 		if (!hasArgs(message)) {
+			int smsCommandDisplayItemsNumber = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(MyApp.getContext()).getString(
+					"smsCommandDisplayItemsNumber", "5"));
+			// 如果值为0,则设为最大值
+			if (smsCommandDisplayItemsNumber == 0) {
+				smsCommandDisplayItemsNumber = Integer.MAX_VALUE;
+			}
 			uri = Uri.parse("content://sms");
 			String[] projection = new String[] { "_id", "address", "body", "date", "type" };
 			cur = MyApp.getContext().getContentResolver().query(uri, projection, null, null, null);
-			StringBuilder smsBuilder = new StringBuilder();
+			StringBuilder sb = new StringBuilder();
 			int smsNumber = 0;
 			if (cur.moveToFirst()) {
 				int index_Date = cur.getColumnIndex("date");
@@ -69,26 +76,26 @@ public class SmsCmd extends SmsCmdBase {
 						strType = "Queued";
 					}
 
-					smsBuilder.append("[ ");
-					smsBuilder.append(strDate + " , ");
-					smsBuilder.append(strType + " , ");
+					sb.append("[ ");
+					sb.append(strDate + " , ");
+					sb.append(strType + " , ");
 					if (intType != DRAFT) {
-						smsBuilder.append(Contact.getContactNameByNumber(strAddress) + " , ");
+						sb.append(Contact.getContactNameByNumber(strAddress) + " , ");
 					} else {
-						smsBuilder.append("UnKnown" + " , ");
+						sb.append("UnKnown" + " , ");
 					}
-					smsBuilder.append(strbody);
-					smsBuilder.append(" ]\n\n");
+					sb.append(strbody);
+					sb.append(" ]\n\n");
 					smsNumber++;
-				} while (cur.moveToNext() && smsNumber < 5);
+				} while (cur.moveToNext() && smsNumber < smsCommandDisplayItemsNumber);
 				if (!cur.isClosed()) {
 					cur.close();
 					cur = null;
 				}
 			} else {
-				smsBuilder.append("No Result!");
+				sb.append("No Result!");
 			}
-			sendMessageAndUpdateView(chat, Tools.delLastLine(smsBuilder));
+			sendMessageAndUpdateView(chat, Tools.delLastLine(sb));
 		} else {
 			// 带参数就回复最后收到的短信
 			// 获取最后(收到的)短信的号码

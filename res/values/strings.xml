@@ -52,5 +52,12 @@
     <string name="find_more">This is an open source project,you can find more information from here :</string>
     <string name="email">"Email : "</string>
     <string name="email_value">anyofyou@gmail.com</string>
+    <string name="preference_debug_mode_summary">DeBug Mode</string>
+    <string name="preference_debug_mode">DeBug Mode</string>
+    <string name="preference_command_setting">Command Setting</string>
+    <string name="preference_sms_command_display_items_number">SMS Command Display Items Number</string>
+    <string name="preference_sms_command_display_items_number_summary">Set SMS Command Display Items Number,Set 0 To Show All Items</string>
+    <string name="preference_calllog_command_display_items_number">Calllog Command Display Items Number</string>
+    <string name="preference_calllog_command_display_items_number_summary">Set Calllog Command Display Items Number,Set 0 To Show All Items</string>
 
 </resources>

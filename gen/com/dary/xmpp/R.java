@@ -63,6 +63,11 @@ public final class R {
         public static final int loginstatus_successful=0x7f06000b;
         public static final int menu_settings=0x7f060029;
         public static final int ok=0x7f06002c;
+        public static final int preference_calllog_command_display_items_number=0x7f060038;
+        public static final int preference_calllog_command_display_items_number_summary=0x7f060039;
+        public static final int preference_command_setting=0x7f060035;
+        public static final int preference_debug_mode=0x7f060034;
+        public static final int preference_debug_mode_summary=0x7f060033;
         public static final int preference_is_auto_reconnect=0x7f060023;
         public static final int preference_is_auto_reconnect_help=0x7f060024;
         public static final int preference_is_custom_server=0x7f060018;
@@ -86,6 +91,8 @@ public final class R {
         public static final int preference_server_port=0x7f06001e;
         public static final int preference_server_port_help=0x7f06001d;
         public static final int preference_server_settings=0x7f06001a;
+        public static final int preference_sms_command_display_items_number=0x7f060036;
+        public static final int preference_sms_command_display_items_number_summary=0x7f060037;
         public static final int servicestart=0x7f060001;
         public static final int servicestop=0x7f060002;
         public static final int settings=0x7f060003;
