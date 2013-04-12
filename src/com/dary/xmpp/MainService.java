@@ -9,10 +9,8 @@ import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.packet.Presence;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -99,7 +97,7 @@ public class MainService extends Service {
 				// SASLAuthentication.supportSASLMechanism("PLAIN", 0);
 			} catch (Exception e) {
 				Tools.doLogAll("Connection Failed");
-				makeNotification("Connection Failed");
+				doNotification(MainService.this, "Connection Failed");
 				sendMsg(MainActivity.CONNECTION_FAILED);
 				e.printStackTrace();
 				return;
@@ -112,7 +110,7 @@ public class MainService extends Service {
 					connection.login(loginAddress, password, Tools.getTimeStr());
 				} catch (Exception e) {
 					Tools.doLogAll("Login Failed");
-					makeNotification("Login Failed");
+					doNotification(MainService.this, "Login Failed");
 					sendMsg(MainActivity.LOGIN_FAILED);
 					e.printStackTrace();
 					return;
@@ -127,7 +125,7 @@ public class MainService extends Service {
 				}
 				// Tools.Vibrator(MainService.this, 500);
 				Tools.doLogAll("Login Successful");
-				makeNotification("Login Successful");
+				doNotification(MainService.this, "Login Successful");
 
 				// 登录成功后发送消息通知Activity改变按钮状态
 				sendMsg(MainActivity.LOGIN_SUCCESSFUL);
@@ -216,16 +214,33 @@ public class MainService extends Service {
 		}
 	}
 
-	private void makeNotification(String str) {
+	private void doNotification(Context context, String str) {
 		// 需要先判断用户是否已经停止登录
 		if (((MyApp) getApplication()).getIsShouldRunning()) {
-			NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-			Notification notification = new Notification(R.drawable.ic_launcher, str, System.currentTimeMillis());
-			notification.flags = Notification.FLAG_AUTO_CANCEL;
-			Intent intent = new Intent(MyApp.getContext(), MainActivity.class);
-			PendingIntent contentIntent = PendingIntent.getActivity(MyApp.getContext(), 0, intent, 0);
-			notification.setLatestEventInfo(MyApp.getContext(), str, str, contentIntent);
-			notificationManager.notify(R.drawable.ic_launcher, notification);
+			SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+			String notificationType = mPrefs.getString("notificationType", "none");
+			if (notificationType.equals("none")) {
+
+			} else if (notificationType.equals("notification")) {
+				Tools.makeNotification(context, str);
+			} else if (notificationType.equals("vibrate")) {
+				Tools.Vibrator(context, 1000);
+			} else if (notificationType.equals("sound")) {
+				Tools.makeSound(context);
+			} else if (notificationType.equals("notification,vibrate")) {
+				Tools.makeNotification(context, str);
+				Tools.Vibrator(context, 1000);
+			} else if (notificationType.equals("notification,sound")) {
+				Tools.makeNotification(context, str);
+				Tools.makeSound(context);
+			} else if (notificationType.equals("vibrate,sound")) {
+				Tools.Vibrator(context, 1000);
+				Tools.makeSound(context);
+			} else if (notificationType.equals("notification,vibrate,sound")) {
+				Tools.makeNotification(context, str);
+				Tools.Vibrator(context, 1000);
+				Tools.makeSound(context);
+			}
 		}
 	}
 

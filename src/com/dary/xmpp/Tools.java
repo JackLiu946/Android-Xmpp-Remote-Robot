@@ -2,20 +2,74 @@ package com.dary.xmpp;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.RingtoneManager;
 import android.os.Vibrator;
 
 import com.dary.xmpp.ui.MainActivity;
 
 public class Tools {
+
+	public static void Vibrator(Context context, int time) {
+		Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+		long[] pattern = { 0, time };
+		vibrator.vibrate(pattern, -1);
+	}
+
+	public static void makeNotification(Context context, String str) {
+		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		Notification notification = new Notification(R.drawable.ic_launcher, str, System.currentTimeMillis());
+		notification.flags = Notification.FLAG_AUTO_CANCEL;
+		Intent intent = new Intent(MyApp.getContext(), MainActivity.class);
+		PendingIntent contentIntent = PendingIntent.getActivity(MyApp.getContext(), 0, intent, 0);
+		notification.setLatestEventInfo(MyApp.getContext(), str, str, contentIntent);
+		notificationManager.notify(R.drawable.ic_launcher, notification);
+	}
+
+	public static void makeSound(Context context) {
+		MediaPlayer mediaPlayer = new MediaPlayer();
+		try {
+			mediaPlayer.setDataSource(context, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		mediaPlayer.setAudioStreamType(AudioManager.STREAM_NOTIFICATION);
+		try {
+			mediaPlayer.prepare();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		mediaPlayer.start();
+		mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+			public void onCompletion(MediaPlayer mp) {
+				mp.release();
+			}
+		});
+	}
 
 	public static String delLastLine(StringBuilder sb) {
 		return sb.delete(sb.toString().length() - 1, sb.toString().length()).toString();
@@ -42,12 +96,6 @@ public class Tools {
 		SimpleDateFormat sdFormatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.getDefault());
 		String retStrFormatNowDate = sdFormatter.format(d);
 		return retStrFormatNowDate;
-	}
-
-	public static void Vibrator(Context context, int time) {
-		Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-		long[] pattern = { 0, time };
-		vibrator.vibrate(pattern, -1);
 	}
 
 	public static void doLog(String str, boolean isLogToFile, boolean isLogToDatabase) {

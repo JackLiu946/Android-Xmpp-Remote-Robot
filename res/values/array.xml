@@ -26,5 +26,25 @@
         <item>smsto:</item>
         <item>usb</item>
     </string-array>
+    <string-array name="preference_notification_type">
+        <item>None</item>
+        <item>Only Notification</item>
+        <item>Only Vibrate</item>
+        <item>Only Sound</item>
+        <item>Nofitication And Vibrate</item>
+        <item>Nofitication And Sound</item>
+        <item>Vibrate And Sound</item>
+        <item>Nofication And Vibrate And Sound</item>
+    </string-array>
+    <string-array name="preference_notification_type_values">
+        <item>none</item>
+        <item>notification</item>
+        <item>vibrate</item>
+        <item>sound</item>
+        <item>notification,vibrate</item>
+        <item>notification,sound</item>
+        <item>vibrate,sound</item>
+        <item>notification,vibrate,sound</item>
+    </string-array>
 
 </resources>

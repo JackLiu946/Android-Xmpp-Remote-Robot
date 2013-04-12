@@ -38,6 +38,8 @@
     <string name="preference_is_start_at_boot_help">Check if you want App to start at boot</string>
     <string name="preference_is_auto_reconnect">Auto Reconnect</string>
     <string name="preference_is_auto_reconnect_help">Check if you want App reconnect when connection status change</string>
+    <string name="preference_notification_type">Set Notification Type</string>
+    <string name="preference_notification_type_summary">Set Notification Type When App Do Login</string>
     <string name="buttonsendmessage">Send</string>
     <string name="autocompletetextviewsendmessage_hint">Send Message</string>
     <string name="menu_settings">Settings</string>
