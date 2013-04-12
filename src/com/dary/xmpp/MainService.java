@@ -2,11 +2,14 @@ package com.dary.xmpp;
 
 import java.util.Locale;
 
+import org.jivesoftware.smack.AndroidConnectionConfiguration;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManager;
 import org.jivesoftware.smack.Connection;
 import org.jivesoftware.smack.ConnectionConfiguration;
+import org.jivesoftware.smack.SmackAndroid;
 import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Presence;
 
 import android.app.Service;
@@ -72,15 +75,19 @@ public class MainService extends Service {
 	class LoginInThread implements Runnable {
 
 		public void run() {
-			ConnectionConfiguration config;
+			ConnectionConfiguration config = null;
 
 			MyApp myApp = (MyApp) getApplication();
 			myApp.setIsShouldRunning(true);
-
+			SmackAndroid.init(myApp);
 			if (isCustomServer) {
-				config = new ConnectionConfiguration(serverHost, Integer.parseInt(serverPort), serverDomain);
+				config = new AndroidConnectionConfiguration(serverHost, Integer.parseInt(serverPort), serverDomain);
 			} else {
-				config = new ConnectionConfiguration(serverHost);
+				try {
+					config = new AndroidConnectionConfiguration(serverHost);
+				} catch (XMPPException e) {
+					e.printStackTrace();
+				}
 			}
 
 			// config.setSecurityMode(ConnectionConfiguration.SecurityMode.enabled);
@@ -116,32 +123,35 @@ public class MainService extends Service {
 					return;
 				}
 				// 如果用户在登录只取消了登录,并且登录成功,需要Disconnect
-				if (!((MyApp) getApplication()).getIsShouldRunning()) {
+				if (!myApp.getIsShouldRunning()) {
 					if (connection.isConnected()) {
 						Presence presence = new Presence(Presence.Type.unavailable);
 						connection.sendPacket(presence);
 						connection.disconnect();
 					}
 				}
-				// Tools.Vibrator(MainService.this, 500);
-				Tools.doLogAll("Login Successful");
-				doNotification(MainService.this, "Login Successful");
+				// 需要先判断用户是否已经停止登录
+				if (myApp.getIsShouldRunning()) {
+					// Tools.Vibrator(MainService.this, 500);
+					Tools.doLogAll("Login Successful");
+					doNotification(MainService.this, "Login Successful");
 
-				// 登录成功后发送消息通知Activity改变按钮状态
-				sendMsg(MainActivity.LOGIN_SUCCESSFUL);
+					// 登录成功后发送消息通知Activity改变按钮状态
+					sendMsg(MainActivity.LOGIN_SUCCESSFUL);
 
-				ChatManager chatmanager = connection.getChatManager();
+					ChatManager chatmanager = connection.getChatManager();
 
-				// 注册消息监听器
-				chat = chatmanager.createChat(notifiedAddress.toLowerCase(Locale.getDefault()), new MsgListener());
+					// 注册消息监听器
+					chat = chatmanager.createChat(notifiedAddress.toLowerCase(Locale.getDefault()), new MsgListener());
 
-				// 登录成功之后再在程序动态的注册电量改变,短信的广播接收器,注册电量改变的接收器时会设置Presence
-				registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-				registerReceiver(smsReceiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
+					// 登录成功之后再在程序动态的注册电量改变,短信的广播接收器,注册电量改变的接收器时会设置Presence
+					registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+					registerReceiver(smsReceiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
 
-				// 登录成功后发送消息,用于测试
-				if (isDebugMode) {
-					CmdBase.sendMessageAndUpdateView(chat, "Login Successful");
+					// 登录成功后发送消息,用于测试
+					if (isDebugMode) {
+						CmdBase.sendMessageAndUpdateView(chat, "Login Successful");
+					}
 				}
 			}
 		}
