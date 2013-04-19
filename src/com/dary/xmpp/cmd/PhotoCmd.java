@@ -6,8 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.jivesoftware.smack.Chat;
-import org.jivesoftware.smack.provider.ProviderManager;
-import org.jivesoftware.smackx.ServiceDiscoveryManager;
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
 
@@ -18,7 +16,6 @@ import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PictureCallback;
 
-import com.dary.xmpp.ConfigureProviderManager;
 import com.dary.xmpp.MainService;
 import com.dary.xmpp.Tools;
 import com.dary.xmpp.ui.MainActivity;
@@ -77,10 +74,10 @@ public class PhotoCmd extends CmdBase {
 					}
 
 					// 这里始终有问题,未解决.
-					ConfigureProviderManager.configure(ProviderManager.getInstance());
-					new ServiceDiscoveryManager(MainService.connection);
-					FileTransferManager FTmanager = new FileTransferManager(MainService.connection);
+					// ConfigureProviderManager.configure(ProviderManager.getInstance());
+					// new ServiceDiscoveryManager(MainService.connection);
 
+					FileTransferManager FTmanager = new FileTransferManager(MainService.connection);
 					// 这里是完整的用户ID,包括资源名
 					OutgoingFileTransfer transfer = FTmanager.createOutgoingFileTransfer(MainService.notifiedAddress);
 					// TODO 会报404,搞不懂
