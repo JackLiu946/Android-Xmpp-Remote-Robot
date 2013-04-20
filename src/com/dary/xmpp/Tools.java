@@ -19,6 +19,7 @@ import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
+import android.os.Environment;
 import android.os.Vibrator;
 
 import com.dary.xmpp.ui.MainActivity;
@@ -117,10 +118,11 @@ public class Tools {
 				}
 				sb.append(str);
 				// 占满整个一行,对齐
-				int length = 24;
+				int length = 32;
 				for (int i = 0; i < length - str.length(); i++) {
 					sb.append(" ");
 				}
+				// sb.append("\n");
 				sb.append(Tools.getTimeStr());
 				FileOutputStream fos = new FileOutputStream(file, true);
 				fos.write(sb.toString().getBytes());
@@ -175,4 +177,14 @@ public class Tools {
 		}
 		return true;
 	}
+
+	public static String getSDPath() {
+		File sdDir = null;
+		boolean sdCardExist = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
+		if (sdCardExist) {
+			sdDir = Environment.getExternalStorageDirectory();// 获取跟目录
+		}
+		return sdDir.toString();
+	}
+
 }

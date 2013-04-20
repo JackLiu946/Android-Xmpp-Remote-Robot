@@ -91,7 +91,7 @@ public class InfoCmd extends CmdBase {
 		StringBuilder wifiInfo = new StringBuilder();
 		wifiInfo.append("WiFi Info : " + "\n\n");
 		wifiInfo.append("WiFi is Enabled : " + wifManager.isWifiEnabled() + "\n");
-		wifiInfo.append("WiFi Mac Address : " + wifManager.getConnectionInfo().getMacAddress() + "\n");
+		wifiInfo.append("WiFi Mac Address : " + wifManager.getConnectionInfo().getMacAddress().toUpperCase() + "\n");
 		wifiInfo.append("WiFi Link Speed : " + wifManager.getConnectionInfo().getLinkSpeed() + "\n");
 		wifiInfo.append("WiFi SSID : " + wifManager.getConnectionInfo().getSSID() + "\n");
 		// 转换IP地址格式

@@ -28,7 +28,7 @@ public class PhotoCmd extends CmdBase {
 	public static void Photo(Chat chat) {
 		// 照片的名字和存储的地址.
 		fileName = Tools.getTimeStrHyphen() + ".jpg";
-		filePath = "/sdcard";
+		filePath = Tools.getSDPath();
 
 		if (sCamera == null) {
 			sCamera = Camera.open();

@@ -6,7 +6,7 @@ import android.provider.Settings;
 
 import com.dary.xmpp.MyApp;
 
-public class USBStorage {
+public class USBStorage extends CmdBase {
 
 	public static void OpenUSBStorage() {
 		ContentResolver cr = MyApp.getContext().getContentResolver();
