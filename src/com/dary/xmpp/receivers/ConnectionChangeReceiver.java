@@ -21,7 +21,7 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 	private static Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			Tools.doLogAll("Try Relogin");
+			Tools.doLogPrintAndFile("Try Relogin");
 			Intent mainserviceIntent = new Intent();
 			mainserviceIntent.setClass(MyApp.getContext(), MainService.class);
 			MyApp.getContext().startService(mainserviceIntent);
@@ -35,7 +35,7 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(final Context context, Intent intent) {
-		Tools.doLogAll("Connectivty Change");
+		Tools.doLogPrintAndFile("Connectivty Change");
 		MyApp myApp = (MyApp) context.getApplicationContext();
 		if (myApp.getStatus() != MainActivity.DEBUG) {
 			MainService.sendMsg(MainActivity.NOT_LOGGED_IN);

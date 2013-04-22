@@ -142,7 +142,7 @@ public class Tools {
 	}
 
 	public static void doLogPrintAndFile(String str) {
-		doLog(str, false, false);
+		doLog(str, true, false);
 	}
 
 	public static void doLogAll(String str) {
