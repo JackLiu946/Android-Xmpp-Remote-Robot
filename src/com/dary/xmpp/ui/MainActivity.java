@@ -2,6 +2,7 @@ package com.dary.xmpp.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -35,7 +36,9 @@ import com.dary.xmpp.cmd.CmdBase;
 
 public class MainActivity extends Activity {
 
-	public TextView loginStatus;
+	@SuppressWarnings("deprecation")
+	public static android.text.ClipboardManager clipboardManager;
+	private TextView loginStatus;
 	private AutoCompleteTextView autoCompleteTextViewSendMessage;
 	private Button buttonServiceStart;
 	private Button buttonServiceStop;
@@ -43,7 +46,6 @@ public class MainActivity extends Activity {
 	private ScrollView scrollViewMessage;
 	private LinearLayout linearLayoutMessage;
 	public static Handler MsgHandler = null;
-	public static TextView TVmessage;
 	public static SurfaceView surfaceview;
 
 	public static final int DEBUG = -1;
@@ -56,11 +58,12 @@ public class MainActivity extends Activity {
 	public static final int SHOW_MESSAGE = 6;
 	public static final int CLEAR_MSG = 7;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-
+		clipboardManager = (android.text.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
 		buttonServiceStart = (Button) findViewById(R.id.servicestart);
 		buttonServiceStop = (Button) findViewById(R.id.servicestop);
 		loginStatus = (TextView) findViewById(R.id.loginstatus);

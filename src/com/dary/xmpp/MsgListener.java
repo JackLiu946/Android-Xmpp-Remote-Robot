@@ -26,6 +26,7 @@ import com.dary.xmpp.cmd.USBStorage;
 import com.dary.xmpp.ui.MainActivity;
 
 public class MsgListener implements MessageListener {
+
 	// 消息处理
 	public void processMessage(Chat chat, Message message) {
 
