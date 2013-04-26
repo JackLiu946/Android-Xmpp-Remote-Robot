@@ -76,7 +76,6 @@ public class MainService extends Service {
 
 		public void run() {
 			ConnectionConfiguration config = null;
-
 			MyApp myApp = (MyApp) getApplication();
 			myApp.setIsShouldRunning(true);
 			SmackAndroid.init(myApp);
@@ -192,7 +191,7 @@ public class MainService extends Service {
 		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		isCustomServer = mPrefs.getBoolean("isCustomServer", false);
 		Tools.doLogJustPrint("isCustomServer " + isCustomServer);
-		serverHost = mPrefs.getString("serverHost", "");
+		serverHost = mPrefs.getString("serverHost", "jabber.org");
 		Tools.doLogJustPrint("serverHost " + serverHost);
 		serverPort = mPrefs.getString("serverPort", "5222");
 		Tools.doLogJustPrint("serverPort " + serverPort);
