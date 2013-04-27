@@ -117,12 +117,12 @@ public class Tools {
 					file.createNewFile();
 				}
 				sb.append(str);
-				// 占满整个一行,对齐
-				int length = 32;
-				for (int i = 0; i < length - str.length(); i++) {
-					sb.append(" ");
-				}
-				// sb.append("\n");
+				// // 占满整个一行,对齐
+				// int length = 32;
+				// for (int i = 0; i < length - str.length(); i++) {
+				// sb.append(" ");
+				// }
+				sb.append("\t");
 				sb.append(Tools.getTimeStr());
 				FileOutputStream fos = new FileOutputStream(file, true);
 				fos.write(sb.toString().getBytes());
