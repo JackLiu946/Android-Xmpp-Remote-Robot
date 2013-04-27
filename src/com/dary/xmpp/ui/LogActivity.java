@@ -2,23 +2,18 @@ package com.dary.xmpp.ui;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.app.Activity;
 import android.app.ListActivity;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 
-import com.dary.xmpp.MyApp;
 import com.dary.xmpp.R;
 
 public class LogActivity extends ListActivity {
@@ -42,27 +37,30 @@ public class LogActivity extends ListActivity {
 			while (-1 != (length = is.read(buffer))) {
 				String str = new String(buffer, 0, length);
 				sb.append(str);
-				is.close();
 			}
+			is.close();
+			String logAll = sb.toString();
+			String lines[] = logAll.split("\n");
+
+			List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+
+			for (int i = 0; i < lines.length; i++) {
+				Map<String, String> map = new HashMap<String, String>();
+				String[] line = lines[i].split("\t");
+				String log = line[0];
+				String time = line[1];
+				map.put("log", log);
+				map.put("time", time);
+				list.add(map);
+			}
+			return list;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String logAll = sb.toString();
-		String lines[] = logAll.split("\n");
-
-		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-		Map<String, String> map = new HashMap<String, String>();
-
-		for (int i = 0; i < lines.length; i++) {
-			String[] line = lines[i].split("\t");
-			String log = line[0];
-			String time = line[1];
-			map.put("log", log);
-			map.put("time", time);
+			List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("log", "Log dose not exist");
 			list.add(map);
+			return list;
 		}
-		return list;
 	}
 
 	@Override
@@ -79,10 +77,7 @@ public class LogActivity extends ListActivity {
 				sb.append(str);
 			}
 			is.close();
-			// textViewLog.setText(sb.toString());
-
 		} catch (Exception e) {
-			// textViewLog.setText("Log dose not exist");
 		}
 		super.onStart();
 	}
@@ -99,7 +94,8 @@ public class LogActivity extends ListActivity {
 			File file = getFileStreamPath("Log");
 			if (file.exists()) {
 				if (file.delete()) {
-					// textViewLog.setText("Log dose not exist");
+					SimpleAdapter adapter = new SimpleAdapter(this, getData(), R.layout.log, new String[] { "log", "time" }, new int[] { R.id.TVlog, R.id.TVtime });
+					setListAdapter(adapter);
 				}
 			}
 			break;
