@@ -63,25 +63,6 @@ public class LogActivity extends ListActivity {
 		}
 	}
 
-	@Override
-	protected void onStart() {
-
-		StringBuilder sb = new StringBuilder();
-		File file = getFileStreamPath("Log");
-		try {
-			InputStream is = new FileInputStream(file);
-			byte[] buffer = new byte[200];
-			int length = 0;
-			while (-1 != (length = is.read(buffer))) {
-				String str = new String(buffer, 0, length);
-				sb.append(str);
-			}
-			is.close();
-		} catch (Exception e) {
-		}
-		super.onStart();
-	}
-
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, 0, 0, R.string.clear_log);
 		return super.onCreateOptionsMenu(menu);
@@ -94,7 +75,8 @@ public class LogActivity extends ListActivity {
 			File file = getFileStreamPath("Log");
 			if (file.exists()) {
 				if (file.delete()) {
-					SimpleAdapter adapter = new SimpleAdapter(this, getData(), R.layout.log, new String[] { "log", "time" }, new int[] { R.id.TVlog, R.id.TVtime });
+					SimpleAdapter adapter = new SimpleAdapter(this, getData(), R.layout.log, new String[] { "log", "time" }, new int[] { R.id.TVlog,
+							R.id.TVtime });
 					setListAdapter(adapter);
 				}
 			}
