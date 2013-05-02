@@ -74,9 +74,10 @@ public class LogActivity extends ListActivity {
 		super.onOptionsItemSelected(item);
 		switch (item.getItemId()) {
 		case 0:
-			File file = getFileStreamPath("Log");
-			if (file.exists()) {
-				if (file.delete()) {
+			File cacheDir = MyApp.getContext().getCacheDir();
+			File logFile = new File(cacheDir, "Log");
+			if (logFile.exists()) {
+				if (logFile.delete()) {
 					SimpleAdapter adapter = new SimpleAdapter(this, getData(), R.layout.log, new String[] { "log", "time" }, new int[] { R.id.TVlog,
 							R.id.TVtime });
 					setListAdapter(adapter);
