@@ -35,6 +35,9 @@ public class MainService extends Service {
 	private String serverHost;
 	private String serverPort;
 	private String serverDomain;
+	private String autoServerHost;
+	private int autoServerPort;
+	private String autoServerDomain;
 	private String resource;
 	private boolean isAutoReconnect;
 	private boolean isDebugMode;
@@ -83,8 +86,8 @@ public class MainService extends Service {
 				config = new AndroidConnectionConfiguration(serverHost, Integer.parseInt(serverPort), serverDomain);
 			} else {
 				try {
-					config = new AndroidConnectionConfiguration(serverHost);
-				} catch (XMPPException e) {
+					config = new AndroidConnectionConfiguration(autoServerHost, autoServerPort, autoServerDomain);
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -191,7 +194,7 @@ public class MainService extends Service {
 		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		isCustomServer = mPrefs.getBoolean("isCustomServer", false);
 		Tools.doLogJustPrint("isCustomServer " + isCustomServer);
-		serverHost = mPrefs.getString("serverHost", "jabber.org");
+		serverHost = mPrefs.getString("serverHost", "");
 		Tools.doLogJustPrint("serverHost " + serverHost);
 		serverPort = mPrefs.getString("serverPort", "5222");
 		Tools.doLogJustPrint("serverPort " + serverPort);
@@ -209,6 +212,15 @@ public class MainService extends Service {
 		Tools.doLogJustPrint("isAutoReconnect " + isAutoReconnect);
 		isDebugMode = mPrefs.getBoolean("isDebugMode", false);
 		Tools.doLogJustPrint("isDebugMode " + isDebugMode);
+		if (loginAddress.length() != 0) {
+			String address[] = loginAddress.split("@");
+			autoServerHost = address[address.length - 1];
+			autoServerDomain = autoServerHost;
+			autoServerPort = 5222;
+			Tools.doLogJustPrint("autoServerHost " + autoServerHost);
+			Tools.doLogJustPrint("autoServerPort " + autoServerPort);
+			Tools.doLogJustPrint("autoServerDomain " + autoServerDomain);
+		}
 	}
 
 	public static void sendMsg(int tag) {

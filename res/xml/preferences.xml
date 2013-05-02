@@ -35,7 +35,7 @@
                 android:title="@string/preference_is_custom_server" />
 
             <EditTextPreference
-                android:defaultValue="jabber.org"
+                android:defaultValue=""
                 android:dependency="isCustomServer"
                 android:inputType="textUri"
                 android:key="serverHost"

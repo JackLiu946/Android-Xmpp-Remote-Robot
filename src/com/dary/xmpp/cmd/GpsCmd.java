@@ -8,6 +8,7 @@ import android.location.Location;
 import android.location.LocationManager;
 
 import com.dary.xmpp.MyApp;
+import com.dary.xmpp.Tools;
 
 public class GpsCmd extends CmdBase {
 	public static void Gps(Chat chat) {
@@ -16,7 +17,7 @@ public class GpsCmd extends CmdBase {
 		// if (MainService.locationmanager
 		// .isProviderEnabled(android.location.LocationManager.GPS_PROVIDER))
 		// {
-		// System.out.println("gps3");
+		// System.out.println("gps");
 		// Toast.makeText(XmppActivity.xmppactivity,
 		// "GPS模块正常", Toast.LENGTH_SHORT)
 		// .show();
@@ -37,8 +38,8 @@ public class GpsCmd extends CmdBase {
 		String provider = locManager.getBestProvider(criteria, true); // 获取GPS信息
 		Location location = locManager.getLastKnownLocation(provider); // 通过GPS获取位置
 		if (location != null) {
-			System.out.println(location.getLatitude());
-			System.out.println(location.getLongitude());
+			Tools.doLogJustPrint(location.getLatitude() + "");
+			Tools.doLogJustPrint(location.getLongitude() + "");
 
 			sendMessageAndUpdateView(chat, "http://maps.google.com/maps?q=" + location.getLatitude() + ",+" + location.getLongitude());
 		}
