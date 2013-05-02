@@ -105,7 +105,7 @@ public class Tools {
 		if (isLogToFile) {
 			try {
 				// 注意如果文件不存在的时候(确切的说应该是文件的内容为空时),添加新内容之前要先添加换行符.
-//				File file = MyApp.getContext().getFileStreamPath("Log");
+				// File file = MyApp.getContext().getFileStreamPath("Log");
 				File cacheDir = MyApp.getContext().getCacheDir();
 				File logFile = new File(cacheDir, "Log");
 				StringBuilder sb = new StringBuilder();

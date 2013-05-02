@@ -27,6 +27,8 @@ public class CallLogCmd extends CmdBase {
 		Cursor cur = cr.query(CallLog.Calls.CONTENT_URI,
 				new String[] { CallLog.Calls.NUMBER, CallLog.Calls.CACHED_NAME, CallLog.Calls.TYPE, CallLog.Calls.DATE }, null, null,
 				CallLog.Calls.DEFAULT_SORT_ORDER);
+		// Cursor cur = cr.query(CallLog.Calls.CONTENT_URI, null, null, null,
+		// null);
 		int calllogNumber = 0;
 		// 判断是否有记录
 		if (cur.moveToFirst()) {
