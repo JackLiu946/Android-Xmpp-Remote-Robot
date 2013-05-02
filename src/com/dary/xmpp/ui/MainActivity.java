@@ -203,7 +203,7 @@ public class MainActivity extends Activity {
 		switch (item.getItemId()) {
 		case 0:
 			Intent preferenceIntent = new Intent();
-			preferenceIntent.setClass(MainActivity.this, PreferenceActivity.class);
+			preferenceIntent.setClass(MainActivity.this, PreferencesActivity.class);
 			startActivity(preferenceIntent);
 			break;
 		case 1:

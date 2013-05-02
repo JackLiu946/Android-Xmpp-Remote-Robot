@@ -50,7 +50,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.PreferenceActivity"
+            android:name=".ui.PreferencesActivity"
             android:label="Setting" >
         </activity>
 

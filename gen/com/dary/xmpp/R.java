@@ -21,10 +21,12 @@ public final class R {
         public static final int ic_launcher=0x7f020001;
     }
     public static final class id {
+        public static final int ETsavepreferences=0x7f07000c;
         public static final int TVlog=0x7f070001;
         public static final int TVtime=0x7f070002;
         public static final int autocompletetextviewsendmessage=0x7f070009;
         public static final int buttonsendmessage=0x7f07000a;
+        public static final int delSavedPreferences=0x7f07000e;
         public static final int linearlayoutmessage=0x7f070008;
         public static final int linearlayoutsend=0x7f070007;
         public static final int loginstatus=0x7f070005;
@@ -32,6 +34,7 @@ public final class R {
         public static final int servicestart=0x7f070003;
         public static final int servicestop=0x7f070004;
         public static final int sv=0x7f07000b;
+        public static final int switchPreferences=0x7f07000d;
         public static final int text_about=0x7f070000;
     }
     public static final class layout {
@@ -39,6 +42,7 @@ public final class R {
         public static final int auto_cmd_string_item=0x7f030001;
         public static final int log=0x7f030002;
         public static final int main=0x7f030003;
+        public static final int save_preferences=0x7f030004;
     }
     public static final class string {
         public static final int about=0x7f060004;

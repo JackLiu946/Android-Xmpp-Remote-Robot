@@ -32,6 +32,7 @@ public class Tools {
 		vibrator.vibrate(pattern, -1);
 	}
 
+	@SuppressWarnings("deprecation")
 	public static void makeNotification(Context context, String str) {
 		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		Notification notification = new Notification(R.drawable.ic_launcher, str, System.currentTimeMillis());
@@ -104,22 +105,19 @@ public class Tools {
 		if (isLogToFile) {
 			try {
 				// 注意如果文件不存在的时候(确切的说应该是文件的内容为空时),添加新内容之前要先添加换行符.
-				// FileOutputStream outStream =
-				// MyApp.getContext().openFileOutput("Log",
-				// Context.MODE_APPEND);
-				// 会直接创建
-				File file = MyApp.getContext().getFileStreamPath("Log");
-
+//				File file = MyApp.getContext().getFileStreamPath("Log");
+				File cacheDir = MyApp.getContext().getCacheDir();
+				File logFile = new File(cacheDir, "Log");
 				StringBuilder sb = new StringBuilder();
-				if (file.exists()) {
+				if (logFile.exists()) {
 					sb.append("\n");
 				} else {
-					file.createNewFile();
+					logFile.createNewFile();
 				}
 				sb.append(str);
 				sb.append("\t");
 				sb.append(Tools.getTimeStr());
-				FileOutputStream fos = new FileOutputStream(file, true);
+				FileOutputStream fos = new FileOutputStream(logFile, true);
 				fos.write(sb.toString().getBytes());
 				fos.close();
 			} catch (Exception e) {

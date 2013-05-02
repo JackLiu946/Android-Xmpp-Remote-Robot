@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SimpleAdapter;
 
+import com.dary.xmpp.MyApp;
 import com.dary.xmpp.R;
 
 public class LogActivity extends ListActivity {
@@ -27,10 +28,11 @@ public class LogActivity extends ListActivity {
 
 	private List<Map<String, String>> getData() {
 		StringBuilder sb = new StringBuilder();
-		File file = getFileStreamPath("Log");
+		File cacheDir = MyApp.getContext().getCacheDir();
+		File logFile = new File(cacheDir, "Log");
 		InputStream is;
 		try {
-			is = new FileInputStream(file);
+			is = new FileInputStream(logFile);
 
 			byte[] buffer = new byte[200];
 			int length = 0;
