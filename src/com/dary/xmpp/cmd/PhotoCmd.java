@@ -80,7 +80,6 @@ public class PhotoCmd extends CmdBase {
 					FileTransferManager FTmanager = new FileTransferManager(MainService.connection);
 					// 这里是完整的用户ID,包括资源名
 					OutgoingFileTransfer transfer = FTmanager.createOutgoingFileTransfer(MainService.notifiedAddress);
-					// TODO 会报404,搞不懂
 					transfer.sendFile(file, "You won't believe this!");
 
 				} catch (Exception e) {

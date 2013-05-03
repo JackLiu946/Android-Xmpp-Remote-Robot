@@ -29,7 +29,6 @@ public class MsgListener implements MessageListener {
 
 	// 消息处理
 	public void processMessage(Chat chat, Message message) {
-
 		handleMessage(chat, message.getBody());
 	}
 
