@@ -59,7 +59,7 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 						&& netInfo.getState() == NetworkInfo.State.CONNECTED) {
 					if (null == MainService.connection || MainService.connection.isAuthenticated() != true) {
 						// 通过延迟发消息的方式使得在短时间如果收到多次连接改变的广播(并且网络可用),仅登录一次
-						int delay = 3000;
+						int delay = 5000;
 						handler.removeMessages(0);
 						handler.sendEmptyMessageDelayed(0, delay);
 					}

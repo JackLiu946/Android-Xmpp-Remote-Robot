@@ -71,6 +71,7 @@ public class Contact {
 				String phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 				// 去除"-"符号
 				phoneNumber = phoneNumber.replace("-", "");
+				phoneNumber = phoneNumber.replace(" ", "");
 				listPhoneNumber.add(phoneNumber);
 			} while (cursor.moveToNext());
 			cursor.close();
