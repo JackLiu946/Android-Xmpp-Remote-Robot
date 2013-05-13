@@ -18,21 +18,6 @@ import com.dary.xmpp.ui.MainActivity;
 
 public class ConnectionChangeReceiver extends BroadcastReceiver {
 
-	private static Handler handler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			Tools.doLogPrintAndFile("Try Relogin");
-			Intent mainserviceIntent = new Intent();
-			mainserviceIntent.setClass(MyApp.getContext(), MainService.class);
-			MyApp.getContext().startService(mainserviceIntent);
-
-			Intent incallserviceIntent = new Intent();
-			incallserviceIntent.setClass(MyApp.getContext(), IncallService.class);
-			MyApp.getContext().startService(incallserviceIntent);
-			super.handleMessage(msg);
-		}
-	};
-
 	@Override
 	public void onReceive(final Context context, Intent intent) {
 		Tools.doLogPrintAndFile("Connectivty Change");
@@ -60,8 +45,8 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 					if (null == MainService.connection || MainService.connection.isAuthenticated() != true) {
 						// 通过延迟发消息的方式使得在短时间如果收到多次连接改变的广播(并且网络可用),仅登录一次
 						int delay = 5000;
-						handler.removeMessages(0);
-						handler.sendEmptyMessageDelayed(0, delay);
+						MainService.tryReconnectHandler.removeMessages(0);
+						MainService.tryReconnectHandler.sendEmptyMessageDelayed(0, delay);
 					}
 				}
 			}

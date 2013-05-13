@@ -55,7 +55,8 @@ public class MainActivity extends Activity {
 	public static final int SET_INCOMPLETE = 3;
 	public static final int CONNECTION_FAILED = 4;
 	public static final int LOGIN_FAILED = 5;
-	public static final int SHOW_MESSAGE = 6;
+
+	public static final int SHOW_MESSAGE =6;
 	public static final int CLEAR_MSG = 7;
 
 	@SuppressWarnings("deprecation")

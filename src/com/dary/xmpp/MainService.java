@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.preference.PreferenceManager;
@@ -43,8 +44,23 @@ public class MainService extends Service {
 	public SMSReceiver smsReceiver = new SMSReceiver();
 	private BatteryReceiver batteryReceiver = new BatteryReceiver();
 	private boolean isCustomServer;
-
+	private int tryReconnectCount;
 	public static Chat chat;
+
+	public static Handler tryReconnectHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			Tools.doLogAll("Try Relogin");
+			Intent mainServiceIntent = new Intent();
+			mainServiceIntent.setClass(MyApp.getContext(), MainService.class);
+			MyApp.getContext().startService(mainServiceIntent);
+
+			Intent incallServiceIntent = new Intent();
+			incallServiceIntent.setClass(MyApp.getContext(), IncallService.class);
+			MyApp.getContext().startService(incallServiceIntent);
+			super.handleMessage(msg);
+		}
+	};
 
 	@Override
 	public void onCreate() {
@@ -107,51 +123,49 @@ public class MainService extends Service {
 				Tools.doLogAll("Connection Failed");
 				doNotification(MainService.this, "Connection Failed");
 				sendMsg(MainActivity.CONNECTION_FAILED);
+				tryReconnect();
 				e.printStackTrace();
 				return;
 			}
-			// 防止重新连接时多次登录
-			if (!connection.isAuthenticated() && connection.isConnected()) {
-				Tools.doLogPrintAndFile("Verify Password");
-				try {
-					// connection.login(loginAddress,password,resource);
-					connection.login(loginAddress, password, Tools.getTimeStr());
-				} catch (Exception e) {
-					Tools.doLogAll("Login Failed");
-					doNotification(MainService.this, "Login Failed");
-					sendMsg(MainActivity.LOGIN_FAILED);
-					e.printStackTrace();
-					return;
+			Tools.doLogPrintAndFile("Verify Password");
+			try {
+				// connection.login(loginAddress,password,resource);
+				connection.login(loginAddress, password, Tools.getTimeStr());
+			} catch (Exception e) {
+				Tools.doLogAll("Login Failed");
+				doNotification(MainService.this, "Login Failed");
+				sendMsg(MainActivity.LOGIN_FAILED);
+				e.printStackTrace();
+				return;
+			}
+			// 如果用户在登录时取消了登录,并且登录成功,需要Disconnect
+			if (!myApp.getIsShouldRunning()) {
+				if (connection.isConnected()) {
+					Presence presence = new Presence(Presence.Type.unavailable);
+					connection.sendPacket(presence);
+					connection.disconnect();
 				}
-				// 如果用户在登录只取消了登录,并且登录成功,需要Disconnect
-				if (!myApp.getIsShouldRunning()) {
-					if (connection.isConnected()) {
-						Presence presence = new Presence(Presence.Type.unavailable);
-						connection.sendPacket(presence);
-						connection.disconnect();
-					}
-				}
-				// 需要先判断用户是否已经停止登录
-				if (myApp.getIsShouldRunning()) {
-					// Tools.Vibrator(MainService.this, 500);
-					Tools.doLogAll("Login Successful");
-					doNotification(MainService.this, "Login Successful");
+			}
+			// 需要先判断用户是否已经停止登录
+			if (myApp.getIsShouldRunning()) {
+				// Tools.Vibrator(MainService.this, 500);
+				Tools.doLogAll("Login Successful");
+				doNotification(MainService.this, "Login Successful");
 
-					// 登录成功后发送消息通知Activity改变按钮状态
-					sendMsg(MainActivity.LOGIN_SUCCESSFUL);
+				// 登录成功后发送消息通知Activity改变按钮状态
+				sendMsg(MainActivity.LOGIN_SUCCESSFUL);
 
-					ChatManager chatmanager = connection.getChatManager();
+				ChatManager chatmanager = connection.getChatManager();
 
-					// 注册消息监听器
-					chat = chatmanager.createChat(notifiedAddress.toLowerCase(Locale.getDefault()), new MsgListener());
-					// 登录成功之后再在程序动态的注册电量改变,短信的广播接收器,注册电量改变的接收器时会设置Presence
-					registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-					registerReceiver(smsReceiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
+				// 注册消息监听器
+				chat = chatmanager.createChat(notifiedAddress.toLowerCase(Locale.getDefault()), new MsgListener());
+				// 登录成功之后再在程序动态的注册电量改变,短信的广播接收器,注册电量改变的接收器时会设置Presence
+				registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+				registerReceiver(smsReceiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
 
-					// 登录成功后发送消息,用于测试
-					if (isDebugMode) {
-						CmdBase.sendMessageAndUpdateView(chat, "Login Successful");
-					}
+				// 登录成功后发送消息,用于测试
+				if (isDebugMode) {
+					CmdBase.sendMessageAndUpdateView(chat, "Login Successful");
 				}
 			}
 		}
@@ -280,5 +294,17 @@ public class MainService extends Service {
 			return false;
 		}
 		return true;
+	}
+
+	// TODO tryReconnectCount 合时置0?
+	private void tryReconnect() {
+		int timeout;
+		tryReconnectCount += 1;
+		if (tryReconnectCount < 10) {
+			timeout = 5000 * tryReconnectCount;
+		} else {
+			timeout = 1000 * 60 * 5;
+		}
+		tryReconnectHandler.sendEmptyMessageDelayed(0, timeout);
 	}
 }
