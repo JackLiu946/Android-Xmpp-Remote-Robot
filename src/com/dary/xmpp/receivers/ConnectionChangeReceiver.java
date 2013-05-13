@@ -6,11 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Handler;
-import android.os.Message;
 import android.preference.PreferenceManager;
 
-import com.dary.xmpp.IncallService;
 import com.dary.xmpp.MainService;
 import com.dary.xmpp.MyApp;
 import com.dary.xmpp.Tools;

@@ -154,7 +154,7 @@ public class MainService extends Service {
 
 				// 登录成功后发送消息通知Activity改变按钮状态
 				sendMsg(MainActivity.LOGIN_SUCCESSFUL);
-				//登录成功后将tryReconnectCount置0
+				// 登录成功后将tryReconnectCount置0
 				tryReconnectCount = 0;
 				ChatManager chatmanager = connection.getChatManager();
 
