@@ -74,6 +74,10 @@ public class MainActivity extends Activity {
 		autoCompleteTextViewSendMessage = (AutoCompleteTextView) findViewById(R.id.autocompletetextviewsendmessage);
 		// 拍照相关
 		surfaceview = (SurfaceView) findViewById(R.id.sv);
+
+		// 读取数据库,创建MsgView
+		readDatabaseAndCreateMsgView();
+
 		// 设置AutoCompleteTextView的Adapter
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.auto_cmd_string_item, getResources().getStringArray(R.array.autoSendCmdString));
 		autoCompleteTextViewSendMessage.setAdapter(adapter);
@@ -105,9 +109,6 @@ public class MainActivity extends Activity {
 				}
 			}
 		};
-
-		// 读取数据库,创建MsgView
-		readDatabaseAndCreateMsgView();
 
 		// 服务启动按钮
 		buttonServiceStart.setOnClickListener(new OnClickListener() {

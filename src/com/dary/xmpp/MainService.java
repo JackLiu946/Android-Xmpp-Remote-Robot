@@ -80,11 +80,10 @@ public class MainService extends Service {
 			thread.setName("LoginThread");
 			thread.start();
 
+			// 登录中,发送消息,更新UI
+			sendMsg(MainActivity.LOGGING);
 			// 尝试将登录的记录存储下来,先暂时只存储到普通的文本文件中
 			Tools.doLogAll("Login");
-			// 登录中,发送消息,更新UI
-
-			sendMsg(MainActivity.LOGGING);
 		}
 		return super.onStartCommand(intent, flags, startId);
 	}

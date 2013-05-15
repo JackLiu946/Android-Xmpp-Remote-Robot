@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.ListActivity;
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,7 +24,8 @@ public class LogActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		SimpleAdapter adapter = new SimpleAdapter(this, getData(), R.layout.log, new String[] { "log", "time" }, new int[] { R.id.TVlog, R.id.TVtime });
+		SimpleAdapter adapter = new SimpleAdapter(LogActivity.this, getData(), R.layout.log, new String[] { "log", "time" }, new int[] { R.id.TVlog,
+				R.id.TVtime });
 		setListAdapter(adapter);
 	}
 
