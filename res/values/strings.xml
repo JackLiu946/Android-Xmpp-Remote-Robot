@@ -62,5 +62,7 @@
     <string name="preference_others_settings">Others Settings</string>
     <string name="preference_command_settings">Command Settings</string>
     <string name="preference_connect_settings">Connect Setting</string>
+    <string name="preference_auto_switch_preferences_between_different_network_summary">Auto Switch Preferences Between Different Network</string>
+    <string name="preference_auto_switch_preferences_between_different_network">Auto Switch Preferences Between Different Network</string>
 
 </resources>

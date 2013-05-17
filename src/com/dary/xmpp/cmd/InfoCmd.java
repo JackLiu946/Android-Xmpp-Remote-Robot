@@ -1,6 +1,7 @@
 package com.dary.xmpp.cmd;
 
 import java.util.List;
+import java.util.Locale;
 
 import org.jivesoftware.smack.Chat;
 
@@ -87,15 +88,15 @@ public class InfoCmd extends CmdBase {
 	}
 
 	private static String getWiFiInfo() {
-		WifiManager wifManager = (WifiManager) MyApp.getContext().getSystemService(Context.WIFI_SERVICE);
+		WifiManager wifiManager = (WifiManager) MyApp.getContext().getSystemService(Context.WIFI_SERVICE);
 		StringBuilder wifiInfo = new StringBuilder();
 		wifiInfo.append("WiFi Info : " + "\n\n");
-		wifiInfo.append("WiFi is Enabled : " + wifManager.isWifiEnabled() + "\n");
-		wifiInfo.append("WiFi Mac Address : " + wifManager.getConnectionInfo().getMacAddress().toUpperCase() + "\n");
-		wifiInfo.append("WiFi Link Speed : " + wifManager.getConnectionInfo().getLinkSpeed() + "\n");
-		wifiInfo.append("WiFi SSID : " + wifManager.getConnectionInfo().getSSID() + "\n");
+		wifiInfo.append("WiFi is Enabled : " + wifiManager.isWifiEnabled() + "\n");
+		wifiInfo.append("WiFi Mac Address : " + wifiManager.getConnectionInfo().getMacAddress().toUpperCase() + "\n");
+		wifiInfo.append("WiFi Link Speed : " + wifiManager.getConnectionInfo().getLinkSpeed() + "\n");
+		wifiInfo.append("WiFi SSID : " + wifiManager.getConnectionInfo().getSSID() + "\n");
 		// 转换IP地址格式
-		int ip = wifManager.getConnectionInfo().getIpAddress();
+		int ip = wifiManager.getConnectionInfo().getIpAddress();
 		String ipaddress = String.format("%d.%d.%d.%d", (ip & 0xff), (ip >> 8 & 0xff), (ip >> 16 & 0xff), (ip >> 24 & 0xff));
 		wifiInfo.append("WiFi IP Address : " + ipaddress + "\n");
 		return wifiInfo.toString();

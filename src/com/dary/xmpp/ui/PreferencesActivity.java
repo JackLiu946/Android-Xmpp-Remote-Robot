@@ -9,10 +9,12 @@ import java.util.Map;
 
 import android.R.integer;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -27,6 +29,7 @@ import com.dary.xmpp.R;
 
 public class PreferencesActivity extends android.preference.PreferenceActivity {
 	private ListPreference switchPreferences;
+	private ListPreference switchPreferencesBetweenDifferentNetWork;
 	private Preference saveCurrentPreferences;
 	private MultiSelectListPreference delSavedPreferences;
 
@@ -36,6 +39,7 @@ public class PreferencesActivity extends android.preference.PreferenceActivity {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
 		switchPreferences = (ListPreference) findPreference("switchPreferences");
+		switchPreferencesBetweenDifferentNetWork = (ListPreference) findPreference("switchPreferencesBetweenDifferentNetWork");
 		delSavedPreferences = (MultiSelectListPreference) findPreference("delSavedPreferences");
 		setList();
 		switchPreferences.setSummary("Current Preferences is " + switchPreferences.getValue());
@@ -146,6 +150,19 @@ public class PreferencesActivity extends android.preference.PreferenceActivity {
 	}
 
 	private void setList() {
+		WifiManager wifiManager = (WifiManager) MyApp.getContext().getSystemService(Context.WIFI_SERVICE);
+		for (int i = 0; i < wifiManager.getConfiguredNetworks().size(); i++) {
+			System.out.println(wifiManager.getConfiguredNetworks().get(i).SSID);
+		}
+
+		CharSequence cs1[] = new String[wifiManager.getConfiguredNetworks().size()+1];
+		cs1[0] = "Mobile";
+		for (int j = 1, i = 0; i < wifiManager.getConfiguredNetworks().size(); i++,j++) {
+			cs1[j] = wifiManager.getConfiguredNetworks().get(i).SSID;
+		}
+
+		switchPreferencesBetweenDifferentNetWork.setEntries(cs1);
+		switchPreferencesBetweenDifferentNetWork.setEntryValues(cs1);
 
 		String[] subFiles = getFilesDir().list();
 		if (subFiles.length == 0) {

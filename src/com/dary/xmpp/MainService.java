@@ -128,8 +128,8 @@ public class MainService extends Service {
 			}
 			Tools.doLogPrintAndFile("Verify Password");
 			try {
-				// connection.login(loginAddress,password,resource);
-				connection.login(loginAddress, password, Tools.getTimeStr());
+				connection.login(loginAddress, password, resource);
+				// connection.login(loginAddress, password, Tools.getTimeStr());
 			} catch (Exception e) {
 				Tools.doLogAll("Login Failed");
 				doNotification(MainService.this, "Login Failed");
