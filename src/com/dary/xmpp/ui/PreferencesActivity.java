@@ -9,6 +9,7 @@ import java.util.Map;
 
 import android.R.integer;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -22,6 +23,7 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
 import com.dary.xmpp.MyApp;
@@ -147,6 +149,28 @@ public class PreferencesActivity extends android.preference.PreferenceActivity {
 				return false;
 			}
 		});
+
+		switchPreferencesBetweenDifferentNetWork.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				String[] subFiles = getFilesDir().list();
+				String cs[] = new String[subFiles.length + 1];
+				cs[0] = "Nothing";
+				for (int i = 1, j = 0; j < subFiles.length; i++, j++) {
+					cs[i] = subFiles[j];
+				}
+				ArrayAdapter<String> adapter = new ArrayAdapter<String>(PreferencesActivity.this, android.R.layout.simple_list_item_1, cs);
+				AlertDialog.Builder b = new Builder(PreferencesActivity.this);
+				b.setAdapter(adapter, new OnClickListener() {
+
+					public void onClick(DialogInterface dialog, int which) {
+					}
+				});
+				b.setTitle("Select Preferences");
+				b.show();
+				return false;
+			}
+		});
 	}
 
 	private void setList() {
@@ -155,10 +179,10 @@ public class PreferencesActivity extends android.preference.PreferenceActivity {
 			System.out.println(wifiManager.getConfiguredNetworks().get(i).SSID);
 		}
 
-		CharSequence cs1[] = new String[wifiManager.getConfiguredNetworks().size()+1];
+		CharSequence cs1[] = new String[wifiManager.getConfiguredNetworks().size() + 1];
 		cs1[0] = "Mobile";
-		for (int j = 1, i = 0; i < wifiManager.getConfiguredNetworks().size(); i++,j++) {
-			cs1[j] = wifiManager.getConfiguredNetworks().get(i).SSID;
+		for (int i = 1, j = 0; j < wifiManager.getConfiguredNetworks().size(); i++, j++) {
+			cs1[i] = wifiManager.getConfiguredNetworks().get(j).SSID;
 		}
 
 		switchPreferencesBetweenDifferentNetWork.setEntries(cs1);

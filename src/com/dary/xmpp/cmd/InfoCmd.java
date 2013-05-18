@@ -1,7 +1,6 @@
 package com.dary.xmpp.cmd;
 
 import java.util.List;
-import java.util.Locale;
 
 import org.jivesoftware.smack.Chat;
 
