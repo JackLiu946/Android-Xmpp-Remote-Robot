@@ -204,6 +204,14 @@ public class MainService extends Service {
 
 	private void getSetting() {
 		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+		String value = mPrefs.getString("switchPreferencesBetweenDifferentNetwork", "");
+		if (value != "") {
+			CharSequence csToDel[] = value.split("\\|");
+			for (int i = 0; i < csToDel.length; i++) {
+				
+			}
+			// do switch
+		}
 		isCustomServer = mPrefs.getBoolean("isCustomServer", false);
 		Tools.doLogJustPrint("isCustomServer " + isCustomServer);
 		serverHost = mPrefs.getString("serverHost", "");

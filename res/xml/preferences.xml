@@ -109,7 +109,7 @@
 
         <ListPreference
             android:id="@+id/switchPreferences"
-            android:defaultValue=""
+            android:defaultValue="Default"
             android:key="switchPreferences"
             android:summary="Select Preferences To Switch"
             android:title="Switch Preferences" />
@@ -122,17 +122,22 @@
 
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="autoSwitchPreferencesBetweenDifferentNetWork"
+            android:key="autoSwitchPreferencesBetweenDifferentNetwork"
             android:summary="@string/preference_auto_switch_preferences_between_different_network_summary"
             android:title="@string/preference_auto_switch_preferences_between_different_network" />
 
-        <ListPreference
-            android:id="@+id/switchPreferencesBetweenDifferentNetWork"
-            android:defaultValue=""
-            android:dependency="autoSwitchPreferencesBetweenDifferentNetWork"
-            android:key="switchPreferencesBetweenDifferentNetWork"
-            android:summary="Switch Preferences Between Different NetWork"
-            android:title="Switch Preferences Between Different NetWork" />
+        <Preference
+            android:id="@+id/switchPreferencesBetweenDifferentNetwork"
+            android:dependency="autoSwitchPreferencesBetweenDifferentNetwork"
+            android:key="switchPreferencesBetweenDifferentNetwork"
+            android:summary="Switch Preferences Between Different Network"
+            android:title="Switch Preferences Between Different Network" />
+
+        <com.dary.xmpp.ui.MultiSelectListPreference
+            android:id="@+id/delSwitchPreferencesBetweenDifferentNetwork"
+            android:key="delSwitchPreferencesBetweenDifferentNetwork"
+            android:summary="Delete Switch Preferences Between Different Network"
+            android:title="Delete Switch Preferences Between Different Network" />
     </PreferenceCategory>
 
 </PreferenceScreen>
