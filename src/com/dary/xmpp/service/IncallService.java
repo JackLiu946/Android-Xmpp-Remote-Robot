@@ -17,6 +17,7 @@ public class IncallService extends Service {
 	public static boolean isFirstStart;
 
 	private class mPhoneCallListener extends PhoneStateListener {
+		@Override
 		public void onCallStateChanged(int state, String incomingNumber) {
 			if (!isFirstStart) {
 				if (state == TelephonyManager.CALL_STATE_RINGING) {
@@ -40,7 +41,7 @@ public class IncallService extends Service {
 		// 有问题,改为不调用ServiceManager中的telManager
 		isFirstStart = true;
 		TelephonyManager telManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-		telManager.listen(phoneListener, mPhoneCallListener.LISTEN_CALL_STATE);
+		telManager.listen(phoneListener, PhoneStateListener.LISTEN_CALL_STATE);
 		super.onCreate();
 	}
 

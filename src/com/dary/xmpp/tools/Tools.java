@@ -23,7 +23,6 @@ import android.os.Environment;
 import android.os.Vibrator;
 
 import com.dary.xmpp.R;
-import com.dary.xmpp.R.drawable;
 import com.dary.xmpp.application.MyApp;
 import com.dary.xmpp.databases.DatabaseHelper;
 import com.dary.xmpp.ui.MainActivity;

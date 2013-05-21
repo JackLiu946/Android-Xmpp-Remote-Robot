@@ -11,6 +11,7 @@ public class MyApp extends Application {
 	private int status;
 	private boolean isShouldRunning;
 
+	@Override
 	public void onCreate() {
 		super.onCreate();
 		isShouldRunning = false;

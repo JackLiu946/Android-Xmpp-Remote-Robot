@@ -92,11 +92,11 @@ public class MainActivity extends Activity {
 
 		// 更新显示收到的消息
 		MsgHandler = new Handler() {
+			@Override
 			public void handleMessage(Message msg) {
 				// 要展示的消息
 				if (msg.what == SHOW_MESSAGE) {
-					MsgView mv = new MsgView(MainActivity.this, msg.getData().getInt("type"), msg.getData().getString("fromaddress"), msg.getData().getString(
-							"time"), msg.getData().getString("msg"));
+					MsgView mv = new MsgView(MainActivity.this, msg.getData().getInt("type"), msg.getData().getString("fromaddress"), msg.getData().getString("time"), msg.getData().getString("msg"));
 					linearLayoutMessage.addView(mv);
 					// 将ScrollView滚动到底部
 					scrollToBottom(scrollViewMessage, linearLayoutMessage);
@@ -191,6 +191,7 @@ public class MainActivity extends Activity {
 		}
 	}
 
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, 0, 0, R.string.settings);
 		menu.add(0, 1, 1, R.string.about);
@@ -211,12 +212,8 @@ public class MainActivity extends Activity {
 		case 1:
 			View view = View.inflate(MainActivity.this, R.layout.about, null);
 			TextView tv = (TextView) view.findViewById(R.id.text_about);
-			tv.setText(getResources().getString(R.string.author) + getResources().getString(R.string.author_value) + "\n"
-					+ getResources().getString(R.string.email) + getResources().getString(R.string.email_value) + "\n"
-					+ getResources().getString(R.string.version) + Tools.getAppVersionName(MainActivity.this) + "\n"
-					+ getResources().getString(R.string.find_more) + "\n" + getResources().getString(R.string.github));
-			new AlertDialog.Builder(MainActivity.this).setTitle(R.string.app_name).setView(view).setPositiveButton(R.string.ok, null)
-					.setIcon(R.drawable.ic_launcher).show();
+			tv.setText(getResources().getString(R.string.author) + getResources().getString(R.string.author_value) + "\n" + getResources().getString(R.string.email) + getResources().getString(R.string.email_value) + "\n" + getResources().getString(R.string.version) + Tools.getAppVersionName(MainActivity.this) + "\n" + getResources().getString(R.string.find_more) + "\n" + getResources().getString(R.string.github));
+			new AlertDialog.Builder(MainActivity.this).setTitle(R.string.app_name).setView(view).setPositiveButton(R.string.ok, null).setIcon(R.drawable.ic_launcher).show();
 			break;
 		case 2:
 			clearMsg();
@@ -296,8 +293,7 @@ public class MainActivity extends Activity {
 			loginStatus.setTextColor(Color.BLUE);
 			loginStatus.setText(R.string.loginstats_debug);
 			// 对于Debug模式,要修改autoCompleteTextViewSendMessage的adapter
-			ArrayAdapter<String> autoDebugCmdStringAdapter = new ArrayAdapter<String>(this, R.layout.auto_cmd_string_item, getResources().getStringArray(
-					R.array.autoDebugCmdString));
+			ArrayAdapter<String> autoDebugCmdStringAdapter = new ArrayAdapter<String>(this, R.layout.auto_cmd_string_item, getResources().getStringArray(R.array.autoDebugCmdString));
 			autoCompleteTextViewSendMessage.setAdapter(autoDebugCmdStringAdapter);
 			break;
 		case NOT_LOGGED_IN:
@@ -314,8 +310,7 @@ public class MainActivity extends Activity {
 			loginStatus.setTextColor(Color.YELLOW);
 			loginStatus.setText(R.string.loginstatus_logging);
 			// 对于Debug模式,要修改autoCompleteTextViewSendMessage的adapter
-			ArrayAdapter<String> autoSendCmdStringAdapter = new ArrayAdapter<String>(this, R.layout.auto_cmd_string_item, getResources().getStringArray(
-					R.array.autoSendCmdString));
+			ArrayAdapter<String> autoSendCmdStringAdapter = new ArrayAdapter<String>(this, R.layout.auto_cmd_string_item, getResources().getStringArray(R.array.autoSendCmdString));
 			autoCompleteTextViewSendMessage.setAdapter(autoSendCmdStringAdapter);
 			break;
 		case LOGIN_SUCCESSFUL:

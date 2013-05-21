@@ -1,12 +1,12 @@
 package com.dary.xmpp.databases;
 
-import com.dary.xmpp.application.MyApp;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.dary.xmpp.application.MyApp;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 

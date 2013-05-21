@@ -16,6 +16,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo.State;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.os.IBinder;
@@ -79,6 +81,8 @@ public class MainService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		// 需要移除Handler队列中的消息,以防出现用户点击登录,随后又因超时时见到再次登录的情况.
+		tryReconnectHandler.removeMessages(0);
 		if (switchPrefs()) {
 			if (isSetComplete()) {
 				// 启动登录线程
@@ -246,12 +250,17 @@ public class MainService extends Service {
 
 	private String getCurrentNetwork() {
 		// TODO 这里判断的并不完整,以后再修改
-		WifiManager wifiManager = (WifiManager) MyApp.getContext().getSystemService(Context.WIFI_SERVICE);
-		if (wifiManager.isWifiEnabled()) {
+		ConnectivityManager conMan = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		State mobile = conMan.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState();
+		State wifi = conMan.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
+
+		if (wifi.toString().equals(State.CONNECTED)) {
+			WifiManager wifiManager = (WifiManager) MyApp.getContext().getSystemService(Context.WIFI_SERVICE);
 			return wifiManager.getConnectionInfo().getSSID();
-		} else {
+		} else if (mobile.toString().equals(State.CONNECTED)) {
 			return "Mobile";
 		}
+		return "";
 	}
 
 	public static void sendMsg(int tag) {
@@ -335,26 +344,23 @@ public class MainService extends Service {
 				String cs[] = value.split("\\|");
 				String net;
 				String prefs = "";
-				for (int i = 0;i<cs.length;i++)
-				{
-					net= cs[i].split("\\^")[0];
-					if (getCurrentNetwork().equals(net))
-					{
+				for (int i = 0; i < cs.length; i++) {
+					net = cs[i].split("\\^")[0];
+					if (getCurrentNetwork().equals(net)) {
 						prefs = cs[i].split("\\^")[1];
 						break;
-					}
-					else{
-						if (i== cs.length-1){
+					} else {
+						if (i == cs.length - 1) {
 							return true;
 						}
 					}
 				}
-//				int i = 0;
-//				do {
-//					net = cs[i].split("\\^")[0];
-//					i++;
-//				} while (!net.equals(getCurrentNetwork()));
-//				String prefs = cs[i - 1].split("\\^")[1];
+				// int i = 0;
+				// do {
+				// net = cs[i].split("\\^")[0];
+				// i++;
+				// } while (!net.equals(getCurrentNetwork()));
+				// String prefs = cs[i - 1].split("\\^")[1];
 				Toast.makeText(MainService.this, "Switch Prefs To " + prefs, Toast.LENGTH_LONG).show();
 				// 需判断为Nothing的情况
 				if (prefs.equals("Nothing")) {

@@ -47,7 +47,7 @@ public class InfoCmd extends CmdBase {
 	}
 
 	private static String getAppInfo() {
-		PackageManager pacManager = (PackageManager) MyApp.getContext().getPackageManager();
+		PackageManager pacManager = MyApp.getContext().getPackageManager();
 		// 这里不应该只获取需要权限的应用
 		List<PackageInfo> list = pacManager.getInstalledPackages(PackageManager.GET_PERMISSIONS);
 		StringBuilder appInfo = new StringBuilder();
