@@ -331,12 +331,27 @@ public class MainService extends Service {
 			if (value != "") {
 				String cs[] = value.split("\\|");
 				String net;
-				int i = 0;
-				do {
-					net = cs[i].split("\\^")[0];
-					i++;
-				} while (!net.equals(getCurrentNetwork()));
-				String prefs = cs[i - 1].split("\\^")[1];
+				String prefs = "";
+				for (int i = 0;i<cs.length;i++)
+				{
+					net= cs[i].split("\\^")[0];
+					if (getCurrentNetwork().equals(net))
+					{
+						prefs = cs[i].split("\\^")[1];
+						break;
+					}
+					else{
+						if (i== cs.length-1){
+							return true;
+						}
+					}
+				}
+//				int i = 0;
+//				do {
+//					net = cs[i].split("\\^")[0];
+//					i++;
+//				} while (!net.equals(getCurrentNetwork()));
+//				String prefs = cs[i - 1].split("\\^")[1];
 				Toast.makeText(MainService.this, "Switch Prefs To " + prefs, Toast.LENGTH_LONG).show();
 				// 需判断为Nothing的情况
 				if (prefs.equals("Nothing")) {

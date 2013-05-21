@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.R.integer;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
@@ -67,6 +68,7 @@ public class PreferencesActivity extends android.preference.PreferenceActivity {
 		saveCurrentPreferences = findPreference("saveCurrentPreferences");
 		saveCurrentPreferences.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
+			@SuppressLint("NewApi")
 			public boolean onPreferenceClick(Preference preference) {
 				View view = View.inflate(PreferencesActivity.this, R.layout.save_preferences, null);
 				final EditText ETsavepreferences = (EditText) view.findViewById(R.id.ETsavepreferences);
