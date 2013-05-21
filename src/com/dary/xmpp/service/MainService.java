@@ -253,8 +253,7 @@ public class MainService extends Service {
 		ConnectivityManager conMan = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		State mobile = conMan.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState();
 		State wifi = conMan.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
-
-		if (wifi.toString().equals(State.CONNECTED)) {
+		if (wifi.equals(State.CONNECTED)) {
 			WifiManager wifiManager = (WifiManager) MyApp.getContext().getSystemService(Context.WIFI_SERVICE);
 			return wifiManager.getConnectionInfo().getSSID();
 		} else if (mobile.toString().equals(State.CONNECTED)) {
@@ -344,9 +343,10 @@ public class MainService extends Service {
 				String cs[] = value.split("\\|");
 				String net;
 				String prefs = "";
+                String currentNetwork = getCurrentNetwork();
 				for (int i = 0; i < cs.length; i++) {
 					net = cs[i].split("\\^")[0];
-					if (getCurrentNetwork().equals(net)) {
+					if (currentNetwork.equals(net)) {
 						prefs = cs[i].split("\\^")[1];
 						break;
 					} else {
@@ -355,12 +355,6 @@ public class MainService extends Service {
 						}
 					}
 				}
-				// int i = 0;
-				// do {
-				// net = cs[i].split("\\^")[0];
-				// i++;
-				// } while (!net.equals(getCurrentNetwork()));
-				// String prefs = cs[i - 1].split("\\^")[1];
 				Toast.makeText(MainService.this, "Switch Prefs To " + prefs, Toast.LENGTH_LONG).show();
 				// 需判断为Nothing的情况
 				if (prefs.equals("Nothing")) {
