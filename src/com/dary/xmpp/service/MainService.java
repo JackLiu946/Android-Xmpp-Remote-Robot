@@ -187,6 +187,7 @@ public class MainService extends Service {
 	// 如果正在登录中时进行中断,并不会立即处理
 	@Override
 	public void onDestroy() {
+		tryReconnectHandler.removeMessages(0);
 		Tools.doLogAll("Service Destroy");
 		MyApp myApp = (MyApp) getApplication();
 		myApp.setIsShouldRunning(false);
@@ -356,6 +357,7 @@ public class MainService extends Service {
 					}
 				}
 				Toast.makeText(MainService.this, "Switch Prefs To " + prefs, Toast.LENGTH_LONG).show();
+				Tools.doLogAll("Switch Prefs To " + prefs);
 				// 需判断为Nothing的情况
 				if (prefs.equals("Nothing")) {
 					return false;
