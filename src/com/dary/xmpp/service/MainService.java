@@ -343,7 +343,7 @@ public class MainService extends Service {
 				String cs[] = value.split("\\|");
 				String net;
 				String prefs = "";
-                String currentNetwork = getCurrentNetwork();
+				String currentNetwork = getCurrentNetwork();
 				for (int i = 0; i < cs.length; i++) {
 					net = cs[i].split("\\^")[0];
 					if (currentNetwork.equals(net)) {
