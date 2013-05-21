@@ -16,15 +16,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 import com.dary.xmpp.cmd.CmdBase;
 import com.dary.xmpp.receivers.BatteryReceiver;
 import com.dary.xmpp.receivers.SMSReceiver;
 import com.dary.xmpp.ui.MainActivity;
+import com.dary.xmpp.ui.PreferencesActivity;
 
 public class MainService extends Service {
 
@@ -73,17 +76,14 @@ public class MainService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		if (isSetComplete()) {
-			// 启动登录线程
-			LoginInThread loginInThread = new LoginInThread();
-			Thread thread = new Thread(loginInThread);
-			thread.setName("LoginThread");
-			thread.start();
-
-			// 登录中,发送消息,更新UI
-			sendMsg(MainActivity.LOGGING);
-			// 尝试将登录的记录存储下来,先暂时只存储到普通的文本文件中
-			Tools.doLogAll("Login");
+		if (switchPrefs()) {
+			if (isSetComplete()) {
+				// 启动登录线程
+				LoginInThread loginInThread = new LoginInThread();
+				Thread thread = new Thread(loginInThread);
+				thread.setName("LoginThread");
+				thread.start();
+			}
 		}
 		return super.onStartCommand(intent, flags, startId);
 	}
@@ -92,6 +92,12 @@ public class MainService extends Service {
 	class LoginInThread implements Runnable {
 
 		public void run() {
+
+			// 登录中,发送消息,更新UI
+			sendMsg(MainActivity.LOGGING);
+			// 尝试将登录的记录存储下来,先暂时只存储到普通的文本文件中
+			Tools.doLogAll("Login");
+
 			ConnectionConfiguration config = null;
 			MyApp myApp = (MyApp) getApplication();
 			myApp.setIsShouldRunning(true);
@@ -204,14 +210,6 @@ public class MainService extends Service {
 
 	private void getSetting() {
 		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-		String value = mPrefs.getString("switchPreferencesBetweenDifferentNetwork", "");
-		if (value != "") {
-			CharSequence csToDel[] = value.split("\\|");
-			for (int i = 0; i < csToDel.length; i++) {
-				
-			}
-			// do switch
-		}
 		isCustomServer = mPrefs.getBoolean("isCustomServer", false);
 		Tools.doLogJustPrint("isCustomServer " + isCustomServer);
 		serverHost = mPrefs.getString("serverHost", "");
@@ -240,6 +238,16 @@ public class MainService extends Service {
 			Tools.doLogJustPrint("autoServerHost " + autoServerHost);
 			Tools.doLogJustPrint("autoServerPort " + autoServerPort);
 			Tools.doLogJustPrint("autoServerDomain " + autoServerDomain);
+		}
+	}
+
+	private String getCurrentNetwork() {
+		// TODO 这里判断的并不完整,以后再修改
+		WifiManager wifiManager = (WifiManager) MyApp.getContext().getSystemService(Context.WIFI_SERVICE);
+		if (wifiManager.isWifiEnabled()) {
+			return wifiManager.getConnectionInfo().getSSID();
+		} else {
+			return "Mobile";
 		}
 	}
 
@@ -313,5 +321,36 @@ public class MainService extends Service {
 			timeout = 1000 * 60 * 5;
 		}
 		tryReconnectHandler.sendEmptyMessageDelayed(0, timeout);
+	}
+
+	private boolean switchPrefs() {
+		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+		boolean autoSwitch = mPrefs.getBoolean("autoSwitchPreferencesBetweenDifferentNetwork", false);
+		if (autoSwitch) {
+			String value = mPrefs.getString("switchPreferencesBetweenDifferentNetwork", "");
+			if (value != "") {
+				String cs[] = value.split("\\|");
+				String net;
+				int i = 0;
+				do {
+					net = cs[i].split("\\^")[0];
+					i++;
+				} while (!net.equals(getCurrentNetwork()));
+				String prefs = cs[i - 1].split("\\^")[1];
+				Toast.makeText(MainService.this, "Switch Prefs To " + prefs, Toast.LENGTH_LONG).show();
+				// 需判断为Nothing的情况
+				if (prefs.equals("Nothing")) {
+					return false;
+				}
+				// Do Switch
+				else {
+					PreferencesActivity.switchPreferences(prefs);
+					return true;
+				}
+			}
+			// 这里暂时返回true,让程序在"switchPreferencesBetweenDifferentNetwork"项为空时仍去登录.
+			return true;
+		}
+		return true;
 	}
 }

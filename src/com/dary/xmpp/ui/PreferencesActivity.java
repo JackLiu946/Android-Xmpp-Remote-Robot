@@ -45,6 +45,7 @@ public class PreferencesActivity extends android.preference.PreferenceActivity {
 
 	@SuppressWarnings("deprecation")
 	@Override
+	// TODO 修改了配置之后,未切换时的状态
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		File file1 = new File(SAVE_PREFERENCES_PATH);
@@ -102,57 +103,11 @@ public class PreferencesActivity extends android.preference.PreferenceActivity {
 		switchPreferences.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				// 读取配置文件
-				// File file =
-				// MyApp.getContext().getFileStreamPath(newValue.toString());
-				File file = new File(SAVE_PREFERENCES_PATH + File.separator + newValue.toString());
-				if (file.exists()) {
-
-					StringBuilder sb = new StringBuilder();
-					InputStream is;
-					String prefs = "";
-					try {
-						is = new FileInputStream(file);
-
-						byte[] buffer = new byte[200];
-						int length = 0;
-						while (-1 != (length = is.read(buffer))) {
-							String str = new String(buffer, 0, length);
-							sb.append(str);
-						}
-						is.close();
-						prefs = sb.toString();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					// 写入(切换)配置
-					Map<String, String> prefsMap = converStringToMap(prefs);
-					SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(MyApp.getContext());
-					Editor e = mPrefs.edit();
-					// 不全
-					for (Map.Entry<String, String> entry : prefsMap.entrySet()) {
-						String key = entry.getKey();
-						Map<String, ?> map = mPrefs.getAll();
-						// 判断原map的value类型
-						boolean isInt = map.get(key) instanceof integer;
-						boolean isBoolean = map.get(key) instanceof Boolean;
-						String value = entry.getValue();
-						if (isBoolean) {
-							e.putBoolean(key, Boolean.valueOf(value));
-						} else if (isInt) {
-							e.putInt(key, Integer.parseInt(value));
-						} else {
-							e.putString(key, value);
-						}
-					}
-					// 配置切换这一项要修改为最新的值
-					e.putString("switchPreferences", newValue.toString());
-					e.commit();
+				boolean result = switchPreferences(newValue);
+				if (result) {
 					onCreate(null);
-					return true;
-				} else {
-					return false;
 				}
+				return result;
 			}
 		});
 
@@ -191,7 +146,8 @@ public class PreferencesActivity extends android.preference.PreferenceActivity {
 				return false;
 			}
 		});
-		//TODO不同网络下,只能应用一套配置,必须加逻辑判断
+
+		// TODO不同网络下,只能应用一套配置,必须加逻辑判断
 		switchPreferencesBetweenDifferentNetwork.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 			public boolean onPreferenceClick(Preference preference) {
@@ -200,7 +156,10 @@ public class PreferencesActivity extends android.preference.PreferenceActivity {
 				// wifiManager.getConfiguredNetworks().size(); i++) {
 				// System.out.println(wifiManager.getConfiguredNetworks().get(i).SSID);
 				// }
-
+				if (wifiManager.getConfiguredNetworks() == null) {
+					Toast.makeText(PreferencesActivity.this, "Please Turn On Wifi", Toast.LENGTH_LONG).show();
+					return false;
+				}
 				final String cs1[] = new String[wifiManager.getConfiguredNetworks().size() + 1];
 				cs1[0] = "Mobile";
 				for (int i = 1, j = 0; j < wifiManager.getConfiguredNetworks().size(); i++, j++) {
@@ -229,7 +188,7 @@ public class PreferencesActivity extends android.preference.PreferenceActivity {
 								SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(MyApp.getContext());
 								Editor e = mPrefs.edit();
 								String oldValue = mPrefs.getString(switchPreferencesBetweenDifferentNetwork.getKey(), "");
-								String newValue = cs1[whichNetwork] + "-" + cs2[whichPreferebces];
+								String newValue = cs1[whichNetwork] + "^" + cs2[whichPreferebces];
 								if (oldValue != "") {
 									e.putString(switchPreferencesBetweenDifferentNetwork.getKey(), oldValue + "|" + newValue);
 									e.commit();
@@ -341,5 +300,62 @@ public class PreferencesActivity extends android.preference.PreferenceActivity {
 		// System.out.println(entry.getKey() + "/" + entry.getValue());
 		// }
 		return map;
+	}
+
+	public static boolean switchPreferences(Object newValue) {
+		// 读取配置文件
+		// File file =
+		// MyApp.getContext().getFileStreamPath(newValue.toString());
+		File file = new File(SAVE_PREFERENCES_PATH + File.separator + newValue.toString());
+		if (file.exists()) {
+
+			StringBuilder sb = new StringBuilder();
+			InputStream is;
+			String prefs = "";
+			try {
+				is = new FileInputStream(file);
+
+				byte[] buffer = new byte[200];
+				int length = 0;
+				while (-1 != (length = is.read(buffer))) {
+					String str = new String(buffer, 0, length);
+					sb.append(str);
+				}
+				is.close();
+				prefs = sb.toString();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			// 写入(切换)配置
+			Map<String, String> prefsMap = converStringToMap(prefs);
+			SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(MyApp.getContext());
+			Editor e = mPrefs.edit();
+			// 不全
+			for (Map.Entry<String, String> entry : prefsMap.entrySet()) {
+				String key = entry.getKey();
+				Map<String, ?> map = mPrefs.getAll();
+				// 判断原map的value类型
+				// 将"switchPreferencesBetweenDifferentNetwork"项排除在外
+				if (!key.equals("switchPreferencesBetweenDifferentNetwork")) {
+					boolean isInt = map.get(key) instanceof integer;
+					boolean isBoolean = map.get(key) instanceof Boolean;
+					String value = entry.getValue();
+					if (isBoolean) {
+						e.putBoolean(key, Boolean.valueOf(value));
+					} else if (isInt) {
+						e.putInt(key, Integer.parseInt(value));
+					} else {
+						e.putString(key, value);
+					}
+				}
+			}
+			// 配置切换这一项要修改为最新的值
+			e.putString("switchPreferences", newValue.toString());
+			e.commit();
+			// onCreate(null);
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
