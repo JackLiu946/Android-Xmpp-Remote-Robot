@@ -336,7 +336,7 @@ public class PreferencesActivity extends android.preference.PreferenceActivity {
 				Map<String, ?> map = mPrefs.getAll();
 				// 判断原map的value类型
 				// 将"switchPreferencesBetweenDifferentNetwork"项排除在外
-				if (!key.equals("switchPreferencesBetweenDifferentNetwork")) {
+				if (!key.equals("switchPreferencesBetweenDifferentNetwork") && !key.equals("autoSwitchPreferencesBetweenDifferentNetwork")) {
 					boolean isInt = map.get(key) instanceof integer;
 					boolean isBoolean = map.get(key) instanceof Boolean;
 					String value = entry.getValue();
