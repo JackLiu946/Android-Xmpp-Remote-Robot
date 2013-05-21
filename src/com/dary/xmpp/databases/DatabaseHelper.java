@@ -1,4 +1,6 @@
-package com.dary.xmpp;
+package com.dary.xmpp.databases;
+
+import com.dary.xmpp.application.MyApp;
 
 import android.content.ContentValues;
 import android.content.Context;

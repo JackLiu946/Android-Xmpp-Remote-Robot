@@ -8,7 +8,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 
-import com.dary.xmpp.MyApp;
+import com.dary.xmpp.application.MyApp;
 
 public class RingCmd extends CmdBase {
 

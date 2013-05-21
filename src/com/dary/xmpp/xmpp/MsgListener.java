@@ -1,4 +1,4 @@
-package com.dary.xmpp;
+package com.dary.xmpp.xmpp;
 
 import java.util.Locale;
 
@@ -23,6 +23,9 @@ import com.dary.xmpp.cmd.SelCmd;
 import com.dary.xmpp.cmd.SmsCmd;
 import com.dary.xmpp.cmd.SmsToCmd;
 import com.dary.xmpp.cmd.USBStorage;
+import com.dary.xmpp.databases.DatabaseHelper;
+import com.dary.xmpp.service.MainService;
+import com.dary.xmpp.tools.Tools;
 import com.dary.xmpp.ui.MainActivity;
 
 public class MsgListener implements MessageListener {

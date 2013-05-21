@@ -7,8 +7,8 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 
-import com.dary.xmpp.MyApp;
-import com.dary.xmpp.Tools;
+import com.dary.xmpp.application.MyApp;
+import com.dary.xmpp.tools.Tools;
 
 public class GpsCmd extends CmdBase {
 	public static void Gps(Chat chat) {

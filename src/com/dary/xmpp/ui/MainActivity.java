@@ -26,13 +26,13 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-import com.dary.xmpp.DatabaseHelper;
-import com.dary.xmpp.MainService;
-import com.dary.xmpp.MsgListener;
-import com.dary.xmpp.MyApp;
 import com.dary.xmpp.R;
-import com.dary.xmpp.Tools;
+import com.dary.xmpp.application.MyApp;
 import com.dary.xmpp.cmd.CmdBase;
+import com.dary.xmpp.databases.DatabaseHelper;
+import com.dary.xmpp.service.MainService;
+import com.dary.xmpp.tools.Tools;
+import com.dary.xmpp.xmpp.MsgListener;
 
 public class MainActivity extends Activity {
 

@@ -9,7 +9,7 @@ import android.content.Context;
 import android.telephony.TelephonyManager;
 
 import com.android.internal.telephony.ITelephony;
-import com.dary.xmpp.MyApp;
+import com.dary.xmpp.application.MyApp;
 
 public class RejectCmd extends CmdBase {
 	public static void Reject(Chat chat) {

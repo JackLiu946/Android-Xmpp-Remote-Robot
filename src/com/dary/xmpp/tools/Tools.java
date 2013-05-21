@@ -1,4 +1,4 @@
-package com.dary.xmpp;
+package com.dary.xmpp.tools;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,6 +22,10 @@ import android.media.RingtoneManager;
 import android.os.Environment;
 import android.os.Vibrator;
 
+import com.dary.xmpp.R;
+import com.dary.xmpp.R.drawable;
+import com.dary.xmpp.application.MyApp;
+import com.dary.xmpp.databases.DatabaseHelper;
 import com.dary.xmpp.ui.MainActivity;
 
 public class Tools {

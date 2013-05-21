@@ -11,9 +11,9 @@ import android.content.pm.PackageManager;
 import android.net.wifi.WifiManager;
 import android.telephony.TelephonyManager;
 
-import com.dary.xmpp.Contact;
-import com.dary.xmpp.MyApp;
-import com.dary.xmpp.Tools;
+import com.dary.xmpp.application.MyApp;
+import com.dary.xmpp.tools.Contact;
+import com.dary.xmpp.tools.Tools;
 
 public class InfoCmd extends CmdBase {
 	static Chat chat = null;

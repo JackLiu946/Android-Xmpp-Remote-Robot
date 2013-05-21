@@ -29,8 +29,8 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.dary.xmpp.MyApp;
 import com.dary.xmpp.R;
+import com.dary.xmpp.application.MyApp;
 
 public class PreferencesActivity extends android.preference.PreferenceActivity {
 	private ListPreference switchPreferences;
@@ -39,25 +39,15 @@ public class PreferencesActivity extends android.preference.PreferenceActivity {
 	private static final String SDCARD = Environment.getExternalStorageDirectory().toString();
 	private static final String SAVE_PREFERENCES_PATH = SDCARD + File.separator + "Android XMPP Remote Robot" + File.separator + "Save Preferences";
 
-	// private static final String
-	// SWITCH_PREFERENCES_BETWEEN_DIFFERENT_NETWORK_PATH = SDCARD +
-	// File.separator + "Android XMPP Remote Robot" + File.separator
-	// + "Swtich Preferences Between Different Netwrok";
-
 	@SuppressWarnings("deprecation")
 	@Override
 	// TODO 修改了配置之后,未切换时的状态
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		File file1 = new File(SAVE_PREFERENCES_PATH);
-		// File file2 = new
-		// File(SWITCH_PREFERENCES_BETWEEN_DIFFERENT_NETWORK_PATH);
 		if (!file1.exists()) {
 			file1.mkdirs();
 		}
-		// if (!file2.exists()) {
-		// file2.mkdirs();
-		// }
 		addPreferencesFromResource(R.xml.preferences);
 		switchPreferences = (ListPreference) findPreference("switchPreferences");
 		switchPreferencesBetweenDifferentNetwork = findPreference("switchPreferencesBetweenDifferentNetwork");
@@ -186,7 +176,8 @@ public class PreferencesActivity extends android.preference.PreferenceActivity {
 						b.setAdapter(adapter, new OnClickListener() {
 
 							public void onClick(DialogInterface dialog, int whichPreferebces) {
-								Toast.makeText(PreferencesActivity.this, cs1[whichNetwork] + " " + cs2[whichPreferebces], Toast.LENGTH_LONG).show();
+								Toast.makeText(PreferencesActivity.this, "When " + cs1[whichNetwork] + "Switch To " + cs2[whichPreferebces], Toast.LENGTH_LONG)
+										.show();
 								SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(MyApp.getContext());
 								Editor e = mPrefs.edit();
 								String oldValue = mPrefs.getString(switchPreferencesBetweenDifferentNetwork.getKey(), "");
@@ -265,7 +256,6 @@ public class PreferencesActivity extends android.preference.PreferenceActivity {
 		}
 
 		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(MyApp.getContext());
-		Editor e = mPrefs.edit();
 		String value = mPrefs.getString(switchPreferencesBetweenDifferentNetwork.getKey(), "");
 		if (value != "") {
 			CharSequence csToDel[] = null;
@@ -276,7 +266,6 @@ public class PreferencesActivity extends android.preference.PreferenceActivity {
 		} else {
 			delSwitchPreferencesBetweenDifferentNetwork.setEnabled(false);
 		}
-
 	}
 
 	private static Map<String, String> converStringToMap(String str) {

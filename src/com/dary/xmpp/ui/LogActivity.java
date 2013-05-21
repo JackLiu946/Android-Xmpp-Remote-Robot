@@ -14,8 +14,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SimpleAdapter;
 
-import com.dary.xmpp.MyApp;
 import com.dary.xmpp.R;
+import com.dary.xmpp.application.MyApp;
 
 public class LogActivity extends ListActivity {
 

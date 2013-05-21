@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.dary.xmpp.MainService;
-import com.dary.xmpp.Tools;
+import com.dary.xmpp.service.MainService;
+import com.dary.xmpp.tools.Tools;
 
 public class StartUpReceiver extends BroadcastReceiver {
 

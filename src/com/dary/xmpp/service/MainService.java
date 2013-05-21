@@ -1,4 +1,4 @@
-package com.dary.xmpp;
+package com.dary.xmpp.service;
 
 import java.util.Locale;
 
@@ -23,11 +23,14 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
+import com.dary.xmpp.application.MyApp;
 import com.dary.xmpp.cmd.CmdBase;
 import com.dary.xmpp.receivers.BatteryReceiver;
 import com.dary.xmpp.receivers.SMSReceiver;
+import com.dary.xmpp.tools.Tools;
 import com.dary.xmpp.ui.MainActivity;
 import com.dary.xmpp.ui.PreferencesActivity;
+import com.dary.xmpp.xmpp.MsgListener;
 
 public class MainService extends Service {
 

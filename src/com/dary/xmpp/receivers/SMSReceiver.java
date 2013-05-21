@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 
-import com.dary.xmpp.Contact;
-import com.dary.xmpp.MainService;
 import com.dary.xmpp.cmd.CmdBase;
+import com.dary.xmpp.service.MainService;
+import com.dary.xmpp.tools.Contact;
 import com.dary.xmpp.ui.MainActivity;
 
 public class SMSReceiver extends BroadcastReceiver {

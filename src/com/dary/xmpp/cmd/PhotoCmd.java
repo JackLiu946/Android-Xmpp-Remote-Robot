@@ -16,8 +16,8 @@ import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PictureCallback;
 
-import com.dary.xmpp.MainService;
-import com.dary.xmpp.Tools;
+import com.dary.xmpp.service.MainService;
+import com.dary.xmpp.tools.Tools;
 import com.dary.xmpp.ui.MainActivity;
 
 public class PhotoCmd extends CmdBase {

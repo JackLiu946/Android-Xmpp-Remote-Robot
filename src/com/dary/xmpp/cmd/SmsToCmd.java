@@ -2,8 +2,8 @@ package com.dary.xmpp.cmd;
 
 import org.jivesoftware.smack.Chat;
 
-import com.dary.xmpp.Contact;
-import com.dary.xmpp.Tools;
+import com.dary.xmpp.tools.Contact;
+import com.dary.xmpp.tools.Tools;
 
 public class SmsToCmd extends SmsCmdBase {
 	static String body = null;

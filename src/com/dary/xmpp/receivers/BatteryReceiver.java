@@ -7,7 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.BatteryManager;
 
-import com.dary.xmpp.MainService;
+import com.dary.xmpp.service.MainService;
 
 public class BatteryReceiver extends BroadcastReceiver {
 	private int intLevel;

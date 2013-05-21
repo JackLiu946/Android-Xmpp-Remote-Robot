@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.jivesoftware.smack.Chat;
 
-import com.dary.xmpp.Tools;
+import com.dary.xmpp.tools.Tools;
 
 public class SelCmd extends CmdBase {
 	private static ArrayList<String> choices = null;

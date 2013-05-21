@@ -5,7 +5,7 @@ import org.jivesoftware.smack.Chat;
 import android.content.Context;
 import android.media.AudioManager;
 
-import com.dary.xmpp.MyApp;
+import com.dary.xmpp.application.MyApp;
 
 public class RingerModeCmd extends CmdBase {
 	public static void RingerMode(Chat chat, String message) {

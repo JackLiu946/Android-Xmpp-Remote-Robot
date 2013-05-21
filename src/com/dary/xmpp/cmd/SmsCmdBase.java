@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.telephony.SmsManager;
 
-import com.dary.xmpp.MyApp;
+import com.dary.xmpp.application.MyApp;
 
 public class SmsCmdBase extends CmdBase {
 	// 发送短信,并插入短信库中

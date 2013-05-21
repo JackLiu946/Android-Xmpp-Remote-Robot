@@ -8,9 +8,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 
-import com.dary.xmpp.MainService;
-import com.dary.xmpp.MyApp;
-import com.dary.xmpp.Tools;
+import com.dary.xmpp.application.MyApp;
+import com.dary.xmpp.service.MainService;
+import com.dary.xmpp.tools.Tools;
 import com.dary.xmpp.ui.MainActivity;
 
 public class ConnectionChangeReceiver extends BroadcastReceiver {

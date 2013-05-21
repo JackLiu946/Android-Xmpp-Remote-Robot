@@ -1,10 +1,11 @@
-package com.dary.xmpp;
+package com.dary.xmpp.tools;
 
 import java.util.ArrayList;
 
 import android.database.Cursor;
 import android.provider.ContactsContract;
 
+import com.dary.xmpp.application.MyApp;
 import com.dary.xmpp.cmd.SelCmd;
 
 public class Contact {

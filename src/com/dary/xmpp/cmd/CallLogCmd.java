@@ -7,8 +7,8 @@ import android.database.Cursor;
 import android.preference.PreferenceManager;
 import android.provider.CallLog;
 
-import com.dary.xmpp.MyApp;
-import com.dary.xmpp.Tools;
+import com.dary.xmpp.application.MyApp;
+import com.dary.xmpp.tools.Tools;
 
 public class CallLogCmd extends CmdBase {
 	public static void Calllog(Chat chat) {

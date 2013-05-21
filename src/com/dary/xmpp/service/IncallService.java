@@ -1,4 +1,4 @@
-package com.dary.xmpp;
+package com.dary.xmpp.service;
 
 import android.app.Service;
 import android.content.Context;
@@ -8,6 +8,8 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
 import com.dary.xmpp.cmd.CmdBase;
+import com.dary.xmpp.tools.Contact;
+import com.dary.xmpp.tools.Tools;
 
 public class IncallService extends Service {
 

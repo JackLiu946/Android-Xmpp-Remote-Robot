@@ -6,10 +6,10 @@ import org.jivesoftware.smack.Chat;
 
 import android.widget.Toast;
 
-import com.dary.xmpp.DatabaseHelper;
-import com.dary.xmpp.MainService;
-import com.dary.xmpp.MyApp;
-import com.dary.xmpp.Tools;
+import com.dary.xmpp.application.MyApp;
+import com.dary.xmpp.databases.DatabaseHelper;
+import com.dary.xmpp.service.MainService;
+import com.dary.xmpp.tools.Tools;
 import com.dary.xmpp.ui.MainActivity;
 
 public class CmdBase {

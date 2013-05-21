@@ -1,4 +1,4 @@
-package com.dary.xmpp;
+package com.dary.xmpp.application;
 
 import android.app.Application;
 import android.content.Context;
