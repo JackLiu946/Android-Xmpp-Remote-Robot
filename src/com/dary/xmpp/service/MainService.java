@@ -257,7 +257,7 @@ public class MainService extends Service {
 		if (wifi.equals(State.CONNECTED)) {
 			WifiManager wifiManager = (WifiManager) MyApp.getContext().getSystemService(Context.WIFI_SERVICE);
 			return wifiManager.getConnectionInfo().getSSID();
-		} else if (mobile.toString().equals(State.CONNECTED)) {
+		} else if (mobile.equals(State.CONNECTED)) {
 			return "Mobile";
 		}
 		return "";
