@@ -45,6 +45,8 @@ public class CmdBase {
 			// 消息发送失败时不能简单设置为Not Logged In的状态
 			// 可以考虑单独增加一个状态
 			MainService.sendMsg(MainActivity.CONNECTION_FAILED);
+			// 尝试重新连接
+			MainService.tryReconnectHandler.sendEmptyMessage(0);
 		}
 	}
 
