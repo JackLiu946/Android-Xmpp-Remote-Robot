@@ -77,6 +77,8 @@ public final class R {
         public static final int preference_command_setting=0x7f060037;
         public static final int preference_command_settings=0x7f06003d;
         public static final int preference_connect_settings=0x7f06003e;
+        public static final int preference_connection_fail_reconnect_timeout=0x7f060043;
+        public static final int preference_connection_fail_reconnect_timeout_summary=0x7f060042;
         public static final int preference_debug_mode=0x7f060036;
         public static final int preference_debug_mode_summary=0x7f060035;
         public static final int preference_is_auto_reconnect_when_connection_fail=0x7f060023;

@@ -67,5 +67,7 @@
     <string name="preference_auto_switch_preferences_between_different_network_summary">Auto Switch Preferences Between Different Network</string>
     <string name="preference_auto_switch_preferences_between_different_network">Auto Switch Preferences Between Different Network</string>
     <string name="preference_preferences_setting">Preferences Setting</string>
+    <string name="preference_connection_fail_reconnect_timeout_summary">Connection Fail Reconnect Timeout (min)</string>
+    <string name="preference_connection_fail_reconnect_timeout">Connection Fail Reconnect Timeout</string>
 
 </resources>
