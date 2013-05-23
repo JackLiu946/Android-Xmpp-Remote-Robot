@@ -5,6 +5,7 @@ import java.io.DataInputStream;
 import org.jivesoftware.smack.Chat;
 
 public class CmdCmd extends CmdBase {
+	@SuppressWarnings("deprecation")
 	public static void Cmd(Chat chat, String message) {
 		// 判断参数是否为空.
 		if (!hasArgs(message) || getArgs(message).trim().length() == 0) {

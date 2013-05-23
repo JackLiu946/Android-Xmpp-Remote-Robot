@@ -23,7 +23,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.widget.Toast;
 
 import com.dary.xmpp.application.MyApp;
 import com.dary.xmpp.cmd.CmdBase;

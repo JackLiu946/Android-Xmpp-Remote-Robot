@@ -26,6 +26,7 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 			boolean isAutoReconnectWhenNetStatusChange = mPrefs.getBoolean("isAutoReconnectWhenNetStatusChange", true);
 			if (isAutoReconnectWhenNetStatusChange && myApp.getIsShouldRunning()) {
 
+				@SuppressWarnings("deprecation")
 				NetworkInfo netInfo = (NetworkInfo) intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
 
 				// ConnectivityManager conManager = (ConnectivityManager)

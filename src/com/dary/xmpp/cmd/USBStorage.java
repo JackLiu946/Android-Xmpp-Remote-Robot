@@ -8,6 +8,7 @@ import com.dary.xmpp.application.MyApp;
 
 public class USBStorage extends CmdBase {
 
+	@SuppressWarnings("deprecation")
 	public static void OpenUSBStorage() {
 		ContentResolver cr = MyApp.getContext().getContentResolver();
 		// Settings.System.putString(cr,

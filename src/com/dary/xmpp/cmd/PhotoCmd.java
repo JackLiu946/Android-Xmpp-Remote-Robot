@@ -25,6 +25,7 @@ public class PhotoCmd extends CmdBase {
 	static String fileName = null;
 	static String filePath = null;
 
+	@SuppressWarnings("deprecation")
 	public static void Photo(Chat chat) {
 		// 照片的名字和存储的地址.
 		fileName = Tools.getTimeStrHyphen() + ".jpg";
