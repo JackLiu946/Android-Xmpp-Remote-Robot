@@ -53,7 +53,7 @@ public class MainService extends Service {
 	private BatteryReceiver batteryReceiver = new BatteryReceiver();
 	private boolean isCustomServer;
 	private int tryReconnectCount;
-	private int connectionFailReconnectTimeout;
+	private String connectionFailReconnectTimeout;
 	public static Chat chat;
 
 	public static Handler tryReconnectHandler = new Handler() {
@@ -241,7 +241,7 @@ public class MainService extends Service {
 		Tools.doLogJustPrint("isAutoReconnectWhenConnectionFail " + isAutoReconnectWhenConnectionFail);
 		isAutoReconnectWhenNetStatusChange = mPrefs.getBoolean("isAutoReconnectWhenNetStatusChange", true);
 		Tools.doLogJustPrint("isAutoReconnectWhenNetStatusChange " + isAutoReconnectWhenNetStatusChange);
-		connectionFailReconnectTimeout = mPrefs.getInt("connectionFailReconnectTimeout", 10);
+		connectionFailReconnectTimeout = mPrefs.getString("connectionFailReconnectTimeout", "10");
 		Tools.doLogJustPrint("connectionFailReconnectTimeout" + connectionFailReconnectTimeout);
 		isDebugMode = mPrefs.getBoolean("isDebugMode", false);
 		Tools.doLogJustPrint("isDebugMode " + isDebugMode);
@@ -337,7 +337,7 @@ public class MainService extends Service {
 		if (tryReconnectCount < 10) {
 			timeout = 10 * 1000 * tryReconnectCount;
 		} else {
-			timeout = connectionFailReconnectTimeout * 1000 * 60;
+			timeout = Integer.parseInt(connectionFailReconnectTimeout) * 1000 * 60;
 		}
 		tryReconnectHandler.sendEmptyMessageDelayed(0, timeout);
 	}
