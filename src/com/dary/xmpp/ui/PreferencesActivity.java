@@ -175,7 +175,7 @@ public class PreferencesActivity extends android.preference.PreferenceActivity {
 						b.setAdapter(adapter, new OnClickListener() {
 
 							public void onClick(DialogInterface dialog, int whichPreferebces) {
-								Toast.makeText(PreferencesActivity.this, "When " + cs1[whichNetwork] + "Switch To " + cs2[whichPreferebces], Toast.LENGTH_LONG).show();
+								Toast.makeText(PreferencesActivity.this, "When " + cs1[whichNetwork] + " Switch To " + cs2[whichPreferebces], Toast.LENGTH_LONG).show();
 								SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(MyApp.getContext());
 								Editor e = mPrefs.edit();
 								String oldValue = mPrefs.getString(switchPreferencesBetweenDifferentNetwork.getKey(), "");

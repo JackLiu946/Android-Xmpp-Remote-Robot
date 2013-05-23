@@ -23,8 +23,8 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 			MainService.sendMsg(MainActivity.NOT_LOGGED_IN);
 
 			SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-			boolean isAutoReconnect = mPrefs.getBoolean("isAutoReconnect", true);
-			if (isAutoReconnect && myApp.getIsShouldRunning()) {
+			boolean isAutoReconnectWhenNetStatusChange = mPrefs.getBoolean("isAutoReconnectWhenNetStatusChange", true);
+			if (isAutoReconnectWhenNetStatusChange && myApp.getIsShouldRunning()) {
 
 				NetworkInfo netInfo = (NetworkInfo) intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
 
@@ -37,7 +37,8 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 				// Tools.doLogJustPrint("activeNetInfo " +
 				// activeNetInfo.isConnected() + " " + activeNetInfo.getType());
 
-				if (netInfo != null && netInfo.isAvailable() && !netInfo.isFailover() && netInfo.isConnected() && netInfo.getState() == NetworkInfo.State.CONNECTED) {
+				if (netInfo != null && netInfo.isAvailable() && !netInfo.isFailover() && netInfo.isConnected()
+						&& netInfo.getState() == NetworkInfo.State.CONNECTED) {
 					if (null == MainService.connection || MainService.connection.isAuthenticated() != true) {
 						// 通过延迟发消息的方式使得在短时间如果收到多次连接改变的广播(并且网络可用),仅登录一次
 						int delay = 5000;

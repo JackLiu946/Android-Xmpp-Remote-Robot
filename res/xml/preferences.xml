@@ -6,12 +6,6 @@
         <EditTextPreference
             android:defaultValue=""
             android:inputType="textEmailAddress"
-            android:key="notifiedAddress"
-            android:summary="@string/preference_notified_address_summary"
-            android:title="@string/preference_notified_address" />
-        <EditTextPreference
-            android:defaultValue=""
-            android:inputType="textEmailAddress"
             android:key="loginAddress"
             android:summary="@string/preference_login_address_summary"
             android:title="@string/preference_login_address" />
@@ -21,6 +15,12 @@
             android:password="true"
             android:summary="@string/preference_password_summary"
             android:title="@string/preference_password" />
+        <EditTextPreference
+            android:defaultValue=""
+            android:inputType="textEmailAddress"
+            android:key="notifiedAddress"
+            android:summary="@string/preference_notified_address_summary"
+            android:title="@string/preference_notified_address" />
         <EditTextPreference
             android:defaultValue="@string/app_name"
             android:key="resource"
@@ -57,17 +57,6 @@
                 android:summary="@string/preference_server_domain_summary"
                 android:title="@string/preference_server_domain" />
         </PreferenceScreen>
-
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="isStartAtBoot"
-            android:summary="@string/preference_is_start_at_boot_summary"
-            android:title="@string/preference_is_start_at_boot" />
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="isAutoReconnect"
-            android:summary="@string/preference_is_auto_reconnect_summary"
-            android:title="@string/preference_is_auto_reconnect" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/preference_command_setting" >
         <PreferenceScreen android:title="@string/preference_command_setting" >
@@ -88,6 +77,22 @@
         </PreferenceScreen>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/preference_others_settings" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="isStartAtBoot"
+            android:summary="@string/preference_is_start_at_boot_summary"
+            android:title="@string/preference_is_start_at_boot" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="isAutoReconnectWhenConnectionFail"
+            android:summary="@string/preference_is_auto_reconnect_when_connection_fail_summary"
+            android:title="@string/preference_is_auto_reconnect_when_connection_fail" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="isAutoReconnectWhenNetStatusChange"
+            android:summary="@string/preference_is_auto_reconnect_when_net_status_change_summary"
+            android:title="@string/preference_is_auto_reconnect_when_net_Status_change" />
+
         <ListPreference
             android:defaultValue="none"
             android:entries="@array/preference_notification_type"
@@ -101,43 +106,46 @@
             android:key="isDebugMode"
             android:summary="@string/preference_debug_mode_summary"
             android:title="@string/preference_debug_mode" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/preference_preferences_setting" >
+        <PreferenceScreen android:title="@string/preference_preferences_setting" >
+            <Preference
+                android:key="saveCurrentPreferences"
+                android:summary="Save Current Preferences"
+                android:title="Save Current Preferences" />
 
-        <Preference
-            android:key="saveCurrentPreferences"
-            android:summary="Save Current Preferences"
-            android:title="Save Current Preferences" />
+            <ListPreference
+                android:id="@+id/switchPreferences"
+                android:defaultValue="Default"
+                android:key="switchPreferences"
+                android:summary="Select Preferences To Switch"
+                android:title="Switch Preferences" />
 
-        <ListPreference
-            android:id="@+id/switchPreferences"
-            android:defaultValue="Default"
-            android:key="switchPreferences"
-            android:summary="Select Preferences To Switch"
-            android:title="Switch Preferences" />
+            <com.dary.xmpp.ui.MultiSelectListPreference
+                android:id="@+id/delSavedPreferences"
+                android:key="delSavedPreferences"
+                android:summary="Delete Saved Preferences"
+                android:title="Delete Saved Preferences" />
 
-        <com.dary.xmpp.ui.MultiSelectListPreference
-            android:id="@+id/delSavedPreferences"
-            android:key="delSavedPreferences"
-            android:summary="Delete Saved Preferences"
-            android:title="Delete Saved Preferences" />
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="autoSwitchPreferencesBetweenDifferentNetwork"
+                android:summary="@string/preference_auto_switch_preferences_between_different_network_summary"
+                android:title="@string/preference_auto_switch_preferences_between_different_network" />
 
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="autoSwitchPreferencesBetweenDifferentNetwork"
-            android:summary="@string/preference_auto_switch_preferences_between_different_network_summary"
-            android:title="@string/preference_auto_switch_preferences_between_different_network" />
+            <Preference
+                android:id="@+id/switchPreferencesBetweenDifferentNetwork"
+                android:dependency="autoSwitchPreferencesBetweenDifferentNetwork"
+                android:key="switchPreferencesBetweenDifferentNetwork"
+                android:summary="Switch Preferences Between Different Network"
+                android:title="Switch Preferences Between Different Network" />
 
-        <Preference
-            android:id="@+id/switchPreferencesBetweenDifferentNetwork"
-            android:dependency="autoSwitchPreferencesBetweenDifferentNetwork"
-            android:key="switchPreferencesBetweenDifferentNetwork"
-            android:summary="Switch Preferences Between Different Network"
-            android:title="Switch Preferences Between Different Network" />
-
-        <com.dary.xmpp.ui.MultiSelectListPreference
-            android:id="@+id/delSwitchPreferencesBetweenDifferentNetwork"
-            android:key="delSwitchPreferencesBetweenDifferentNetwork"
-            android:summary="Delete Switch Preferences Between Different Network"
-            android:title="Delete Switch Preferences Between Different Network" />
+            <com.dary.xmpp.ui.MultiSelectListPreference
+                android:id="@+id/delSwitchPreferencesBetweenDifferentNetwork"
+                android:key="delSwitchPreferencesBetweenDifferentNetwork"
+                android:summary="Delete Switch Preferences Between Different Network"
+                android:title="Delete Switch Preferences Between Different Network" />
+        </PreferenceScreen>
     </PreferenceCategory>
 
 </PreferenceScreen>

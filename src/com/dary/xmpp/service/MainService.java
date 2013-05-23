@@ -47,7 +47,8 @@ public class MainService extends Service {
 	private int autoServerPort;
 	private String autoServerDomain;
 	private String resource;
-	private boolean isAutoReconnect;
+	private boolean isAutoReconnectWhenConnectionFail;
+	private boolean isAutoReconnectWhenNetStatusChange;
 	private boolean isDebugMode;
 	public SMSReceiver smsReceiver = new SMSReceiver();
 	private BatteryReceiver batteryReceiver = new BatteryReceiver();
@@ -135,7 +136,9 @@ public class MainService extends Service {
 				Tools.doLogAll("Connection Failed");
 				doNotification(MainService.this, "Connection Failed");
 				sendMsg(MainActivity.CONNECTION_FAILED);
-				tryReconnect();
+				if (isAutoReconnectWhenConnectionFail) {
+					tryReconnect();
+				}
 				e.printStackTrace();
 				return;
 			}
@@ -234,8 +237,10 @@ public class MainService extends Service {
 		Tools.doLogJustPrint("notifiedAddress " + notifiedAddress);
 		resource = mPrefs.getString("resource", "");
 		Tools.doLogJustPrint("resource " + resource);
-		isAutoReconnect = mPrefs.getBoolean("isAutoReconnect", true);
-		Tools.doLogJustPrint("isAutoReconnect " + isAutoReconnect);
+		isAutoReconnectWhenConnectionFail = mPrefs.getBoolean("isAutoReconnectWhenConnectionFail", true);
+		Tools.doLogJustPrint("isAutoReconnectWhenConnectionFail " + isAutoReconnectWhenConnectionFail);
+		isAutoReconnectWhenNetStatusChange = mPrefs.getBoolean("isAutoReconnectWhenNetStatusChange", true);
+		Tools.doLogJustPrint("isAutoReconnectWhenNetStatusChange " + isAutoReconnectWhenNetStatusChange);
 		isDebugMode = mPrefs.getBoolean("isDebugMode", false);
 		Tools.doLogJustPrint("isDebugMode " + isDebugMode);
 		if (loginAddress.length() != 0) {
@@ -328,9 +333,9 @@ public class MainService extends Service {
 		int timeout;
 		tryReconnectCount += 1;
 		if (tryReconnectCount < 10) {
-			timeout = 5000 * tryReconnectCount;
+			timeout = 10 * 1000 * tryReconnectCount;
 		} else {
-			timeout = 1000 * 60 * 5;
+			timeout = 10 * 1000 * 60;
 		}
 		tryReconnectHandler.sendEmptyMessageDelayed(0, timeout);
 	}
@@ -356,7 +361,8 @@ public class MainService extends Service {
 						}
 					}
 				}
-				Toast.makeText(MainService.this, "Switch Prefs To " + prefs, Toast.LENGTH_LONG).show();
+				// Toast.makeText(MainService.this, "Switch Prefs To " + prefs,
+				// Toast.LENGTH_LONG).show();
 				Tools.doLogAll("Switch Prefs To " + prefs);
 				// 需判断为Nothing的情况
 				if (prefs.equals("Nothing")) {

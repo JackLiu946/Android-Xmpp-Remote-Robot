@@ -36,8 +36,10 @@
     <string name="preference_server_domain">Server Domain</string>
     <string name="preference_is_start_at_boot">Start at Boot</string>
     <string name="preference_is_start_at_boot_summary">Check if you want App to start at boot</string>
-    <string name="preference_is_auto_reconnect">Auto Reconnect</string>
-    <string name="preference_is_auto_reconnect_summary">Check if you want App reconnect when connection status change</string>
+    <string name="preference_is_auto_reconnect_when_connection_fail">Auto Reconnect When Connection Fail</string>
+    <string name="preference_is_auto_reconnect_when_connection_fail_summary">Check if you want App reconnect when connection fail</string>
+    <string name="preference_is_auto_reconnect_when_net_Status_change">Auto Reconnect When Net Status Change</string>
+    <string name="preference_is_auto_reconnect_when_net_status_change_summary">Check if you want App reconnect when net status change</string>
     <string name="preference_notification_type">Set Notification Type</string>
     <string name="preference_notification_type_summary">Set Notification Type When App Do Login</string>
     <string name="buttonsendmessage">Send</string>
@@ -64,5 +66,6 @@
     <string name="preference_connect_settings">Connect Setting</string>
     <string name="preference_auto_switch_preferences_between_different_network_summary">Auto Switch Preferences Between Different Network</string>
     <string name="preference_auto_switch_preferences_between_different_network">Auto Switch Preferences Between Different Network</string>
+    <string name="preference_preferences_setting">Preferences Setting</string>
 
 </resources>
