@@ -26,8 +26,7 @@ public class SmsCmd extends SmsCmdBase {
 
 		// 不带参数,则返回短信记录.
 		if (!hasArgs(message)) {
-			int smsCommandDisplayItemsNumber = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(MyApp.getContext()).getString(
-					"smsCommandDisplayItemsNumber", "5"));
+			int smsCommandDisplayItemsNumber = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(MyApp.getContext()).getString("smsCommandDisplayItemsNumber", "5"));
 			// 如果值为0,则设为最大值
 			if (smsCommandDisplayItemsNumber == 0) {
 				smsCommandDisplayItemsNumber = Integer.MAX_VALUE;
@@ -122,8 +121,7 @@ public class SmsCmd extends SmsCmdBase {
 				sendMessageAndUpdateView(chat, "Make Last Message As Read Done");
 			} else {
 				sendSMSAndInsertToLibrary(lastAddress, getArgsCaseSensitive(message));
-				sendMessageAndUpdateView(chat, "Send SMS " + "( Number : " + Contact.getContactNameByNumber(lastAddress) + " Body : "
-						+ getArgsCaseSensitive(message) + " )" + "Done");
+				sendMessageAndUpdateView(chat, "Send SMS " + "( Number : " + Contact.getContactNameByNumber(lastAddress) + " Body : " + getArgsCaseSensitive(message) + " )" + "Done");
 			}
 		}
 	}

@@ -64,25 +64,24 @@ public class PreferencesActivity extends android.preference.PreferenceActivity {
 			public boolean onPreferenceClick(Preference preference) {
 				View view = View.inflate(PreferencesActivity.this, R.layout.save_preferences, null);
 				final EditText ETsavepreferences = (EditText) view.findViewById(R.id.ETsavepreferences);
-				new AlertDialog.Builder(PreferencesActivity.this).setTitle("Save Preferences").setView(view)
-						.setPositiveButton(R.string.ok, new OnClickListener() {
+				new AlertDialog.Builder(PreferencesActivity.this).setTitle("Save Preferences").setView(view).setPositiveButton(R.string.ok, new OnClickListener() {
 
-							public void onClick(DialogInterface dialog, int which) {
-								SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(PreferencesActivity.this);
-								Map<String, ?> prefs = mPrefs.getAll();
-								// TODO 文件名不能为空,不能含有分隔符
-								String prefsFileName = ETsavepreferences.getText().toString();
-								// File file =
-								// MyApp.getContext().getFileStreamPath(prefsFileName);
-								File file = new File(SAVE_PREFERENCES_PATH + File.separator + prefsFileName);
-								// 不能为Append模式
-								Tools.writeFile(file, prefs.toString(), true);
+					public void onClick(DialogInterface dialog, int which) {
+						SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(PreferencesActivity.this);
+						Map<String, ?> prefs = mPrefs.getAll();
+						// TODO 文件名不能为空,不能含有分隔符
+						String prefsFileName = ETsavepreferences.getText().toString();
+						// File file =
+						// MyApp.getContext().getFileStreamPath(prefsFileName);
+						File file = new File(SAVE_PREFERENCES_PATH + File.separator + prefsFileName);
+						// 不能为Append模式
+						Tools.writeFile(file, prefs.toString(), true);
 
-								switchPreferences.setSummary("Current Preferences is " + prefsFileName);
-								switchPreferences.setValue(prefsFileName);
-								setList();
-							}
-						}).setNegativeButton("Cancel", null).setIcon(R.drawable.ic_launcher).show();
+						switchPreferences.setSummary("Current Preferences is " + prefsFileName);
+						switchPreferences.setValue(prefsFileName);
+						setList();
+					}
+				}).setNegativeButton("Cancel", null).setIcon(R.drawable.ic_launcher).show();
 				return true;
 			}
 		});
@@ -174,8 +173,7 @@ public class PreferencesActivity extends android.preference.PreferenceActivity {
 						b.setAdapter(adapter, new OnClickListener() {
 
 							public void onClick(DialogInterface dialog, int whichPreferebces) {
-								Toast.makeText(PreferencesActivity.this, "When " + cs1[whichNetwork] + " Switch To " + cs2[whichPreferebces], Toast.LENGTH_LONG)
-										.show();
+								Toast.makeText(PreferencesActivity.this, "When " + cs1[whichNetwork] + " Switch To " + cs2[whichPreferebces], Toast.LENGTH_LONG).show();
 								SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(MyApp.getContext());
 								Editor e = mPrefs.edit();
 								String oldValue = mPrefs.getString(switchPreferencesBetweenDifferentNetwork.getKey(), "");
