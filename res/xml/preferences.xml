@@ -117,7 +117,6 @@
             android:title="@string/preference_debug_mode" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/preference_preferences_setting" >
-        <PreferenceScreen android:title="@string/preference_preferences_setting" >
             <Preference
                 android:key="saveCurrentPreferences"
                 android:summary="Save Current Preferences"
@@ -154,7 +153,6 @@
                 android:key="delSwitchPreferencesBetweenDifferentNetwork"
                 android:summary="Delete Switch Preferences Between Different Network"
                 android:title="Delete Switch Preferences Between Different Network" />
-        </PreferenceScreen>
     </PreferenceCategory>
 
 </PreferenceScreen>

@@ -1,8 +1,10 @@
 package com.dary.xmpp.tools;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -183,4 +185,34 @@ public class Tools {
 		return sdDir.toString();
 	}
 
+	public static String readFile(File file) {
+		StringBuilder sb = new StringBuilder();
+		InputStream is;
+		String returnString = "";
+		try {
+			is = new FileInputStream(file);
+
+			byte[] buffer = new byte[200];
+			int length = 0;
+			while (-1 != (length = is.read(buffer))) {
+				String str = new String(buffer, 0, length);
+				sb.append(str);
+			}
+			is.close();
+			returnString = sb.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return returnString;
+	}
+
+	public static void writeFile(File file, String str, Boolean isAppend) {
+		try {
+			FileOutputStream fos = new FileOutputStream(file, isAppend);
+			fos.write(str.getBytes());
+			fos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

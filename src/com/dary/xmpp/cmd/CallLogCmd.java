@@ -13,7 +13,8 @@ import com.dary.xmpp.tools.Tools;
 public class CallLogCmd extends CmdBase {
 	public static void Calllog(Chat chat) {
 
-		int calllogCommandDisplayItemsNumber = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(MyApp.getContext()).getString("calllogCommandDisplayItemsNumber", "5"));
+		int calllogCommandDisplayItemsNumber = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(MyApp.getContext()).getString(
+				"calllogCommandDisplayItemsNumber", "5"));
 		// 如果值为0,则设为最大值
 		if (calllogCommandDisplayItemsNumber == 0) {
 			calllogCommandDisplayItemsNumber = Integer.MAX_VALUE;
@@ -23,7 +24,9 @@ public class CallLogCmd extends CmdBase {
 		String time = "";
 		StringBuilder sb = new StringBuilder();
 		ContentResolver cr = MyApp.getContext().getContentResolver();
-		Cursor cur = cr.query(CallLog.Calls.CONTENT_URI, new String[] { CallLog.Calls.NUMBER, CallLog.Calls.CACHED_NAME, CallLog.Calls.TYPE, CallLog.Calls.DATE }, null, null, CallLog.Calls.DEFAULT_SORT_ORDER);
+		Cursor cur = cr.query(CallLog.Calls.CONTENT_URI,
+				new String[] { CallLog.Calls.NUMBER, CallLog.Calls.CACHED_NAME, CallLog.Calls.TYPE, CallLog.Calls.DATE }, null, null,
+				CallLog.Calls.DEFAULT_SORT_ORDER);
 		// Cursor cur = cr.query(CallLog.Calls.CONTENT_URI, null, null, null,
 		// null);
 		int calllogNumber = 0;
