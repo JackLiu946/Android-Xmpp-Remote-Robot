@@ -3,6 +3,7 @@ package com.dary.xmpp.application;
 import android.app.Application;
 import android.content.Context;
 
+import com.dary.xmpp.tools.CrashHandler;
 import com.dary.xmpp.ui.MainActivity;
 
 public class MyApp extends Application {
@@ -17,6 +18,8 @@ public class MyApp extends Application {
 		isShouldRunning = false;
 		status = MainActivity.NOT_LOGGED_IN;
 		mContext = getApplicationContext();
+		CrashHandler crashHandler = CrashHandler.getInstance();
+		crashHandler.init(getApplicationContext());
 	}
 
 	public static Context getContext() {
