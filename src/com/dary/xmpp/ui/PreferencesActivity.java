@@ -75,7 +75,7 @@ public class PreferencesActivity extends android.preference.PreferenceActivity {
 						// MyApp.getContext().getFileStreamPath(prefsFileName);
 						File file = new File(SAVE_PREFERENCES_PATH + File.separator + prefsFileName);
 						// 不能为Append模式
-						Tools.writeFile(file, prefs.toString(), true);
+						Tools.writeFile(file, prefs.toString(), false);
 
 						switchPreferences.setSummary("Current Preferences is " + prefsFileName);
 						switchPreferences.setValue(prefsFileName);

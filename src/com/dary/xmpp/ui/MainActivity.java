@@ -55,9 +55,10 @@ public class MainActivity extends Activity {
 	public static final int SET_INCOMPLETE = 3;
 	public static final int CONNECTION_FAILED = 4;
 	public static final int LOGIN_FAILED = 5;
+	public static final int NOTIFIED_ADDRESS_IS_NOT_IN_FRIEND_LIST = 6;
 
-	public static final int SHOW_MESSAGE = 6;
-	public static final int CLEAR_MSG = 7;
+	public static final int SHOW_MESSAGE = 7;
+	public static final int CLEAR_MSG = 8;
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -326,6 +327,13 @@ public class MainActivity extends Activity {
 			loginStatus.setText(R.string.loginstatus_set_incomplete);
 			loginStatus.setTextColor(Color.RED);
 			break;
+		case NOTIFIED_ADDRESS_IS_NOT_IN_FRIEND_LIST:
+			buttonServiceStart.setEnabled(true);
+			buttonServiceStop.setEnabled(false);
+			buttonSendMessage.setEnabled(false);
+			loginStatus.setText(R.string.loginstatus_notified_address_is_not_in_friend_list);
+			loginStatus.setTextColor(Color.RED);
+			break;
 		case CONNECTION_FAILED:
 			buttonServiceStart.setEnabled(true);
 			buttonServiceStop.setEnabled(true);
@@ -359,6 +367,7 @@ public class MainActivity extends Activity {
 			sendHandlerMessageToAddMsgView(type, fromaddress, msg, time);
 		}
 		db.close();
+		cursor.close();
 	}
 
 	// 发送Handler,创建MsgView

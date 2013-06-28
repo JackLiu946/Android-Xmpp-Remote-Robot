@@ -14,6 +14,7 @@
     <string name="loginstatus_not_logged_in">Not logged in</string>
     <string name="loginstatus_successful">Successful</string>
     <string name="loginstatus_set_incomplete">Set incomplete</string>
+    <string name="loginstatus_notified_address_is_not_in_friend_list">Notified Address Incorrect</string>
     <string name="loginstatus_login_failure">Login Failure</string>
     <string name="loginstatus_connection_failure">Connection Failure</string>
     <string name="loginstatus_logging">Logging&#8230;</string>

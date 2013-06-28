@@ -1,5 +1,6 @@
 package com.dary.xmpp.service;
 
+import java.util.Collection;
 import java.util.Locale;
 
 import org.jivesoftware.smack.AndroidConnectionConfiguration;
@@ -7,6 +8,9 @@ import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManager;
 import org.jivesoftware.smack.Connection;
 import org.jivesoftware.smack.ConnectionConfiguration;
+import org.jivesoftware.smack.Roster;
+import org.jivesoftware.smack.RosterEntry;
+import org.jivesoftware.smack.RosterGroup;
 import org.jivesoftware.smack.SmackAndroid;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.packet.Presence;
@@ -23,6 +27,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.dary.xmpp.application.MyApp;
 import com.dary.xmpp.cmd.CmdBase;
@@ -173,6 +178,27 @@ public class MainService extends Service {
 				tryReconnectCount = 0;
 				ChatManager chatmanager = connection.getChatManager();
 
+				Roster roster = connection.getRoster();
+				Collection<RosterGroup> entriesGroup = roster.getGroups();
+				boolean notifiedAddressIsInFriendList = false;
+				for (RosterGroup group : entriesGroup) {
+					Collection<RosterEntry> entries = group.getEntries();
+					// System.out.println(group.getName());
+					for (RosterEntry entry : entries) {
+						boolean temp = entry.getUser().equalsIgnoreCase(notifiedAddress);
+						notifiedAddressIsInFriendList = notifiedAddressIsInFriendList || temp;
+						// Presence presence = roster.getPresence(entry.getUser());
+						// System.out.println(entry.getUser());
+						// System.out.println(entry.getName());
+						// System.out.println(entry.getType());
+						// System.out.println(entry.getStatus());
+						// System.out.println(entry.getGroups());
+					}
+				}
+				if (!notifiedAddressIsInFriendList){
+					logoutAndClearUp(MainActivity.NOTIFIED_ADDRESS_IS_NOT_IN_FRIEND_LIST);
+					return;
+				}
 				// 注册消息监听器
 				chat = chatmanager.createChat(notifiedAddress.toLowerCase(Locale.getDefault()), new MsgListener());
 				// 登录成功之后再在程序动态的注册电量改变,短信的广播接收器,注册电量改变的接收器时会设置Presence
@@ -190,16 +216,22 @@ public class MainService extends Service {
 	// 如果正在登录中时进行中断,并不会立即处理
 	@Override
 	public void onDestroy() {
+		logoutAndClearUp(MainActivity.NOT_LOGGED_IN);
+		super.onDestroy();
+	}
+	
+	private void logoutAndClearUp(int msg){
 		tryReconnectHandler.removeMessages(0);
 		Tools.doLogAll("Service Destroy");
 		MyApp myApp = (MyApp) getApplication();
 		myApp.setIsShouldRunning(false);
-		sendMsg(MainActivity.NOT_LOGGED_IN);
+		
 		if (connection.isConnected()) {
 			Presence presence = new Presence(Presence.Type.unavailable);
 			connection.sendPacket(presence);
 			connection.disconnect();
 		}
+		sendMsg(msg);
 		Intent incallserviceIntent = new Intent();
 		incallserviceIntent.setClass(MainService.this, IncallService.class);
 		stopService(incallserviceIntent);
@@ -211,7 +243,6 @@ public class MainService extends Service {
 			// 尚未注册
 			e.printStackTrace();
 		}
-		super.onDestroy();
 	}
 
 	@Override
