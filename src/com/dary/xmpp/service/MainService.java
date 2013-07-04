@@ -1,19 +1,22 @@
 package com.dary.xmpp.service;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Locale;
 
 import org.jivesoftware.smack.AndroidConnectionConfiguration;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManager;
-import org.jivesoftware.smack.Connection;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.RosterGroup;
 import org.jivesoftware.smack.SmackAndroid;
+import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smackx.ping.PingFailedListener;
+import org.jivesoftware.smackx.ping.PingManager;
 
 import android.app.Service;
 import android.content.Context;
@@ -23,11 +26,11 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo.State;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.dary.xmpp.application.MyApp;
 import com.dary.xmpp.cmd.CmdBase;
@@ -40,7 +43,7 @@ import com.dary.xmpp.xmpp.MsgListener;
 
 public class MainService extends Service {
 
-	public static Connection connection;
+	public static XMPPConnection connection;
 	public static String notifiedAddress;
 	public static String loginAddress;
 	private String password;
@@ -60,6 +63,9 @@ public class MainService extends Service {
 	private int tryReconnectCount;
 	private String connectionFailReconnectTimeout;
 	public static Chat chat;
+	public static final int DNSSRV_TIMEOUT = 30 * 1000;
+	public static final int DISCON_TIMEOUT = 10 * 1000;
+	public static final int SMACK_PACKET_REPLY_TIMEOUT = 40 * 1000;
 
 	public static Handler tryReconnectHandler = new Handler() {
 		@Override
@@ -104,28 +110,32 @@ public class MainService extends Service {
 	// 登录线程
 	class LoginInThread implements Runnable {
 
-		public void run() {
-
-			// 登录中,发送消息,更新UI
-			sendMsg(MainActivity.LOGGING);
-			// 尝试将登录的记录存储下来,先暂时只存储到普通的文本文件中
-			Tools.doLogAll("Login");
-
+		private XMPPConnection getConnection() {
 			ConnectionConfiguration config = null;
-			MyApp myApp = (MyApp) getApplication();
-			myApp.setIsShouldRunning(true);
-			SmackAndroid.init(myApp);
 			if (isCustomServer) {
 				config = new AndroidConnectionConfiguration(serverHost, Integer.parseInt(serverPort), serverDomain);
 			} else {
 				try {
-					config = new AndroidConnectionConfiguration(autoServerHost, autoServerPort, autoServerDomain);
+					// config = new AndroidConnectionConfiguration(autoServerHost, autoServerPort, autoServerDomain);
+					config = new AndroidConnectionConfiguration(serverDomain, DNSSRV_TIMEOUT);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+				config.setTruststoreType("AndroidCAStore");
+				config.setTruststorePassword(null);
+				config.setTruststorePath(null);
 
-			// config.setSecurityMode(ConnectionConfiguration.SecurityMode.enabled);
+			} else {
+				config.setTruststoreType("BKS");
+				String path = System.getProperty("javax.net.ssl.trustStore");
+				if (path == null) {
+					path = System.getProperty("java.home") + File.separator + "etc" + File.separator + "security" + File.separator + "cacerts.bks";
+				}
+				config.setTruststorePath(path);
+			}
+			// config.setSecurityMode(ConnectionConfiguration.SecurityMode.disabled);
 			// config.setReconnectionAllowed(false);
 			// config.setSendPresence(false);
 			// config.setCompressionEnabled(false);
@@ -133,6 +143,21 @@ public class MainService extends Service {
 			// config.setSASLAuthenticationEnabled(true);
 
 			connection = new XMPPConnection(config);
+			return connection;
+		}
+
+		public void run() {
+
+			// 登录中,发送消息,更新UI
+			sendMsg(MainActivity.LOGGING);
+			// 尝试将登录的记录存储下来,先暂时只存储到普通的文本文件中
+			Tools.doLogAll("Login");
+
+			MyApp myApp = (MyApp) getApplication();
+			myApp.setIsShouldRunning(true);
+			SmackAndroid.init(myApp);
+			SmackConfiguration.setPacketReplyTimeout(SMACK_PACKET_REPLY_TIMEOUT);
+			getConnection();
 			try {
 				Tools.doLogJustPrint("Connect to Server");
 				connection.connect();
@@ -147,17 +172,36 @@ public class MainService extends Service {
 				e.printStackTrace();
 				return;
 			}
-			Tools.doLogPrintAndFile("Verify Password");
-			try {
-				connection.login(loginAddress, password, resource);
-				// connection.login(loginAddress, password, Tools.getTimeStr());
-			} catch (Exception e) {
-				Tools.doLogAll("Login Failed");
-				doNotification(MainService.this, "Login Failed");
-				sendMsg(MainActivity.LOGIN_FAILED);
-				e.printStackTrace();
-				return;
+			if (!connection.isAuthenticated()) {
+
+				PingManager mPingManager = PingManager.getInstanceFor(connection);
+				mPingManager.registerPingFailedListener(new PingFailedListener() {
+
+					public void pingFailed() {
+						Tools.doLogPrintAndFile("Ping Failed");
+						tryReconnect();
+					}
+				});
+
+				Tools.doLogPrintAndFile("Verify Password");
+				try {
+					connection.login(loginAddress, password, resource);
+					// connection.login(loginAddress, password, Tools.getTimeStr());
+				} catch (Exception e) {
+					Tools.doLogAll("Login Failed");
+					doNotification(MainService.this, "Login Failed");
+					sendMsg(MainActivity.LOGIN_FAILED);
+					e.printStackTrace();
+					// 不为用户名/密码错误的情况下
+					if (e.getMessage().indexOf("SASL authentication") == -1) {
+						if (isAutoReconnectWhenConnectionFail) {
+							tryReconnect();
+							return;
+						}
+					}
+				}
 			}
+
 			// 如果用户在登录时取消了登录,并且登录成功,需要Disconnect
 			if (!myApp.getIsShouldRunning()) {
 				if (connection.isConnected()) {
@@ -195,7 +239,7 @@ public class MainService extends Service {
 						// System.out.println(entry.getGroups());
 					}
 				}
-				if (!notifiedAddressIsInFriendList){
+				if (!notifiedAddressIsInFriendList) {
 					logoutAndClearUp(MainActivity.NOTIFIED_ADDRESS_IS_NOT_IN_FRIEND_LIST);
 					return;
 				}
@@ -219,17 +263,33 @@ public class MainService extends Service {
 		logoutAndClearUp(MainActivity.NOT_LOGGED_IN);
 		super.onDestroy();
 	}
-	
-	private void logoutAndClearUp(int msg){
+
+	private void logoutAndClearUp(int msg) {
 		tryReconnectHandler.removeMessages(0);
 		Tools.doLogAll("Service Destroy");
 		MyApp myApp = (MyApp) getApplication();
 		myApp.setIsShouldRunning(false);
-		
+
 		if (connection.isConnected()) {
-			Presence presence = new Presence(Presence.Type.unavailable);
-			connection.sendPacket(presence);
-			connection.disconnect();
+			// Presence presence = new Presence(Presence.Type.unavailable);
+			// connection.sendPacket(presence);
+
+			Thread t = new Thread(new Runnable() {
+				public void run() {
+					try {
+						connection.disconnect();
+					} catch (Exception e) {
+					}
+				}
+			}, "xmpp-disconnector");
+			t.setDaemon(true);
+			t.start();
+
+			try {
+				t.join(DISCON_TIMEOUT);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 		sendMsg(msg);
 		Intent incallserviceIntent = new Intent();
