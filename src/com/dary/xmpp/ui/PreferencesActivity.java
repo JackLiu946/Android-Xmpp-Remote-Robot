@@ -30,7 +30,7 @@ import com.dary.xmpp.R;
 import com.dary.xmpp.application.MyApp;
 import com.dary.xmpp.tools.Tools;
 
-public class PreferencesActivity extends android.preference.PreferenceActivity {
+public class PreferencesActivity extends android.preference.PreferenceActivity implements OnPreferenceChangeListener {
 	private ListPreference switchPreferences;
 	private Preference switchPreferencesBetweenDifferentNetwork, saveCurrentPreferences;
 	private MultiSelectListPreference delSavedPreferences, delSwitchPreferencesBetweenDifferentNetwork;
@@ -49,6 +49,7 @@ public class PreferencesActivity extends android.preference.PreferenceActivity {
 		if (!file.exists()) {
 			file.mkdirs();
 		}
+
 		addPreferencesFromResource(R.xml.preferences);
 		switchPreferences = (ListPreference) findPreference("switchPreferences");
 		switchPreferencesBetweenDifferentNetwork = findPreference("switchPreferencesBetweenDifferentNetwork");
@@ -352,6 +353,13 @@ public class PreferencesActivity extends android.preference.PreferenceActivity {
 			prefsMap.put(key, writeValue);
 			Tools.writeFile(subFiles[i], prefsMap.toString(), false);
 		}
+	}
+
+	public boolean onPreferenceChange(Preference preference, Object newValue) {
+		if (switchPreferences.getSummary().toString().endsWith("*")) {
+			switchPreferences.setSummary(switchPreferences.getSummary() + " *");
+		}
+		return true;
 	}
 
 }

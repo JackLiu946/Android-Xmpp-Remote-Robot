@@ -58,7 +58,8 @@ public class MainActivity extends Activity {
 	public static final int NOTIFIED_ADDRESS_IS_NOT_IN_FRIEND_LIST = 6;
 
 	public static final int SHOW_MESSAGE = 7;
-	public static final int CLEAR_MSG = 8;
+	public static final int REMOVE_MESSAGE = 8;
+	public static final int CLEAR_MSG = 9;
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -100,6 +101,8 @@ public class MainActivity extends Activity {
 					scrollToBottom(scrollViewMessage, linearLayoutMessage);
 				} else if (msg.what == CLEAR_MSG) {
 					clearMsg();
+				} else if (msg.what == REMOVE_MESSAGE){
+					linearLayoutMessage.removeViewAt(0);
 				}
 				// 除此之外,仅须改变设置View状态
 				else {
@@ -355,11 +358,11 @@ public class MainActivity extends Activity {
 
 	// 读取数据库,创建MsgView
 	private void readDatabaseAndCreateMsgView() {
-		DatabaseHelper dbHelper = new DatabaseHelper(MyApp.getContext(), "database", null, 1);
+		DatabaseHelper dbHelper = new DatabaseHelper(MyApp.getContext(), DatabaseHelper.DATABASE, null, 1);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
-		Cursor cursor = db.query("messages", new String[] { "time", "fromaddress", "type", "msg" }, null, null, null, null, null);
+		Cursor cursor = db.query(DatabaseHelper.TABLE, new String[] { "time", "fromaddress", "type", "msg" }, null, null, null, null, null);
 		while (cursor.moveToNext()) {
-			String time = cursor.getString(cursor.getColumnIndex("time"));
+			long time = cursor.getLong(cursor.getColumnIndex("time"));
 			String fromaddress = cursor.getString(cursor.getColumnIndex("fromaddress"));
 			int type = cursor.getInt(cursor.getColumnIndex("type"));
 			String msg = cursor.getString(cursor.getColumnIndex("msg"));
@@ -371,7 +374,7 @@ public class MainActivity extends Activity {
 	}
 
 	// 发送Handler,创建MsgView
-	public static void sendHandlerMessageToAddMsgView(int type, String fromAddress, String message, String time) {
+	public static void sendHandlerMessageToAddMsgView(int type, String fromAddress, String message, long time) {
 		if (null != MainActivity.MsgHandler) {
 			android.os.Message msg = new android.os.Message();
 			msg.what = MainActivity.SHOW_MESSAGE;
@@ -379,7 +382,7 @@ public class MainActivity extends Activity {
 			bundle.putInt("type", type);
 			bundle.putString("fromaddress", fromAddress);
 			bundle.putString("msg", message);
-			bundle.putString("time", time);
+			bundle.putString("time", Tools.getTimeStr(time));
 			msg.setData(bundle);
 			MainActivity.MsgHandler.sendMessage(msg);
 		}

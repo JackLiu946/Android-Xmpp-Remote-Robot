@@ -130,8 +130,9 @@ public class Tools {
 			}
 		}
 		if (isLogToDatabase) {
-			MainActivity.sendHandlerMessageToAddMsgView(DatabaseHelper.LOG_MESSAGE, "System Log", str, Tools.getTimeStr());
-			DatabaseHelper.insertMsgToDatabase(DatabaseHelper.LOG_MESSAGE, "System Log", str, Tools.getTimeStr());
+			long time = System.currentTimeMillis();
+			MainActivity.sendHandlerMessageToAddMsgView(DatabaseHelper.LOG_MESSAGE, "System Log", str, time);
+			DatabaseHelper.insertMsgToDatabase(DatabaseHelper.LOG_MESSAGE, "System Log", str, time);
 		}
 	}
 

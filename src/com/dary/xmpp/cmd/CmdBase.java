@@ -26,9 +26,10 @@ public class CmdBase {
 			}
 			// String from = Tools.getAddress(MainService.connection.getUser());
 			// 更新UI
-			MainActivity.sendHandlerMessageToAddMsgView(DatabaseHelper.SEND_MESSAGE, from, message, Tools.getTimeStr());
+			long time  = System.currentTimeMillis();
+			MainActivity.sendHandlerMessageToAddMsgView(DatabaseHelper.SEND_MESSAGE, from, message, time);
 			// 插入数据库
-			DatabaseHelper.insertMsgToDatabase(DatabaseHelper.SEND_MESSAGE, from, message, Tools.getTimeStr());
+			DatabaseHelper.insertMsgToDatabase(DatabaseHelper.SEND_MESSAGE, from, message, time);
 
 		} catch (Exception e) {
 			e.printStackTrace();

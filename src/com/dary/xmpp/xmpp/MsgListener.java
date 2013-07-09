@@ -49,9 +49,10 @@ public class MsgListener implements MessageListener {
 		}
 		// String from = Tools.getAddress(message.getFrom());
 		// 收到消息之后将消息内容放入bundle,发送消息去更新UI
-		MainActivity.sendHandlerMessageToAddMsgView(DatabaseHelper.RECEIVE_MESSAGE, from, message, Tools.getTimeStr());
+		long time = System.currentTimeMillis();
+		MainActivity.sendHandlerMessageToAddMsgView(DatabaseHelper.RECEIVE_MESSAGE, from, message, time);
 		// 插入数据库
-		DatabaseHelper.insertMsgToDatabase(DatabaseHelper.RECEIVE_MESSAGE, from, message, Tools.getTimeStr());
+		DatabaseHelper.insertMsgToDatabase(DatabaseHelper.RECEIVE_MESSAGE, from, message, time);
 
 		String cmd = getCmd(message);
 		// Light命令
