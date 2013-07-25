@@ -49,12 +49,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				if (c.moveToFirst()) {
 					firsttime = c.getLong(c.getColumnIndex("time"));
 					db.delete(TABLE, "time = " + firsttime, null);
-					
-					//删除view
+
+					// 删除view
 					if (null != MainActivity.MsgHandler) {
 						MainActivity.MsgHandler.sendEmptyMessage(MainActivity.REMOVE_MESSAGE);
 					}
-					
+
 				}
 			} while (c.getCount() != MAX_MSG_NUM);
 			c.close();

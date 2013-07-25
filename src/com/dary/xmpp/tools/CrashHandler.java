@@ -56,6 +56,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
 			@Override
 			public void run() {
 				Looper.prepare();
+				ex.printStackTrace();
 				Toast.makeText(mContext, "Sorry,App Crash", Toast.LENGTH_LONG).show();
 				Looper.loop();
 			}
@@ -154,11 +155,13 @@ public class CrashHandler implements UncaughtExceptionHandler {
 		String mailSender = "anyofyou@gmail.com";
 		String password = "";
 		String mailReceiver = "anyofyou@gmail.com";
-		GMailSender sender = new GMailSender(mailSender, password);
-		try {
-			sender.sendMail(title, body, mailSender, mailReceiver);
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (password.length() != 0) {
+			GMailSender sender = new GMailSender(mailSender, password);
+			try {
+				sender.sendMail(title, body, mailSender, mailReceiver);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }

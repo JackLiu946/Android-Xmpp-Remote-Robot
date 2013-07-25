@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_about"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="About"/>
+    <item
+        android:id="@+id/menu_clear_msg"
+        android:icon="@drawable/clear_msg"
+        android:showAsAction="always"
+        android:title="Clear Msg"/>
+    <item
+        android:id="@+id/menu_settings"
+        android:icon="@drawable/settings"
+        android:showAsAction="always"
+        android:title="Settings"/>
+    <item
+        android:id="@+id/menu_log"
+        android:showAsAction="never"
+        android:title="Log"/>
+
+</menu>

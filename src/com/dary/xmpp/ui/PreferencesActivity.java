@@ -13,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -30,7 +31,7 @@ import com.dary.xmpp.R;
 import com.dary.xmpp.application.MyApp;
 import com.dary.xmpp.tools.Tools;
 
-public class PreferencesActivity extends android.preference.PreferenceActivity implements OnPreferenceChangeListener {
+public class PreferencesActivity extends android.preference.PreferenceActivity implements OnSharedPreferenceChangeListener {
 	private ListPreference switchPreferences;
 	private Preference switchPreferencesBetweenDifferentNetwork, saveCurrentPreferences;
 	private MultiSelectListPreference delSavedPreferences, delSwitchPreferencesBetweenDifferentNetwork;
@@ -50,6 +51,7 @@ public class PreferencesActivity extends android.preference.PreferenceActivity i
 			file.mkdirs();
 		}
 
+		PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
 		addPreferencesFromResource(R.xml.preferences);
 		switchPreferences = (ListPreference) findPreference("switchPreferences");
 		switchPreferencesBetweenDifferentNetwork = findPreference("switchPreferencesBetweenDifferentNetwork");
@@ -355,11 +357,9 @@ public class PreferencesActivity extends android.preference.PreferenceActivity i
 		}
 	}
 
-	public boolean onPreferenceChange(Preference preference, Object newValue) {
-		if (switchPreferences.getSummary().toString().endsWith("*")) {
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+		if (!switchPreferences.getSummary().toString().endsWith("*")) {
 			switchPreferences.setSummary(switchPreferences.getSummary() + " *");
 		}
-		return true;
 	}
-
 }

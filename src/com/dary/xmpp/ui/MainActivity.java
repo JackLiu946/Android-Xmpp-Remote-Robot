@@ -1,5 +1,6 @@
 package com.dary.xmpp.ui;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -13,6 +14,7 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.SurfaceView;
 import android.view.View;
@@ -34,6 +36,7 @@ import com.dary.xmpp.service.MainService;
 import com.dary.xmpp.tools.Tools;
 import com.dary.xmpp.xmpp.MsgListener;
 
+@SuppressLint("NewApi")
 public class MainActivity extends Activity {
 
 	@SuppressWarnings("deprecation")
@@ -66,6 +69,12 @@ public class MainActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+
+		// StrictMode.setThreadPolicy(new
+		// StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
+		// StrictMode.setVmPolicy(new
+		// StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog().penaltyDeath().build());
+
 		clipboardManager = (android.text.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
 		buttonServiceStart = (Button) findViewById(R.id.servicestart);
 		buttonServiceStop = (Button) findViewById(R.id.servicestop);
@@ -101,7 +110,7 @@ public class MainActivity extends Activity {
 					scrollToBottom(scrollViewMessage, linearLayoutMessage);
 				} else if (msg.what == CLEAR_MSG) {
 					clearMsg();
-				} else if (msg.what == REMOVE_MESSAGE){
+				} else if (msg.what == REMOVE_MESSAGE) {
 					linearLayoutMessage.removeViewAt(0);
 				}
 				// 除此之外,仅须改变设置View状态
@@ -196,10 +205,8 @@ public class MainActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, 0, 0, R.string.settings);
-		menu.add(0, 1, 1, R.string.about);
-		menu.add(0, 2, 2, R.string.clear_msg);
-		menu.add(0, 3, 3, R.string.log);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -207,21 +214,21 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		super.onOptionsItemSelected(item);
 		switch (item.getItemId()) {
-		case 0:
+		case R.id.menu_settings:
 			Intent preferenceIntent = new Intent();
 			preferenceIntent.setClass(MainActivity.this, PreferencesActivity.class);
 			startActivity(preferenceIntent);
 			break;
-		case 1:
+		case R.id.menu_about:
 			View view = View.inflate(MainActivity.this, R.layout.about, null);
 			TextView tv = (TextView) view.findViewById(R.id.text_about);
 			tv.setText(getResources().getString(R.string.author) + getResources().getString(R.string.author_value) + "\n" + getResources().getString(R.string.email) + getResources().getString(R.string.email_value) + "\n" + getResources().getString(R.string.version) + Tools.getAppVersionName(MainActivity.this) + "\n" + getResources().getString(R.string.find_more) + "\n" + getResources().getString(R.string.github));
 			new AlertDialog.Builder(MainActivity.this).setTitle(R.string.app_name).setView(view).setPositiveButton(R.string.ok, null).setIcon(R.drawable.ic_launcher).show();
 			break;
-		case 2:
+		case R.id.menu_clear_msg:
 			clearMsg();
 			break;
-		case 3:
+		case R.id.menu_log:
 			Intent logIntent = new Intent();
 			logIntent.setClass(MainActivity.this, LogActivity.class);
 			startActivity(logIntent);

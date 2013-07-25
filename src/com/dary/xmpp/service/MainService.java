@@ -116,7 +116,8 @@ public class MainService extends Service {
 				config = new AndroidConnectionConfiguration(serverHost, Integer.parseInt(serverPort), serverDomain);
 			} else {
 				try {
-					// config = new AndroidConnectionConfiguration(autoServerHost, autoServerPort, autoServerDomain);
+					// config = new AndroidConnectionConfiguration(autoServerHost, autoServerPort,
+					// autoServerDomain);
 					config = new AndroidConnectionConfiguration(serverDomain, DNSSRV_TIMEOUT);
 				} catch (Exception e) {
 					e.printStackTrace();
