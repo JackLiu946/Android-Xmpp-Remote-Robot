@@ -1,3 +1,4 @@
+
 package com.dary.xmpp.application;
 
 import android.app.Application;
@@ -8,37 +9,37 @@ import com.dary.xmpp.ui.MainActivity;
 
 public class MyApp extends Application {
 
-	private static Context mContext;
-	private int status;
-	private boolean isShouldRunning;
+    private static Context mContext;
+    private int status;
+    private boolean isShouldRunning;
 
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		isShouldRunning = false;
-		status = MainActivity.NOT_LOGGED_IN;
-		mContext = getApplicationContext();
-		CrashHandler crashHandler = CrashHandler.getInstance();
-		crashHandler.init(getApplicationContext());
-	}
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        isShouldRunning = false;
+        status = MainActivity.NOT_LOGGED_IN;
+        mContext = getApplicationContext();
+        CrashHandler crashHandler = CrashHandler.getInstance();
+        crashHandler.init(getApplicationContext());
+    }
 
-	public static Context getContext() {
-		return mContext;
-	}
+    public static Context getContext() {
+        return mContext;
+    }
 
-	public int getStatus() {
-		return status;
-	}
+    public int getStatus() {
+        return status;
+    }
 
-	public void setStatus(int s) {
-		this.status = s;
-	}
+    public void setStatus(int s) {
+        this.status = s;
+    }
 
-	public boolean getIsShouldRunning() {
-		return isShouldRunning;
-	}
+    public boolean getIsShouldRunning() {
+        return isShouldRunning;
+    }
 
-	public void setIsShouldRunning(boolean isShouldRunning) {
-		this.isShouldRunning = isShouldRunning;
-	}
+    public void setIsShouldRunning(boolean isShouldRunning) {
+        this.isShouldRunning = isShouldRunning;
+    }
 }

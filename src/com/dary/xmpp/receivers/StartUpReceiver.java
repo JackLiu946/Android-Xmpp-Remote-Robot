@@ -1,3 +1,4 @@
+
 package com.dary.xmpp.receivers;
 
 import android.content.BroadcastReceiver;
@@ -11,14 +12,14 @@ import com.dary.xmpp.tools.Tools;
 
 public class StartUpReceiver extends BroadcastReceiver {
 
-	@Override
-	public void onReceive(Context context, Intent intent) {
-		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-		boolean isStartAtBoot = mPrefs.getBoolean("isStartAtBoot", true);
-		if (isStartAtBoot) {
-			Tools.doLogJustPrint("StartUp Service");
-			Intent startserviceintent = new Intent(context, MainService.class);
-			context.startService(startserviceintent);
-		}
-	}
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean isStartAtBoot = mPrefs.getBoolean("isStartAtBoot", true);
+        if (isStartAtBoot) {
+            Tools.doLogJustPrint("StartUp Service");
+            Intent startserviceintent = new Intent(context, MainService.class);
+            context.startService(startserviceintent);
+        }
+    }
 }
