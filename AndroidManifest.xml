@@ -1,11 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.dary.xmpp"
+    package="com.dary.xmppremoterobot"
     android:versionCode="1"
     android:versionName="1.0" >
 
     <uses-sdk
         android:minSdkVersion="9"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -19,7 +19,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_LOGS" />
-    <uses-permission android:name="android.permission.READ_CALL_LOG"/>
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -28,13 +28,13 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
-        android:name="com.dary.xmpp.application.MyApp"
+        android:name="com.dary.xmppremoterobot.application.MyApp"
         android:allowBackup="false"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name" 
-        android:persistent="true">
+        android:label="@string/app_name"
+        android:persistent="true" >
         <activity
-            android:name=".ui.MainActivity"
+            android:name="com.dary.xmppremoterobot.ui.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask" >
             <intent-filter>
@@ -51,25 +51,29 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.PreferencesActivity"
+            android:name="com.dary.xmppremoterobot.ui.PreferencesActivity"
             android:label="Setting" >
+        </activity>
+        <activity
+            android:name="com.dary.xmppremoterobot.ui.ChangeLogActivity"
+            android:label="ChangeLog" >
         </activity>
 
         <service
-            android:name="com.dary.xmpp.service.MainService"
+            android:name="com.dary.xmppremoterobot.service.MainService"
             android:persistent="true" >
         </service>
-        <service android:name="com.dary.xmpp.service.IncallService" >
+        <service android:name="com.dary.xmppremoterobot.service.IncallService" >
         </service>
 
-        <receiver android:name=".receivers.StartUpReceiver" >
+        <receiver android:name="com.dary.xmppremoterobot.receivers.StartUpReceivert" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
 
                 <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receivers.ConnectionChangeReceiver" >
+        <receiver android:name="com.dary.xmppremoterobot.receivers.ConnectionChangeReceiver" >
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>

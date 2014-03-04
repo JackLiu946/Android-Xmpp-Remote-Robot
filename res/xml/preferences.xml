@@ -129,7 +129,7 @@
                 android:summary="Select Preferences To Switch"
                 android:title="Switch Preferences" />
 
-            <com.dary.xmpp.ui.MultiSelectListPreference
+            <com.dary.xmppremoterobot.ui.MultiSelectListPreference
                 android:id="@+id/delSavedPreferences"
                 android:key="delSavedPreferences"
                 android:summary="Delete Saved Preferences"
@@ -148,7 +148,7 @@
                 android:summary="Switch Preferences Between Different Network"
                 android:title="Switch Preferences Between Different Network" />
 
-            <com.dary.xmpp.ui.MultiSelectListPreference
+            <com.dary.xmppremoterobot.ui.MultiSelectListPreference
                 android:id="@+id/delSwitchPreferencesBetweenDifferentNetwork"
                 android:key="delSwitchPreferencesBetweenDifferentNetwork"
                 android:summary="Delete Switch Preferences Between Different Network"

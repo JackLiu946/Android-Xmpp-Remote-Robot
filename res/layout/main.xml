@@ -98,8 +98,8 @@
 
             <AutoCompleteTextView
                 android:id="@+id/autocompletetextviewsendmessage"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
                 android:layout_weight="1"
                 android:completionThreshold="1"
                 android:hint="@string/autocompletetextviewsendmessage_hint"
@@ -107,9 +107,8 @@
 
             <Button
                 android:id="@+id/buttonsendmessage"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
                 android:text="@string/buttonsendmessage" />
         </LinearLayout>
     </RelativeLayout>

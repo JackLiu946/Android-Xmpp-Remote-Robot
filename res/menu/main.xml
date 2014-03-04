@@ -19,5 +19,9 @@
         android:id="@+id/menu_log"
         android:showAsAction="never"
         android:title="Log"/>
+    <item
+        android:id="@+id/menu_changelog"
+        android:showAsAction="never"
+        android:title="ChangeLog"/>
 
 </menu>

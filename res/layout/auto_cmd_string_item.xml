@@ -5,4 +5,5 @@
     android:layout_height="45dp"
     android:ellipsize="marquee"
     android:singleLine="true"
+    android:textColor="@android:color/white"
     android:textAppearance="?android:attr/textAppearanceMediumInverse" />
