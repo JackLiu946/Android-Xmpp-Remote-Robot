@@ -66,7 +66,7 @@
         <service android:name="com.dary.xmppremoterobot.service.IncallService" >
         </service>
 
-        <receiver android:name="com.dary.xmppremoterobot.receivers.StartUpReceivert" >
+        <receiver android:name="com.dary.xmppremoterobot.receivers.StartUpReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
 
